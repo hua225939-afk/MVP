@@ -1,0 +1,200 @@
+{
+  "id": "lesson-01",
+  "order": 1,
+  "title": "认识网页积木",
+  "subtitle": "用 HTML 搭出第一张网页名片",
+  "description": "认识标签、标题和段落，像搭积木一样完成网页的基础结构。",
+  "duration": "25 分钟",
+  "level": "新手起步",
+  "badge": "HTML",
+  "color": "#7C3AED",
+  "skills": ["观察结构", "HTML 标签", "运行测试"],
+  "steps": [
+    {
+      "id": "look",
+      "type": "看",
+      "title": "看见网页的骨架",
+      "goal": "发现网页由一个个有名字的积木组成",
+      "teacher": {
+        "title": "先观察，不急着记",
+        "message": "网页上的大标题、正文和按钮看起来不同，是因为它们使用了不同的 HTML 标签。",
+        "keyPoint": "标签就像积木的说明书：它告诉浏览器“这是什么”。"
+      },
+      "assistant": {
+        "message": "试着把注意力放在内容的“作用”上，而不只是外观。",
+        "hints": ["最大的文字通常是标题", "成段的文字通常是段落"]
+      },
+      "intro": "先观察下面这张网页名片。点击揭晓，看看浏览器是怎样理解它的。",
+      "blocks": [
+        {
+          "id": "html-reveal",
+          "type": "reveal",
+          "title": "网页侦探",
+          "prompt": "“小小发明家”在网页中应该是什么角色？",
+          "content": "它是页面最重要的标题，可以使用 <h1> 标签。h 代表 heading（标题），数字 1 表示最高级标题。",
+          "buttonLabel": "揭晓标签"
+        }
+      ]
+    },
+    {
+      "id": "explain",
+      "type": "讲",
+      "title": "听懂成对标签",
+      "goal": "理解开始标签、内容和结束标签",
+      "teacher": {
+        "title": "标签会把内容抱在中间",
+        "message": "大多数 HTML 元素由开始标签、内容和结束标签组成。例如 <p>你好</p>。",
+        "keyPoint": "结束标签多了一条斜线 /，表示这个元素到这里结束。"
+      },
+      "assistant": {
+        "message": "可以把标签想象成一对括号，它们把内容稳稳抱住。",
+        "hints": ["<p> 是开始", "</p> 是结束", "中间写给人看的内容"]
+      },
+      "intro": "选出一组完整、正确的段落标签。",
+      "blocks": [
+        {
+          "id": "tag-choice",
+          "type": "choice",
+          "title": "标签配对题",
+          "question": "哪一段代码能正确显示一个段落？",
+          "options": [
+            { "id": "a", "label": "<p>我喜欢做机器人</p>" },
+            { "id": "b", "label": "<p>我喜欢做机器人<p>" },
+            { "id": "c", "label": "</p>我喜欢做机器人<p>" }
+          ],
+          "correctOptionId": "a",
+          "explanation": "答对了！开始标签是 <p>，结束标签是 </p>，顺序也要正确。"
+        }
+      ]
+    },
+    {
+      "id": "think",
+      "type": "想",
+      "title": "给内容选角色",
+      "goal": "根据内容作用选择合适的标签",
+      "teacher": {
+        "title": "好代码会表达意思",
+        "message": "HTML 不只是让文字出现，更重要的是说明文字在页面中扮演什么角色。",
+        "keyPoint": "页面主标题用 h1，普通文字用 p。"
+      },
+      "assistant": {
+        "message": "问自己：这句话是整张页面的名字，还是补充说明？",
+        "hints": ["主角只有一个", "说明文字可以有很多段"]
+      },
+      "intro": "根据语义判断最合适的标签名称。",
+      "blocks": [
+        {
+          "id": "semantic-input",
+          "type": "textInput",
+          "title": "角色判断",
+          "question": "“我的太空旅行计划”是页面唯一的大标题，应该使用哪个标签？（只写标签名）",
+          "placeholder": "例如：p",
+          "acceptedAnswers": ["h1", "<h1>"],
+          "successMessage": "完全正确！h1 表示页面中最重要的一级标题。",
+          "hint": "它以字母 h 开头，后面跟数字 1。"
+        }
+      ]
+    },
+    {
+      "id": "make",
+      "type": "做",
+      "title": "组装网页名片",
+      "goal": "把标题和段落组合成一个完整片段",
+      "teacher": {
+        "title": "现在轮到你搭建",
+        "message": "先写标题，再写介绍。代码的上下顺序通常就是网页从上到下的顺序。",
+        "keyPoint": "清晰的缩进和换行，会让代码更容易阅读。"
+      },
+      "assistant": {
+        "message": "先看代码，再对照右侧预览，一行一行寻找对应关系。",
+        "hints": ["h1 对应大标题", "p 对应下面的介绍"]
+      },
+      "intro": "观察代码如何变成一张紫色主题的个人名片。",
+      "blocks": [
+        {
+          "id": "card-preview",
+          "type": "codePreview",
+          "title": "代码变身预览",
+          "description": "左边是 HTML，右边是浏览器呈现的结果。",
+          "language": "html",
+          "code": "<h1>小小发明家</h1>\n<p>我正在学习用代码创造新世界！</p>",
+          "preview": {
+            "eyebrow": "我的第一张网页",
+            "heading": "小小发明家",
+            "text": "我正在学习用代码创造新世界！",
+            "buttonLabel": "认识我",
+            "accent": "#7C3AED"
+          }
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "type": "测",
+      "title": "让测试员来检查",
+      "goal": "用自动测试发现遗漏的标签",
+      "teacher": {
+        "title": "测试是代码的安全网",
+        "message": "测试会按照明确规则检查代码。它不会批评你，只会告诉你哪里还可以补上。",
+        "keyPoint": "通过全部测试，说明代码满足了本关要求。"
+      },
+      "assistant": {
+        "message": "如果测试没通过，对照每条提示检查缺少的文字或标签。",
+        "hints": ["保留 <h1>", "介绍文字要放进 <p>"]
+      },
+      "intro": "补全代码后运行测试，让标题和段落两项都变成绿色。",
+      "blocks": [
+        {
+          "id": "html-test",
+          "type": "runTest",
+          "title": "名片完整度测试",
+          "description": "编辑代码，然后点击“运行测试”。",
+          "language": "html",
+          "initialCode": "<h1>我的创意实验室</h1>\n<!-- 在下面加入一段自我介绍 -->",
+          "tests": [
+            {
+              "id": "has-heading",
+              "label": "包含一级标题",
+              "includes": "<h1>",
+              "message": "找到 <h1> 标题"
+            },
+            {
+              "id": "has-paragraph",
+              "label": "包含介绍段落",
+              "includes": "<p>",
+              "message": "加入一个 <p> 段落就完成了"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "share",
+      "type": "说",
+      "title": "把新发现说出来",
+      "goal": "用自己的话解释 HTML 标签",
+      "teacher": {
+        "title": "能讲出来，才是真的懂",
+        "message": "程序员经常向同伴解释自己的代码。清楚表达能帮助你发现理解中的小空洞。",
+        "keyPoint": "不需要背定义，用自己的例子说明就很好。"
+      },
+      "assistant": {
+        "message": "可以用“我发现……，例如……”作为开头。",
+        "hints": ["标签告诉浏览器内容角色", "举 h1 或 p 的例子"]
+      },
+      "intro": "完成最后一句话，为这节课画上句号。",
+      "blocks": [
+        {
+          "id": "html-reflection",
+          "type": "textInput",
+          "title": "一分钟表达",
+          "question": "HTML 标签像什么？请输入“积木”完成今天的学习暗号。",
+          "placeholder": "今天的学习暗号",
+          "acceptedAnswers": ["积木", "网页积木"],
+          "successMessage": "暗号正确！你已经认识了网页最基础的积木。",
+          "hint": "课程标题里就藏着答案。"
+        }
+      ]
+    }
+  ]
+}

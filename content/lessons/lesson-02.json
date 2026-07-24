@@ -1,0 +1,203 @@
+{
+  "id": "lesson-02",
+  "order": 2,
+  "title": "给网页穿新衣",
+  "subtitle": "用 CSS 设计颜色与圆角",
+  "description": "认识样式规则，为网页加入颜色、圆角和属于自己的视觉风格。",
+  "duration": "30 分钟",
+  "level": "基础进阶",
+  "badge": "CSS",
+  "color": "#8B5CF6",
+  "skills": ["颜色表达", "CSS 属性", "视觉设计"],
+  "steps": [
+    {
+      "id": "look",
+      "type": "看",
+      "title": "找出视觉线索",
+      "goal": "观察颜色、留白和圆角如何改变感受",
+      "teacher": {
+        "title": "样式会说话",
+        "message": "同样的文字，换上不同颜色和形状，就会传达不同气氛。CSS 是网页的造型师。",
+        "keyPoint": "HTML 决定内容是什么，CSS 决定它看起来怎样。"
+      },
+      "assistant": {
+        "message": "观察时可以从颜色、形状、间距三个角度入手。",
+        "hints": ["紫色常显得有创造力", "圆角会让界面更亲切"]
+      },
+      "intro": "点击揭晓，认识网页中负责“穿衣打扮”的语言。",
+      "blocks": [
+        {
+          "id": "css-reveal",
+          "type": "reveal",
+          "title": "造型师登场",
+          "prompt": "是谁把普通按钮变成紫色圆角按钮？",
+          "content": "是 CSS！它可以设置 background（背景色）、color（文字色）和 border-radius（圆角）等样式。",
+          "buttonLabel": "看看答案"
+        }
+      ]
+    },
+    {
+      "id": "explain",
+      "type": "讲",
+      "title": "读懂一条样式规则",
+      "goal": "理解选择器、属性和值",
+      "teacher": {
+        "title": "CSS 像一张造型清单",
+        "message": "button { color: white; } 表示找到所有按钮，把文字颜色设为白色。",
+        "keyPoint": "属性和值用冒号连接，每条规则用分号结束。"
+      },
+      "assistant": {
+        "message": "把它读成一句话：给谁，把什么，变成什么。",
+        "hints": ["button 是“给谁”", "color 是“把什么”", "white 是“变成什么”"]
+      },
+      "intro": "选择能把文字变成紫色的 CSS 属性。",
+      "blocks": [
+        {
+          "id": "css-choice",
+          "type": "choice",
+          "title": "样式选择题",
+          "question": "哪条规则负责改变文字颜色？",
+          "options": [
+            { "id": "a", "label": "color: purple;" },
+            { "id": "b", "label": "border-radius: 16px;" },
+            { "id": "c", "label": "padding: 12px;" }
+          ],
+          "correctOptionId": "a",
+          "explanation": "正确！color 管理文字颜色，background 管理背景颜色。"
+        }
+      ]
+    },
+    {
+      "id": "think",
+      "type": "想",
+      "title": "为页面定风格",
+      "goal": "根据目标选择合适的样式",
+      "teacher": {
+        "title": "设计始于一个理由",
+        "message": "好看的样式不是随便堆出来的。先想“我希望使用者有什么感受”，再选择颜色和形状。",
+        "keyPoint": "样式选择要服务于内容和使用者。"
+      },
+      "assistant": {
+        "message": "面向同学的学习按钮，需要醒目、友好，而且容易点击。",
+        "hints": ["文字与背景要有对比", "适当圆角比尖锐边框更轻松"]
+      },
+      "intro": "判断哪组样式最适合学生使用的主按钮。",
+      "blocks": [
+        {
+          "id": "design-choice",
+          "type": "choice",
+          "title": "小小设计师",
+          "question": "哪个按钮更适合作为“开始挑战”的主操作？",
+          "options": [
+            { "id": "a", "label": "浅灰文字 + 白色背景 + 很小尺寸" },
+            { "id": "b", "label": "紫色背景 + 白色文字 + 舒适圆角" },
+            { "id": "c", "label": "透明背景 + 无文字 + 只有细线" }
+          ],
+          "correctOptionId": "b",
+          "explanation": "选得好！明显的色彩对比和舒适点击区域能让主操作更清楚。"
+        }
+      ]
+    },
+    {
+      "id": "make",
+      "type": "做",
+      "title": "设计一张探索卡",
+      "goal": "把多条 CSS 属性组合成统一风格",
+      "teacher": {
+        "title": "让样式一起工作",
+        "message": "背景色营造氛围，圆角塑造性格，内边距给内容呼吸空间。",
+        "keyPoint": "一个完整组件通常由多条样式共同完成。"
+      },
+      "assistant": {
+        "message": "先看预览，再回到代码寻找控制每个视觉细节的属性。",
+        "hints": ["background 控制底色", "border-radius 控制圆角"]
+      },
+      "intro": "观察一组 CSS 如何把普通内容变成探索任务卡。",
+      "blocks": [
+        {
+          "id": "css-preview",
+          "type": "codePreview",
+          "title": "探索卡预览",
+          "description": "这段 CSS 让卡片拥有紫色重点和柔和圆角。",
+          "language": "css",
+          "code": ".card {\n  background: #f5f3ff;\n  color: #4c1d95;\n  border-radius: 20px;\n  padding: 24px;\n}",
+          "preview": {
+            "eyebrow": "今日探索",
+            "heading": "设计一颗未来星球",
+            "text": "为它命名，并选择一种代表色。",
+            "buttonLabel": "开始设计",
+            "accent": "#8B5CF6"
+          }
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "type": "测",
+      "title": "检查你的样式",
+      "goal": "用测试确认关键 CSS 属性",
+      "teacher": {
+        "title": "测试也能检查设计代码",
+        "message": "CSS 测试关注的是规则有没有写全，而不是评判你的审美。",
+        "keyPoint": "属性名拼写准确，浏览器才能正确理解。"
+      },
+      "assistant": {
+        "message": "让按钮同时拥有背景色和圆角，两条测试就会全部通过。",
+        "hints": ["需要 background", "需要 border-radius"]
+      },
+      "intro": "补全按钮样式，并运行测试。",
+      "blocks": [
+        {
+          "id": "css-test",
+          "type": "runTest",
+          "title": "按钮造型测试",
+          "description": "可以直接在代码框中补上缺少的属性。",
+          "language": "css",
+          "initialCode": ".button {\n  color: white;\n  padding: 12px 20px;\n}",
+          "tests": [
+            {
+              "id": "has-background",
+              "label": "设置按钮背景",
+              "includes": "background:",
+              "message": "加入 background: #7c3aed;"
+            },
+            {
+              "id": "has-radius",
+              "label": "设置按钮圆角",
+              "includes": "border-radius:",
+              "message": "加入 border-radius: 12px;"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "share",
+      "type": "说",
+      "title": "说出你的设计理由",
+      "goal": "用一句话解释样式选择",
+      "teacher": {
+        "title": "设计不是“我觉得”就结束",
+        "message": "当你能说明为什么选择某种颜色和形状，设计就从装饰变成了解决问题。",
+        "keyPoint": "清楚的设计理由包含对象、选择和效果。"
+      },
+      "assistant": {
+        "message": "试着说：我为学习按钮选择了……，因为……",
+        "hints": ["谁会使用它", "你希望它带来什么感受"]
+      },
+      "intro": "输入本节课的样式暗号，完成 CSS 挑战。",
+      "blocks": [
+        {
+          "id": "css-reflection",
+          "type": "textInput",
+          "title": "设计暗号",
+          "question": "负责网页外观的语言是什么？",
+          "placeholder": "输入三个英文字母",
+          "acceptedAnswers": ["css"],
+          "successMessage": "回答正确！现在你已经能为网页设计第一套新衣。",
+          "hint": "它由三个英文字母组成。"
+        }
+      ]
+    }
+  ]
+}

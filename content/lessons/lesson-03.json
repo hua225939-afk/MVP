@@ -1,0 +1,203 @@
+{
+  "id": "lesson-03",
+  "order": 3,
+  "title": "让按钮回应你",
+  "subtitle": "用 JavaScript 创造第一次互动",
+  "description": "理解事件与状态，让按钮在点击后给出清晰、友好的回应。",
+  "duration": "35 分钟",
+  "level": "互动挑战",
+  "badge": "JS",
+  "color": "#6D28D9",
+  "skills": ["事件思维", "条件判断", "交互反馈"],
+  "steps": [
+    {
+      "id": "look",
+      "type": "看",
+      "title": "发现互动的瞬间",
+      "goal": "找到用户动作与页面回应",
+      "teacher": {
+        "title": "互动是一问一答",
+        "message": "你点击按钮是在向网页发出信号；按钮变色或出现文字，是网页给出的回应。",
+        "keyPoint": "一个完整互动包含动作、规则和反馈。"
+      },
+      "assistant": {
+        "message": "想想你每天使用的应用：点下“喜欢”后，页面发生了什么？",
+        "hints": ["动作可能是点击", "反馈应该让人看得见"]
+      },
+      "intro": "点击揭晓，看看网页是怎样“听见”按钮点击的。",
+      "blocks": [
+        {
+          "id": "event-reveal",
+          "type": "reveal",
+          "title": "互动侦探",
+          "prompt": "按钮怎么知道自己被点击了？",
+          "content": "JavaScript 会监听 click（点击）事件。事件发生后，它就按照我们写好的规则更新页面。",
+          "buttonLabel": "揭晓机制"
+        }
+      ]
+    },
+    {
+      "id": "explain",
+      "type": "讲",
+      "title": "认识事件和函数",
+      "goal": "理解点击事件如何触发一段任务",
+      "teacher": {
+        "title": "函数是一张任务卡",
+        "message": "当 click 发生时，我们调用函数。函数里写着页面接下来要完成的任务。",
+        "keyPoint": "事件决定“什么时候做”，函数决定“做什么”。"
+      },
+      "assistant": {
+        "message": "不用背代码，先理清时间顺序：先点击，再执行，最后反馈。",
+        "hints": ["click 是事件", "showMessage 是任务名称"]
+      },
+      "intro": "选择正确的互动顺序。",
+      "blocks": [
+        {
+          "id": "event-choice",
+          "type": "choice",
+          "title": "顺序挑战",
+          "question": "下面哪个顺序符合一次按钮互动？",
+          "options": [
+            { "id": "a", "label": "显示反馈 → 用户点击 → 监听事件" },
+            { "id": "b", "label": "用户点击 → 触发函数 → 页面反馈" },
+            { "id": "c", "label": "触发函数 → 删除按钮 → 用户点击" }
+          ],
+          "correctOptionId": "b",
+          "explanation": "正确！用户动作触发函数，函数再更新页面，让用户看到反馈。"
+        }
+      ]
+    },
+    {
+      "id": "think",
+      "type": "想",
+      "title": "设计友好反馈",
+      "goal": "判断什么样的反馈清楚又有帮助",
+      "teacher": {
+        "title": "页面要及时回应",
+        "message": "如果点击后毫无变化，使用者会怀疑自己是否点成功。好反馈要及时、清楚、友好。",
+        "keyPoint": "反馈不仅告诉结果，也可以提示下一步。"
+      },
+      "assistant": {
+        "message": "把自己当作第一次使用这个按钮的同学。",
+        "hints": ["不要只改变很小的细节", "文字加颜色通常更清楚"]
+      },
+      "intro": "为“提交答案”按钮选择最佳回应。",
+      "blocks": [
+        {
+          "id": "feedback-choice",
+          "type": "choice",
+          "title": "体验设计题",
+          "question": "提交正确答案后，哪种反馈最友好？",
+          "options": [
+            { "id": "a", "label": "什么都不发生" },
+            { "id": "b", "label": "只在角落出现一个小点" },
+            { "id": "c", "label": "显示“答对了！”并提示继续下一步" }
+          ],
+          "correctOptionId": "c",
+          "explanation": "没错！明确的结果和下一步提示，能让学习过程更安心。"
+        }
+      ]
+    },
+    {
+      "id": "make",
+      "type": "做",
+      "title": "预览第一次互动",
+      "goal": "读懂改变消息的简单函数",
+      "teacher": {
+        "title": "代码让界面改变状态",
+        "message": "函数运行前，页面显示等待；函数运行后，页面显示成功。这就是一次状态变化。",
+        "keyPoint": "互动本质上是根据事件更新状态。"
+      },
+      "assistant": {
+        "message": "观察代码里的 message 和预览中的提示文字。",
+        "hints": ["函数名描述任务", "文字是最直接的反馈"]
+      },
+      "intro": "看看一小段 JavaScript 对应怎样的互动界面。",
+      "blocks": [
+        {
+          "id": "js-preview",
+          "type": "codePreview",
+          "title": "鼓励按钮预览",
+          "description": "示例展示按钮被点击后要呈现的成功状态。",
+          "language": "javascript",
+          "code": "function celebrate() {\n  const message = \"太棒了，挑战成功！\";\n  return message;\n}",
+          "preview": {
+            "eyebrow": "互动任务",
+            "heading": "准备好了吗？",
+            "text": "点击按钮，给自己一个出发信号。",
+            "buttonLabel": "开始挑战",
+            "accent": "#6D28D9"
+          }
+        }
+      ]
+    },
+    {
+      "id": "test",
+      "type": "测",
+      "title": "完成互动规则",
+      "goal": "补全点击与成功消息",
+      "teacher": {
+        "title": "让规则经得起检查",
+        "message": "测试会检查代码中是否包含点击事件和成功消息。通过后，互动的关键部件就齐全了。",
+        "keyPoint": "先读测试目标，再动手改代码，是很有效的编程方法。"
+      },
+      "assistant": {
+        "message": "你可以在示例代码中加入 click 和“挑战成功”这两个关键内容。",
+        "hints": ["事件名是 click", "反馈文字包含挑战成功"]
+      },
+      "intro": "编辑代码，让两项互动测试全部通过。",
+      "blocks": [
+        {
+          "id": "js-test",
+          "type": "runTest",
+          "title": "互动完整度测试",
+          "description": "这不是执行任意代码，而是安全检查关键规则是否齐全。",
+          "language": "javascript",
+          "initialCode": "button.addEventListener(\"\", () => {\n  message = \"继续加油\";\n});",
+          "tests": [
+            {
+              "id": "has-click",
+              "label": "监听点击事件",
+              "includes": "click",
+              "message": "把空字符串改成 click"
+            },
+            {
+              "id": "has-message",
+              "label": "给出成功反馈",
+              "includes": "挑战成功",
+              "message": "把消息改成“挑战成功”"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "share",
+      "type": "说",
+      "title": "讲清楚互动逻辑",
+      "goal": "用动作、规则、反馈解释交互",
+      "teacher": {
+        "title": "你已经在像产品设计师思考",
+        "message": "每次设计互动，都可以检查三个问题：用户做什么？系统做什么？用户看见什么？",
+        "keyPoint": "动作 → 规则 → 反馈，是可以反复使用的互动思维。"
+      },
+      "assistant": {
+        "message": "把今天的流程大声读一遍，你会发现它适用于很多应用。",
+        "hints": ["先有用户动作", "再有程序规则", "最后出现反馈"]
+      },
+      "intro": "输入最后一个关键词，完成三课 MVP 学习旅程。",
+      "blocks": [
+        {
+          "id": "js-reflection",
+          "type": "textInput",
+          "title": "互动暗号",
+          "question": "用户点击后，页面给出的可见回应叫作什么？",
+          "placeholder": "两个汉字",
+          "acceptedAnswers": ["反馈", "回应"],
+          "successMessage": "回答正确！你已经完成从网页结构、视觉样式到互动反馈的完整旅程。",
+          "hint": "动作 → 规则 → ？"
+        }
+      ]
+    }
+  ]
+}
