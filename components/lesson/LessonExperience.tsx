@@ -87,7 +87,7 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
           </span>
           <b>{lesson.title}</b>
         </div>
-        <Link className="exit-link" href="/">
+        <Link className="exit-link" href="/student/courses">
           <span>⌂</span> 课程首页
         </Link>
       </header>
