@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Vibe Coding Lab 项目概览：产品定位、五角色体系、课程路径与技术架构。"
+    />
+    <title>Vibe Coding Lab｜项目概览</title>
+    <style>
+      :root {
+        --ink: #252036;
+        --muted: #706b7e;
+        --purple: #7c3aed;
+        --purple-dark: #5b21b6;
+        --purple-soft: #f2edff;
+        --line: #e8e5ed;
+        --surface: #ffffff;
+        --background: #f7f7fa;
+        --dark: #211934;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--background);
+        color: var(--ink);
+        font-family:
+          "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui,
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      a:focus-visible {
+        outline: 3px solid #c4b5fd;
+        outline-offset: 3px;
+      }
+
+      .header {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 72px;
+        padding: 12px max(28px, calc((100vw - 1180px) / 2));
+        border-bottom: 1px solid rgb(232 229 237 / 85%);
+        background: rgb(248 247 251 / 88%);
+        backdrop-filter: blur(18px);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 17px;
+        font-weight: 900;
+      }
+
+      .brand-mark {
+        display: grid;
+        width: 36px;
+        height: 36px;
+        place-items: center;
+        border-radius: 10px 10px 10px 4px;
+        background: linear-gradient(145deg, #9b72f5, #6d28d9);
+        box-shadow: 0 6px 15px rgb(109 40 217 / 22%);
+        color: white;
+        font-family: Georgia, serif;
+        font-size: 18px;
+        font-style: italic;
+        transform: rotate(-4deg);
+      }
+
+      .brand-copy {
+        display: flex;
+        flex-direction: column;
+        line-height: 1.1;
+      }
+
+      .brand-copy small {
+        margin-top: 4px;
+        color: #8b8496;
+        font-size: 9px;
+        letter-spacing: 0.14em;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+
+      nav a {
+        color: #625b6f;
+        font-size: 12px;
+        font-weight: 800;
+      }
+
+      nav a:last-child {
+        border-radius: 999px;
+        background: var(--dark);
+        color: white;
+        padding: 10px 16px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.05fr 0.95fr;
+        align-items: center;
+        gap: 70px;
+        max-width: 1180px;
+        min-height: 640px;
+        margin: 0 auto;
+        padding: 80px 32px 88px;
+        background:
+          radial-gradient(circle at 100% 12%, rgb(168 85 247 / 12%), transparent 21rem),
+          radial-gradient(circle at 0 92%, rgb(124 58 237 / 7%), transparent 24rem);
+      }
+
+      .kicker {
+        color: #7655c6;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 22px 0;
+        font-size: clamp(46px, 5.5vw, 72px);
+        letter-spacing: -0.065em;
+        line-height: 1.04;
+      }
+
+      h1 span {
+        display: block;
+        background: linear-gradient(105deg, #6d28d9, #a855f7);
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-copy > p {
+        max-width: 600px;
+        margin: 0;
+        color: #696273;
+        font-size: 16px;
+        line-height: 1.9;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+      }
+
+      .button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 48px;
+        border: 1px solid var(--line);
+        border-radius: 13px;
+        background: white;
+        padding: 0 20px;
+        font-size: 14px;
+        font-weight: 800;
+      }
+
+      .button.primary {
+        border: 0;
+        background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+        box-shadow: 0 8px 20px rgb(109 40 217 / 18%);
+        color: white;
+      }
+
+      .snapshot {
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 12%);
+        border-radius: 30px;
+        background: var(--dark);
+        box-shadow: 0 32px 80px rgb(36 22 59 / 20%);
+        color: white;
+        padding: 28px;
+        transform: rotate(1.2deg);
+      }
+
+      .snapshot::after {
+        position: absolute;
+        top: -72px;
+        right: -70px;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: #8b5cf6;
+        content: "";
+        filter: blur(4px);
+        opacity: 0.22;
+      }
+
+      .snapshot-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 18px;
+        border-bottom: 1px solid rgb(255 255 255 / 12%);
+        font-size: 13px;
+        font-weight: 900;
+      }
+
+      .snapshot-top small {
+        color: #b9f5d7;
+        font-weight: 600;
+      }
+
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        padding: 26px 0;
+      }
+
+      .metrics article {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgb(255 255 255 / 9%);
+        border-radius: 18px;
+        background: rgb(255 255 255 / 7%);
+        padding: 20px;
+      }
+
+      .metrics strong {
+        font-size: 38px;
+        letter-spacing: -0.05em;
+      }
+
+      .metrics span {
+        margin-top: 3px;
+        color: #cfc6de;
+        font-size: 10px;
+        font-weight: 700;
+      }
+
+      .mini-flow {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 7px;
+        color: #d9d0e7;
+        font-size: 10px;
+      }
+
+      .mini-flow span {
+        border-radius: 999px;
+        background: rgb(255 255 255 / 8%);
+        padding: 7px 9px;
+      }
+
+      .section {
+        padding: 86px max(32px, calc((100vw - 1140px) / 2));
+      }
+
+      .section-heading {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 0.6fr);
+        align-items: end;
+        gap: 56px;
+        margin-bottom: 40px;
+      }
+
+      .section-heading h2 {
+        margin: 10px 0 0;
+        font-size: clamp(32px, 4vw, 48px);
+        letter-spacing: -0.05em;
+        line-height: 1.12;
+      }
+
+      .section-heading > p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.8;
+      }
+
+      .product {
+        border-block: 1px solid #ece9f0;
+        background: white;
+      }
+
+      .roles {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+      }
+
+      .roles article {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-height: 270px;
+        border: 1px solid #e7e2ed;
+        border-radius: 20px;
+        background: #fbfaff;
+        padding: 20px;
+      }
+
+      .role-number {
+        position: absolute;
+        top: 18px;
+        right: 18px;
+        color: #b5adbe;
+        font-family: ui-monospace, monospace;
+        font-size: 10px;
+      }
+
+      .role-symbol {
+        display: grid;
+        width: 44px;
+        height: 44px;
+        place-items: center;
+        border-radius: 13px;
+        background: #eee8ff;
+        color: #6740c1;
+        font-size: 15px;
+        font-weight: 900;
+      }
+
+      .roles small {
+        margin-top: 22px;
+        color: #8b8394;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .roles h3 {
+        margin: 5px 0 10px;
+        font-size: 22px;
+      }
+
+      .roles p {
+        margin: 0;
+        color: #6f6878;
+        font-size: 11px;
+        line-height: 1.7;
+      }
+
+      .roles footer {
+        margin-top: auto;
+        padding-top: 16px;
+        border-top: 1px solid #ebe7ef;
+        color: #7657ba;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .boundary {
+        display: grid;
+        grid-template-columns: 0.55fr 1fr;
+        align-items: center;
+        gap: 34px;
+        margin-top: 28px;
+        border-radius: 24px;
+        background: #f3effc;
+        padding: 28px 32px;
+      }
+
+      .boundary h3 {
+        margin: 7px 0 0;
+        font-size: 22px;
+      }
+
+      .boundary ul {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 9px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .boundary li {
+        border: 1px solid #e3daf5;
+        border-radius: 12px;
+        background: rgb(255 255 255 / 72%);
+        color: #5d536d;
+        padding: 12px 14px;
+        font-size: 11px;
+        font-weight: 700;
+      }
+
+      .units {
+        border-top: 1px solid #ddd8e4;
+      }
+
+      .unit {
+        display: grid;
+        grid-template-columns: 70px minmax(260px, 0.85fr) minmax(300px, 1fr);
+        align-items: center;
+        gap: 24px;
+        padding: 22px 0;
+        border-bottom: 1px solid #ddd8e4;
+      }
+
+      .unit-index {
+        display: flex;
+        flex-direction: column;
+        font-size: 27px;
+        font-weight: 900;
+      }
+
+      .unit-index small {
+        color: #9a92a3;
+        font-size: 8px;
+        letter-spacing: 0.18em;
+      }
+
+      .unit h3 {
+        margin: 0 0 6px;
+        font-size: 18px;
+      }
+
+      .unit p {
+        margin: 0;
+        color: #756e7e;
+        font-size: 11px;
+        line-height: 1.65;
+      }
+
+      .lesson-dots {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .lesson-dots span {
+        display: grid;
+        width: 38px;
+        height: 38px;
+        place-items: center;
+        border: 1px solid #ded8e6;
+        border-radius: 50%;
+        background: white;
+        color: #5e3fac;
+        font-size: 11px;
+        font-weight: 900;
+      }
+
+      .journey {
+        display: grid;
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 44px;
+      }
+
+      .journey article {
+        position: relative;
+        min-height: 210px;
+        border: 1px solid #e2dde8;
+        border-radius: 18px;
+        background: white;
+        padding: 20px;
+      }
+
+      .journey small {
+        color: #7657ba;
+        font-size: 9px;
+        font-weight: 900;
+      }
+
+      .journey b {
+        position: absolute;
+        top: 9px;
+        right: 16px;
+        color: #e6e0ef;
+        font-size: 42px;
+      }
+
+      .journey h3 {
+        margin: 40px 0 9px;
+        font-size: 16px;
+      }
+
+      .journey p {
+        margin: 0;
+        color: #756e7f;
+        font-size: 10px;
+        line-height: 1.7;
+      }
+
+      .architecture {
+        background: var(--dark);
+        color: white;
+      }
+
+      .architecture .kicker {
+        color: #b89be9;
+      }
+
+      .architecture .section-heading > p {
+        color: #bdb3cb;
+      }
+
+      .layers {
+        border-top: 1px solid rgb(255 255 255 / 15%);
+      }
+
+      .layer {
+        display: grid;
+        grid-template-columns: 54px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 24px;
+        padding: 22px 0;
+        border-bottom: 1px solid rgb(255 255 255 / 15%);
+      }
+
+      .layer > span {
+        color: #a889de;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+      }
+
+      .layer h3 {
+        margin: 0 0 5px;
+        font-size: 17px;
+      }
+
+      .layer p {
+        margin: 0;
+        color: #bdb4c9;
+        font-size: 11px;
+        line-height: 1.6;
+      }
+
+      .layer code {
+        border: 1px solid rgb(255 255 255 / 10%);
+        border-radius: 999px;
+        background: rgb(255 255 255 / 8%);
+        color: #d8c9f0;
+        padding: 8px 11px;
+        font-size: 9px;
+      }
+
+      .system-cards {
+        display: grid;
+        grid-template-columns: 1.1fr 1fr 1fr;
+        gap: 14px;
+        margin-top: 44px;
+      }
+
+      .system-card {
+        min-height: 220px;
+        border-radius: 20px;
+        background: #fbfaff;
+        color: #292135;
+        padding: 24px;
+      }
+
+      .system-card.dark {
+        border: 1px solid rgb(255 255 255 / 10%);
+        background: #342746;
+        color: white;
+      }
+
+      .system-card h3 {
+        margin: 12px 0;
+        font-size: 21px;
+      }
+
+      .system-card p {
+        margin: 0;
+        color: #6d6577;
+        font-size: 11px;
+        line-height: 1.75;
+      }
+
+      .system-card.dark p {
+        color: #c4b9d0;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+
+      .chips span {
+        border-radius: 999px;
+        background: #ede7f8;
+        color: #5c3e9f;
+        padding: 7px 9px;
+        font-size: 9px;
+        font-weight: 800;
+      }
+
+      .final {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 90px 32px;
+        background:
+          radial-gradient(circle at 80% 35%, rgb(168 85 247 / 15%), transparent 20rem),
+          white;
+        text-align: center;
+      }
+
+      .final h2 {
+        max-width: 820px;
+        margin: 13px 0 0;
+        font-size: clamp(34px, 4.5vw, 52px);
+        letter-spacing: -0.05em;
+        line-height: 1.14;
+      }
+
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px max(28px, calc((100vw - 1140px) / 2));
+        border-top: 1px solid #ece8f0;
+        background: white;
+        color: #837b8d;
+        font-size: 10px;
+      }
+
+      @media (max-width: 980px) {
+        .hero {
+          grid-template-columns: 1fr 0.85fr;
+          gap: 34px;
+        }
+
+        .roles {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .journey {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .system-cards {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .system-card.dark {
+          grid-column: 1 / -1;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .header {
+          padding-inline: 18px;
+        }
+
+        nav a:not(:last-child) {
+          display: none;
+        }
+
+        .hero {
+          display: block;
+          min-height: auto;
+          padding: 58px 20px 68px;
+        }
+
+        .snapshot {
+          margin-top: 44px;
+          transform: none;
+        }
+
+        .section {
+          padding: 66px 20px;
+        }
+
+        .section-heading,
+        .roles,
+        .journey,
+        .system-cards,
+        .boundary {
+          grid-template-columns: 1fr;
+        }
+
+        .boundary ul {
+          grid-template-columns: 1fr;
+        }
+
+        .unit {
+          grid-template-columns: 50px minmax(0, 1fr);
+          align-items: start;
+          gap: 12px;
+        }
+
+        .lesson-dots {
+          grid-column: 2;
+          justify-content: flex-start;
+        }
+
+        .layer {
+          grid-template-columns: 36px minmax(0, 1fr);
+          align-items: start;
+        }
+
+        .layer code {
+          grid-column: 2;
+          justify-self: start;
+        }
+
+        .system-card.dark {
+          grid-column: auto;
+        }
+
+        .footer {
+          align-items: flex-start;
+          flex-direction: column;
+          gap: 6px;
+          padding-inline: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <a class="brand" href="#top" aria-label="返回页面顶部">
+        <span class="brand-mark">V</span>
+        <span class="brand-copy">
+          Vibe Coding Lab
+          <small>AI 创意编程实验室</small>
+        </span>
+      </a>
+      <nav aria-label="项目概览导航">
+        <a href="#product">产品</a>
+        <a href="#course">课程</a>
+        <a href="#architecture">架构</a>
+        <a href="#summary">概览结论</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="kicker">PROJECT OVERVIEW · 当前源码快照</span>
+          <h1>
+            一张网页，看懂
+            <span>整个创意编程平台</span>
+          </h1>
+          <p>
+            Vibe Coding Lab 是面向 10—15 岁学习者的五角色课程平台。
+            学生用 13 节课持续完成同一个网页应用，其他角色围绕同一份课程、项目与学习事实协作。
+          </p>
+          <div class="actions">
+            <a class="button primary" href="#product">查看产品全景</a>
+            <a class="button" href="#architecture">查看系统架构</a>
+          </div>
+        </div>
+
+        <aside class="snapshot" aria-label="项目关键数据">
+          <div class="snapshot-top">
+            <span>当前产品结构</span>
+            <small>基于当前源码</small>
+          </div>
+          <div class="metrics">
+            <article><strong>5</strong><span>角色端</span></article>
+            <article><strong>5</strong><span>课程单元</span></article>
+            <article><strong>13</strong><span>JSON 课次</span></article>
+            <article><strong>13</strong><span>注册工具</span></article>
+          </div>
+          <div class="mini-flow" aria-label="课程创作路径">
+            <span>想法</span><b>→</b><span>网页</span><b>→</b>
+            <span>互动</span><b>→</b><span>应用</span><b>→</b><span>展示</span>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section product" id="product">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">01 · PRODUCT MAP</span>
+            <h2>一个平台，五种协作视角</h2>
+          </div>
+          <p>
+            五端共用课程与模拟业务数据；区别来自角色目标和可见范围，而不是五套相互冲突的数据副本。
+          </p>
+        </div>
+
+        <div class="roles">
+          <article>
+            <span class="role-number">01</span><span class="role-symbol">总</span>
+            <small>课程与运营团队</small><h3>总部</h3>
+            <p>查看平台整体运营、课程结构与互动组件使用情况。</p>
+            <footer>聚合平台、课程与内容视图</footer>
+          </article>
+          <article>
+            <span class="role-number">02</span><span class="role-symbol">合</span>
+            <small>校区运营负责人</small><h3>合作伙伴</h3>
+            <p>查看所属演示校区、班级、教师与课程进展。</p>
+            <footer>聚合校区与班级视图</footer>
+          </article>
+          <article>
+            <span class="role-number">03</span><span class="role-symbol">师</span>
+            <small>授课教师</small><h3>教师</h3>
+            <p>查看学生进度、项目证据并填写独立的结构化评语。</p>
+            <footer>只读项目与教学工作流</footer>
+          </article>
+          <article>
+            <span class="role-number">04</span><span class="role-symbol">学</span>
+            <small>小学高年级至初中生</small><h3>学生</h3>
+            <p>继续学习与创作，并在当前浏览器保存进度和项目。</p>
+            <footer>课程、创造台与持续作品</footer>
+          </article>
+          <article>
+            <span class="role-number">05</span><span class="role-symbol">家</span>
+            <small>学生家长</small><h3>家长</h3>
+            <p>查看关联学生的成长摘要、作品版本与教师评语。</p>
+            <footer>安全精简的成长视图</footer>
+          </article>
+        </div>
+
+        <div class="boundary">
+          <div>
+            <span class="kicker">第一阶段边界</span>
+            <h3>真实体验，明确演示范围</h3>
+          </div>
+          <ul>
+            <li>模拟身份，不接真实登录</li>
+            <li>本地演示，不接真实数据库</li>
+            <li>预设助手，不冒充真实 AI</li>
+            <li>受控组件，不执行任意代码</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="section" id="course">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">02 · LEARNING JOURNEY</span>
+            <h2>从灵感到 App：13 课持续完成一个作品</h2>
+          </div>
+          <p>每课遵循“看—讲—想—做—测—说”的学习节奏，课程内容与页面代码分离。</p>
+        </div>
+
+        <div class="units">
+          <article class="unit">
+            <div class="unit-index">01<small>UNIT</small></div>
+            <div><h3>认识 Vibe Coding Lab</h3><p>从自然语言需求出发，认识网页与人机协作。</p></div>
+            <div class="lesson-dots"><span>1</span><span>2</span></div>
+          </article>
+          <article class="unit">
+            <div class="unit-index">02<small>UNIT</small></div>
+            <div><h3>搭建网页界面</h3><p>学习网页结构、视觉样式和组件组合。</p></div>
+            <div class="lesson-dots"><span>3</span><span>4</span><span>5</span></div>
+          </article>
+          <article class="unit">
+            <div class="unit-index">03<small>UNIT</small></div>
+            <div><h3>让网页真正动起来</h3><p>用事件、输入、条件和状态构建互动。</p></div>
+            <div class="lesson-dots"><span>6</span><span>7</span><span>8</span><span>9</span></div>
+          </article>
+          <article class="unit">
+            <div class="unit-index">04<small>UNIT</small></div>
+            <div><h3>完成自己的网页应用</h3><p>组合功能、调试问题并根据反馈迭代。</p></div>
+            <div class="lesson-dots"><span>10</span><span>11</span><span>12</span></div>
+          </article>
+          <article class="unit">
+            <div class="unit-index">05<small>UNIT</small></div>
+            <div><h3>应用发布与成果展示</h3><p>完成发布检查并清楚介绍创作过程。</p></div>
+            <div class="lesson-dots"><span>13</span></div>
+          </article>
+        </div>
+
+        <div class="journey">
+          <article><small>第 01 课</small><b>1</b><h3>创建主项目</h3><p>从生活场景与创作意图出发，建立贯穿课程的唯一项目。</p></article>
+          <article><small>第 02—05 课</small><b>2</b><h3>搭好网页</h3><p>明确项目边界，完成页面骨架、视觉主题与组件组合。</p></article>
+          <article><small>第 06—09 课</small><b>3</b><h3>让作品动起来</h3><p>加入点击、输入、条件与状态，并通过测试验证互动。</p></article>
+          <article><small>第 10—12 课</small><b>4</b><h3>组合、调试、迭代</h3><p>形成完整应用，修复问题，并吸收同伴试玩反馈。</p></article>
+          <article><small>第 13 课</small><b>5</b><h3>整理与展示</h3><p>完成发布检查、作品故事与一分钟演示。</p></article>
+        </div>
+      </section>
+
+      <section class="section architecture" id="architecture">
+        <div class="section-heading">
+          <div>
+            <span class="kicker">03 · SYSTEM ARCHITECTURE</span>
+            <h2>内容、作品、进度与业务数据清晰分层</h2>
+          </div>
+          <p>课程页与创造台读取同一项目，教师预览只读，工具修改可校验、可审计。</p>
+        </div>
+
+        <div class="layers">
+          <article class="layer">
+            <span>01</span><div><h3>课程内容层</h3><p>5 单元与 13 课保存在 JSON 中，页面不逐课写死。</p></div><code>content / Course / Lesson</code>
+          </article>
+          <article class="layer">
+            <span>02</span><div><h3>校验与渲染层</h3><p>Zod 校验课程内容，LessonRenderer 分发可复用互动原子。</p></div><code>Zod / LessonRenderer</code>
+          </article>
+          <article class="layer">
+            <span>03</span><div><h3>持续创作层</h3><p>13 个注册工具共同编辑同一份 ProjectDocument，并限制字段权限。</p></div><code>CourseToolHost / ProjectPatch</code>
+          </article>
+          <article class="layer">
+            <span>04</span><div><h3>数据与存储层</h3><p>课程进度、学生项目和模拟业务数据分层保存，通过仓储接口访问。</p></div><code>Repository / localStorage</code>
+          </article>
+          <article class="layer">
+            <span>05</span><div><h3>五角色体验层</h3><p>学生创作，教师与家长只读查看，总部与合作伙伴读取聚合视图。</p></div><code>RoleShell / ViewModel</code>
+          </article>
+        </div>
+
+        <div class="system-cards">
+          <article class="system-card">
+            <span class="kicker">互动原子</span>
+            <h3>7 种可复用课程互动</h3>
+            <div class="chips">
+              <span>点击揭晓</span><span>单项选择</span><span>文本输入</span>
+              <span>代码与互动预览</span><span>安全规则检查</span>
+              <span>结构化创造台</span><span>课程创造工具</span>
+            </div>
+          </article>
+          <article class="system-card">
+            <span class="kicker">项目主线</span>
+            <h3>一份 ProjectDocument 贯穿 13 课</h3>
+            <p>第 01 课创建项目，第 02—13 课持续提交受字段权限约束的 patch；上游修改后，相关测试必须重新运行。</p>
+          </article>
+          <article class="system-card dark">
+            <span class="kicker">运行边界</span>
+            <h3>为未来基础设施保留接口</h3>
+            <p>当前用模拟数据和浏览器本地存储完成演示，Repository 隔离未来数据库迁移对页面和互动组件的影响。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="final" id="summary">
+        <span class="kicker">PROJECT SUMMARY</span>
+        <h2>这是一个由同一课程、同一项目和同一数据事实连接起来的五角色创意编程平台。</h2>
+        <div class="actions">
+          <a class="button primary" href="#top">返回页面顶部</a>
+          <a class="button" href="#course">重新查看课程路径</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Vibe Coding Lab · AI 创意编程实验室</span>
+      <span>独立 HTML 项目概览 · 2026-07-27</span>
+    </footer>
+  </body>
+</html>
