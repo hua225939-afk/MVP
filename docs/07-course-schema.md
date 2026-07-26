@@ -8,6 +8,8 @@
 - 每个课次使用“看、讲、想、做、测、说”六个学习环节。
 - 每个步骤由可复用互动原子组成。
 - 教师说明、学生内容、家长摘要可以从同一份课程内容读取。
+- 课次通过声明式 `projectBinding` 和 `toolId` 读写同一个 `ProjectDocument`，课程 JSON 不复制项目内容。
+- 创造工具通过独立注册表定义解锁、输入输出、测试和 React 组件，不为单课扩展 `LessonRenderer` 分支。
 - 所有 JSON 在开发、测试和构建阶段通过 Zod 验证。
 - 新增课次主要增加 JSON，不复制页面组件。
 
@@ -79,6 +81,7 @@ content/lessons/lesson-06.json
 | `teacherNotes` | object | 教学目标、准备、常见问题、提示 | 教师端 |
 | `studentContent` | object | 引导语、安全说明、完成提示 | 学生端 |
 | `parentSummary` | object | 主题、学到什么、成果说明 | 家长端 |
+| `projectBinding` | object | 本课项目读取、写入、前置字段、造物档案和下一课交接 | 持续项目契约 |
 | `steps` | Step[] | 恰好 6 个，类型与顺序固定 | 六步课程 |
 
 ### 2.4 Step
@@ -95,6 +98,28 @@ content/lessons/lesson-06.json
 | `assistant` | object | 固定模拟文案与 hints；不得暗示已接真实 AI |
 | `atoms` | InteractionAtom[] | 至少 1 个 |
 | `completion` | object | 完成模式与必需原子 ID |
+
+`projectBinding` 目标结构：
+
+```ts
+type LessonProjectBinding = {
+  projectRequired: true;
+  readPaths: ProjectFieldPath[];
+  writePaths: ProjectFieldPath[];
+  primaryToolId: string;
+  prerequisitePaths: ProjectFieldPath[];
+  archiveMappings: Array<{
+    sourceAtomId: string;
+    targetPath: ProjectFieldPath;
+  }>;
+  nextLessonReads: ProjectFieldPath[];
+};
+```
+
+- 第 01 课允许 `createProject: true`；第 02—13 课必须 `projectRequired: true` 且不得创建新主项目。
+- `writePaths` 必须是对应工具注册表 `output` 的子集。
+- `archiveMappings` 只映射结构化互动结果，不把整份学习进度复制到项目。
+- Loader 在课程级验证上一课 `nextLessonReads` 能覆盖下一课前置字段。
 
 ## 3. 六个学习环节的表达
 
@@ -117,7 +142,7 @@ const PHASES = ["看", "讲", "想", "做", "测", "说"] as const;
 
 不能只验证六个值存在，否则重复“看”或顺序错乱也会通过。
 
-## 4. 互动原子
+## 4. 互动原子与课程工具
 
 ### 4.1 公共字段
 
@@ -136,9 +161,9 @@ type AtomBase = {
 
 `id` 建议使用 `{lessonId}.{phase}.{atomName}`，确保 localStorage、作品和分析数据不因数组调整而失效。
 
-### 4.2 第一批原子
+### 4.2 已有原子
 
-只把当前已有且样板课需要的五类纳入第一批：
+当前样板实际使用以下六类：
 
 | `type` | 核心字段 | 标准完成条件 |
 | --- | --- | --- |
@@ -147,6 +172,7 @@ type AtomBase = {
 | `textInput` | `question/placeholder/validation/successMessage/hint` | 通过指定验证 |
 | `codePreview` | `description/language/code/preview` | 用户确认已观察 |
 | `runTest` | `description/language/initialCode/tests/testMode` | 所有规则通过 |
+| `taskBuilder` | `fields/preview/minimumChanges/requiredChangeFieldIds` | 指定字段有效修改并保存 |
 
 `runTest.testMode` 第一阶段固定为 `contains`，明确表示字符串规则检查，不执行任意学生代码。若未来实现安全沙箱，必须增加新的模式和安全评审，不能只改文案。
 
@@ -162,7 +188,59 @@ const interactionAtomSchema = z.discriminatedUnion("type", [
 ]);
 ```
 
-不为课程大纲中的每个模块名称直接创建组件。例如“案例对比”“完成检查”“故障按钮”应先判断能否由现有五类原子组合表达；只有出现新的操作模型时才新增原子类型。
+不为课程大纲中的每个模块名称直接创建组件。例如“案例对比”“完成检查”“故障按钮”应先判断能否由已有原子组合表达；只有出现新的操作模型时才新增原子类型。
+
+当前仓库实际已有第六类 `taskBuilder`，用于结构化字段、即时预览和保存样板产出。创造台架构落地后：
+
+- `taskBuilder` 仍是可复用互动原子，不再承担完整创造台职责。
+- 正式项目修改由 `courseTool` 宿主原子或等价工具调用结构完成。
+- 宿主只引用 `toolId/mode/projectBinding`，具体 React 组件从工具注册表取得。
+
+建议目标原子：
+
+```ts
+type CourseToolAtom = AtomBase & {
+  type: "courseTool";
+  toolId: string;
+  mode: "basic" | "free";
+  projectBinding: {
+    readPaths: ProjectFieldPath[];
+    writePaths: ProjectFieldPath[];
+  };
+  completionRuleIds: string[];
+};
+```
+
+不要把 13 个工具各自做成 13 个 atom type。`courseTool` 是统一宿主，工具差异由注册表和项目 Schema 表达。
+
+### 4.3 工具注册 Schema
+
+工具注册表与课程内容分离，但必须在构建时交叉验证：
+
+```ts
+const courseToolDefinitionSchema = z.object({
+  id: idSchema,
+  name: nonEmptyText,
+  lessonIds: z.array(lessonIdSchema).min(1),
+  unlock: toolUnlockRuleSchema,
+  input: z.array(projectFieldPathSchema),
+  output: z.array(projectFieldPathSchema),
+  basicMode: toolModeSchema,
+  freeMode: toolModeSchema,
+  testRules: z.array(toolTestRuleSchema).min(1),
+  projectMutation: projectMutationContractSchema,
+  componentKey: idSchema,
+}).strict();
+```
+
+注册表完整性检查：
+
+- 13 个主工具 ID 唯一，主课次覆盖 lesson-01 至 lesson-13。
+- 课程引用的 `toolId` 必须存在，工具声明的 React `componentKey` 必须存在于组件 registry。
+- `input/output` 只能引用 ProjectDocument Schema 中存在的路径。
+- 课次 `writePaths` 不得超出工具 `output`。
+- 基础模式和自由模式都必须声明测试、安全和保存行为。
+- 删除或改名工具前必须扫描课次、项目版本和迁移引用。
 
 ## 5. Zod 字段设计
 
@@ -192,6 +270,7 @@ const lessonSchema = z
     teacherNotes: lessonTeacherNotesSchema,
     studentContent: lessonStudentContentSchema,
     parentSummary: parentSummarySchema,
+    projectBinding: lessonProjectBindingSchema,
     steps: z.array(lessonStepSchema).length(6),
   })
   .strict()
@@ -209,6 +288,9 @@ const lessonSchema = z
 - 六步时长总和与 `durationMinutes` 一致；若允许误差需明确规则。
 - Course 中单元 ID、课次 ID、顺序和总数不重复。
 - Loader 需验证 Lesson 的 `courseId/unitId` 与课程清单引用一致。
+- Lesson 的 `projectBinding.primaryToolId` 存在，且读写路径符合工具权限。
+- 第 02—13 课不得创建新课程主项目；13 课必须连续引用同一项目上下文。
+- 项目字段或工具配置改变后，引用旧 project revision 的测试结果不能继续算作通过。
 
 ### 5.1 文本输入验证
 
@@ -812,5 +894,7 @@ const lessonSchema = z
 - 每个 JSON 修改都必须通过 Zod 单文件验证和全课程引用完整性验证。
 - Schema 破坏性变化必须提升 `schemaVersion` 并提供迁移，不直接修改旧版本含义。
 - 组件删除前先扫描内容引用；仍被任一课次引用时不得删除。
-- 样板阶段只保证第 01 课和第 06 课；不得为凑齐 13 课复制占位内容。
+- 第 01、06 课是已完成样板；迁移到工具宿主和 ProjectDocument 时必须提供旧互动进度兼容映射。
+- 其余 11 课按课程工具分组接入，不得为凑齐 13 课复制占位内容。
 - `teacherNotes` 不展示给学生，`parentSummary` 不展示复杂代码；这是展示边界，不是安全权限替代。
+- ProjectDocument 结构由项目 Schema 管理，不嵌入 Lesson JSON；Lesson 只声明字段路径和工具绑定。

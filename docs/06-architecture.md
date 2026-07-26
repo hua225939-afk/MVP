@@ -1,28 +1,30 @@
-# Vibe Coding 第一阶段技术架构
+# Vibe Coding 完整演示版技术架构
 
 ## 1. 文档目的
 
-本文档基于当前仓库的实际实现，定义五角色演示平台与 13 课 JSON 课程系统的目标架构。本文档只做技术设计，不代表本轮已实现对应功能。
+本文档基于当前仓库的实际实现，定义五角色演示平台、13 课 JSON 课程系统与“造物星球·创造台”的目标架构。本文档只做技术设计，不代表本轮已实现对应功能。
 
 第一阶段继续遵守以下边界：
 
 - 使用现有 MVP 扩展，不重建项目。
 - 课程内容与 React 页面代码分离。
 - 所有课次由 JSON 和 `LessonRenderer` 渲染。
-- 使用模拟身份、统一模拟数据和 localStorage。
+- 课程页和创造台通过同一 `ProjectRepository` 读写同一份 `ProjectDocument`，创造台不是第二套系统。
+- 第 01 课创建课程主项目，第 02—13 课持续修改同一个 `projectId`。
+- 使用模拟身份、统一模拟数据和 localStorage，并保留数据库迁移边界。
 - 不接真实登录、数据库、支付、招生或真实 AI 接口。
-- 先完成五端框架，再完成第 01 课和第 06 课样板；样板确认后才接入其余 11 课。
+- 当前五端框架和第 01、06 课样板已经完成；后续先建设创造台正式底层架构，再按课次分组接入工具。
 
 ## 2. 当前 MVP 分析
 
 ### 2.1 当前已实现
 
-当前 Git 跟踪的根目录源码实现了一条完整的学生学习最小链路：
+当前源码已经实现五角色框架和第 01、06 课样板学生学习链路：
 
 ```text
-课程首页 /
-  → 三节课程列表
-  → /lessons/[lessonId]
+公共入口与五角色端
+  → /student/courses
+  → /learn/[courseId]/[lessonId]
   → JSON 课程读取
   → Zod 构建时验证
   → 六步课程体验
@@ -35,26 +37,24 @@
 | 能力 | 当前实现 | 结论 |
 | --- | --- | --- |
 | 技术栈 | Next.js App Router、React、TypeScript、Tailwind CSS、Zod，使用 vinext/Vite 和 Cloudflare Worker 构建部署 | 可保留 |
-| 页面 | `/` 学生课程首页；`/lessons/[lessonId]` 课程学习页 | 可作为学生端原型，路由需迁移 |
-| 课程内容 | `content/lessons/lesson-01.json` 至 `lesson-03.json` | 结构可参考，内容与新 13 课大纲不一致 |
-| 内容验证 | `lib/lesson-schema.ts` 使用 Zod 验证课次、六步和五类互动 | 可扩展，需升级为课程/单元/课次完整 Schema |
-| 内容加载 | `lib/lesson-loader.ts` 显式导入三份 JSON，解析后排序 | 小规模可用，13 课前需重构清单与索引 |
+| 页面 | 五角色入口与仪表盘；学生课程页；新旧课次路由 | 五端框架已完成，创造台正式页面待建设 |
+| 课程内容 | `lesson-01.json`、`lesson-06.json` 两节完整样板和 13 课课程清单 | 样板已完成，其余课次待按工具分组接入 |
+| 内容验证 | `lib/lesson-schema.ts` 已验证 Course、Lesson、六步和六类互动 | 需增加项目绑定和工具引用验证 |
+| 内容加载 | `import.meta.glob` 自动发现课次并校验课程/单元引用 | 可保留并增加全课程完成性策略 |
 | 课程渲染 | `LessonExperience` 负责六步外壳，`LessonRenderer` 按 `type` 分发 | 核心方向正确，可保留并拆分职责 |
-| 互动组件 | `Reveal`、`Choice`、`TextInput`、`CodePreview`、`RunTest` | 可保留为第一批互动原子 |
-| 学习进度 | 每课一个 `vibe-course-progress:{lessonId}` localStorage 项 | 可迁移，需版本、学生、课程维度和 Zod 校验 |
+| 互动组件 | `Reveal`、`Choice`、`TextInput`、`CodePreview`、`RunTest`、`TaskBuilder` | 可作为课程与工具内部复用原子 |
+| 学习进度 | 已使用 `vibe-coding:v1:progress:{studentId}:{courseId}` 聚合键并兼容旧键 | 保留；项目文档必须使用独立 Store |
 | 响应式 | 980、760、520 px 断点，课程页可降为单栏 | 可保留基础样式，需补平板验收 |
 | 自动检查 | `npm run lint`、`npm run build`；`npm test` 串联 lint 和 build | 可保留；需补独立类型检查与自动化测试 |
 
-当前尚未实现：
+当前尚未实现的本轮目标：
 
-- 总部、合作伙伴、教师、家长端及五角色公共入口。
-- 文档页面地图中的 `/hq`、`/partner`、`/teacher`、`/student`、`/parent` 路由。
-- 5 单元、13 课的课程目录与正式课次内容。
-- 第 01 课和第 06 课新大纲样板。
-- 跨角色统一模拟数据。
-- 校区、班级、排课、作品、教师评价、家长摘要。
-- 作品保存、课程奖励、教师只读预览模式。
-- 真实测试框架和课程 JSON 批量校验命令。
+- 创造台顶部导航、插件中心、创造画布、创造助手和底部抽屉。
+- 统一 `ProjectDocument`、`ProjectRepository`、patch、版本、项目测试与迁移。
+- 13 个课程工具的统一注册、解锁、基础/自由模式和字段权限。
+- 第 02—05、07—13 课正式 JSON 与对应工具。
+- 学生本地项目在教师、家长等角色端的统一只读投影。
+- 作品发布方式、正式测试框架和全课程 E2E。
 
 ### 2.2 保留、重构与暂缓
 
@@ -66,14 +66,15 @@
 | 保留 | Zod 在加载阶段解析 JSON | 构建时暴露内容错误的方向正确 |
 | 保留 | localStorage 第一阶段方案 | 适合无登录、无数据库演示，但需升级键和版本 |
 | 重构 | `lesson-schema.ts` | 从单个课次 Schema 升级为课程、单元、课次、学习步骤、互动原子的分层 Schema |
-| 重构 | `lesson-loader.ts` | 从手工三课数组升级为课程清单、课次索引和统一查询接口 |
+| 保留并增强 | `lesson-loader.ts` | 已用 glob 自动发现并校验课次；补项目绑定、工具引用和 13 课完整性校验 |
 | 重构 | `CourseHome` | 当前硬编码“三节课”和学生首页语义；迁移为 `/student` 与 `/student/courses` 可复用模块 |
 | 重构 | `/lessons/[lessonId]` | 目标路径为 `/learn/[courseId]/[lessonId]`，并增加 `mode=student/preview` 或等价只读上下文 |
 | 重构 | `LessonExperience` | 目前同时负责布局、进度读写、导航和互动状态；后续拆为学习外壳、进度适配器和渲染器 |
 | 重构 | `progress-storage.ts` | 增加 schemaVersion、studentId、courseId、课次状态、作品引用及 Zod 校验/迁移 |
 | 重构 | 全局 CSS | 现有单文件适合 MVP，但五端扩展后按 tokens、layout、role、lesson 分层，避免继续膨胀 |
-| 暂缓 | 现有三课内容批量改写 | 先只制作新第 01 课和第 06 课样板；样板确认前不处理其余 11 课 |
-| 暂缓 | 真实 AI、代码沙箱、语音、发布链接和二维码 | 第一阶段明确排除或尚待产品确认 |
+| 保留 | 第 01、06 课样板及现有六种互动 | 作为创造台工具宿主与课程绑定迁移的回归基线 |
+| 暂缓 | 真实 AI、任意代码沙箱、正式语音 | 保持预设助手和安全规则检查边界 |
+| 待确认 | 真实发布链接和二维码 | 工具与数据字段先按最终架构设计，实现方式确认后接入 |
 | 暂缓 | 数据库、真实登录、复杂权限、支付 | 只保留接口位置，不实现基础设施 |
 
 仓库根目录还有未跟踪的 `vibe-coding-course-mvp.zip` 和未跟踪的同名嵌套目录。嵌套目录中的主要源码与根目录副本相同，应视为交付/复制产物；后续开发以 Git 跟踪的根目录源码为唯一来源，避免双份修改。
@@ -121,6 +122,9 @@ app/
 ├── partner/
 ├── teacher/
 ├── student/
+│   ├── workbench/[projectId]/       # 持续创造台
+│   ├── works/
+│   └── courses/
 ├── parent/
 └── learn/[courseId]/[lessonId]/
 components/
@@ -132,14 +136,20 @@ components/
 │   ├── LessonRenderer.tsx
 │   ├── LessonStepNav.tsx
 │   └── TeacherPreviewBoundary.tsx
-└── interactions/                    # 可复用互动原子
+├── interactions/                    # 可复用互动原子
+└── workbench/
+    ├── WorkbenchShell.tsx
+    ├── ProjectCanvas.tsx
+    ├── CreativeAssistant.tsx
+    ├── WorkbenchDrawer.tsx
+    └── tools/                       # 注册工具组件，不按课复制页面
 content/
 ├── courses/
 │   └── vibe-coding-foundations.json # 课程与单元清单
 └── lessons/
     ├── lesson-01.json
     ├── lesson-06.json
-    └── ...                          # 样板确认后补齐
+    └── ...                          # 按工具分组补齐其余课次
 data/
 ├── mock/
 │   ├── organizations.ts
@@ -152,6 +162,7 @@ data/
 └── repositories/                   # 页面唯一数据入口
     ├── organization-repository.ts
     ├── learning-repository.ts
+    ├── project-repository.ts
     └── index.ts
 lib/
 ├── schemas/
@@ -161,13 +172,23 @@ lib/
 ├── content/
 │   ├── course-loader.ts
 │   └── lesson-index.ts
+├── projects/
+│   ├── project-document-schema.ts
+│   ├── project-patch-schema.ts
+│   ├── project-migrations.ts
+│   └── project-projections.ts
+├── tools/
+│   ├── course-tool-registry.ts
+│   └── course-tool-schema.ts
 ├── auth/
 │   ├── demo-session.ts              # 第一阶段模拟身份
 │   └── session-provider.ts          # 未来真实登录替换点
 └── storage/
     ├── progress-store.ts            # 稳定接口
     ├── local-progress-store.ts      # 第一阶段实现
-    └── progress-migrations.ts
+    ├── progress-migrations.ts
+    ├── project-store.ts
+    └── local-project-store.ts
 tests/
 ├── unit/
 ├── integration/
@@ -181,10 +202,14 @@ tests/
 - 页面只调用 `repositories` 或面向页面的 query 函数，不直接导入多份 mock 文件拼接。
 - `LessonRenderer` 只解释课程 JSON，不读取角色、localStorage 或数据库。
 - 存储由 `progress-store` 接口隔离；从 localStorage 迁移数据库时不改互动组件。
+- `ProjectRepository` 是课程页、创造台和角色投影访问学生 App 的唯一入口。
+- 课程互动需要改项目时调用注册工具宿主并提交 `ProjectPatch`，不得直接写 localStorage。
+- `ProjectDocument` 与学习进度分开保存：前者描述 App，后者描述课程完成位置。
+- 工具注册表负责组件分发、字段权限和测试规则；`LessonRenderer` 不增加按课次判断。
 
 ## 5. 五个角色端的路由结构
 
-沿用 `docs/04-page-map.md` 的 24 个页面设计：
+沿用现有五端页面，并新增学生创造台正式路由（最终路径待确认）：
 
 ```text
 /
@@ -205,7 +230,8 @@ tests/
 │   └── /teacher/works
 ├── /student
 │   ├── /student/courses
-│   └── /student/works
+│   ├── /student/works
+│   └── /student/workbench/[projectId]
 ├── /parent
 │   ├── /parent/progress
 │   ├── /parent/works
@@ -219,6 +245,7 @@ tests/
 - 五端各有独立 layout，复用统一 `RoleShell`，并明确显示“演示身份/模拟数据”。
 - 第一阶段通过固定 demo session 确定角色和数据范围，不依赖 URL 伪装真实权限。
 - 学生从 `/student/courses` 进入学习页，允许写入本地进度。
+- 学生从课程“做”环节或顶部“创造台”进入同一 `/student/workbench/[projectId]`；嵌入与跳转策略待确认，但两种入口必须共用同一项目。
 - 教师从 `/teacher/courses` 进入同一学习页时必须是只读预览，不得写入学生进度。预览模式的具体 URL 表达仍需确认。
 - 业务范围过滤在 repository/query 层完成：总部全局、合作伙伴单校区、教师本人班级、学生本人、家长关联孩子。
 
@@ -266,15 +293,47 @@ ProgressStore.save(...)
 5. `ProgressStore` 负责持久化，不参与内容渲染。
 6. 所有互动原子统一输出 `{ value, completed, correct?, attempts?, updatedAt }` 形态；特有值由 Schema 判别。
 
-## 7. localStorage 学习进度
+## 7. 创造台与持续项目数据流
 
-### 7.1 建议键设计
+```text
+Lesson JSON ── toolId + projectBinding ─┐
+                                       ▼
+LessonRenderer ── CourseToolHost ── CourseToolRegistry ── React Tool
+                                       │
+Workbench ─────────────────────────────┘
+                                       │ ProjectPatch
+                                       ▼
+                               ProjectRepository
+                         ┌─────────────┴─────────────┐
+                         ▼                           ▼
+              LocalProjectRepository       ApiProjectRepository
+                  （当前阶段）                （数据库阶段）
+                         │
+                         ▼
+                  ProjectDocument
+```
+
+架构不变量：
+
+1. 课程页和创造台用同一个 `projectId`、同一个 Repository 和同一工具注册表。
+2. `LessonRenderer` 仍只负责 JSON 原子分发；项目上下文由 `CourseToolHost` 注入。
+3. 工具读取注册表声明的 `input` 字段，只能修改声明的 `output` 字段。
+4. 所有修改提交 `ProjectPatch`，包含 `baseRevision/source/lessonId/toolId/changes`；Repository 校验后原子写入并递增 revision。
+5. 工具修改上游字段时，引用旧 revision 的测试结果变为待重测。
+6. 教师预览使用只读 Repository；家长和运营角色只读取安全投影。
+7. `ProjectDocument` 的完整结构、课次字段矩阵和 localStorage 键见 `creative-workbench-spec.md`。
+
+## 8. localStorage 学习进度与项目
+
+### 8.1 建议键设计
 
 当前键 `vibe-course-progress:{lessonId}` 无学生、课程和版本维度。目标键：
 
 ```text
 vibe-coding:v1:progress:{demoStudentId}:{courseId}
 vibe-coding:v1:works:{demoStudentId}:{courseId}
+vibe-coding:v1:project-index:{demoStudentId}:{courseId}
+vibe-coding:v1:project:{demoStudentId}:{projectId}
 vibe-coding:v1:session
 ```
 
@@ -307,7 +366,9 @@ vibe-coding:v1:session
 }
 ```
 
-### 7.2 保存规则
+项目键与进度键不得合并：清理或迁移学习导航状态不能导致学生 App 丢失。旧 `works` 在项目架构落地时迁移为 `ProjectDocument.artifacts/publication` 的安全投影，迁移成功前保留兼容读取。
+
+### 8.2 保存规则
 
 - 首次进入课次时创建 `not_started → in_progress` 记录。
 - 每次互动提交、步骤完成和作品保存后写入；不保存仅用于展示的临时 UI 状态。
@@ -316,8 +377,9 @@ vibe-coding:v1:session
 - 用 `schemaVersion` 执行显式迁移；不直接假设旧数据符合新结构。
 - 教师预览使用只读 `ProgressStore`，所有 `save` 为禁用状态。
 - localStorage 只适合单浏览器演示，不承诺跨设备、跨浏览器或多用户同步。
+- 项目写入还需校验 revision 和工具字段权限；同标签页用 Store 订阅，不同标签页用 `storage` 事件同步。
 
-### 7.3 旧键迁移
+### 8.3 旧键迁移
 
 升级时提供一次性迁移函数：
 
@@ -327,9 +389,9 @@ vibe-coding:v1:session
 4. 写入新的课程聚合记录。
 5. 验证新记录成功后再决定是否保留旧键；第一阶段建议保留一个版本周期，避免不可恢复。
 
-## 8. 数据库和真实登录预留
+## 9. 数据库和真实登录预留
 
-### 8.1 数据库替换点
+### 9.1 数据库替换点
 
 业务组件不直接调用 localStorage。定义稳定接口：
 
@@ -343,6 +405,18 @@ interface ProgressStore {
 
 第一阶段由 `LocalProgressStore` 实现；后续新增 `ApiProgressStore`，通过 Route Handler/Server Action 调用数据库。课程 JSON 可继续作为版本化静态内容，也可在更后阶段迁移到内容服务，但两者不应和学习记录共表。
 
+持续项目使用并行的稳定接口：
+
+```ts
+interface ProjectRepository {
+  getProject(actor: SessionContext, projectId: string): Promise<ProjectDocument>;
+  applyPatch(actor: SessionContext, patch: ProjectPatch): Promise<ProjectDocument>;
+  getProjection(actor: SessionContext, projectId: string): Promise<ProjectProjection>;
+}
+```
+
+数据库阶段新增 `ApiProjectRepository`，服务端校验角色、项目归属、base revision、字段权限和 Schema。代码、截图等大产物可迁移到对象存储，但 `artifacts` 保持稳定引用。
+
 `repositories` 同样保持接口稳定：
 
 - `OrganizationRepository`
@@ -354,7 +428,7 @@ interface ProgressStore {
 
 第一阶段实现读取 `data/mock/`；数据库阶段实现读取服务端数据。
 
-### 8.2 真实登录替换点
+### 9.2 真实登录替换点
 
 第一阶段 `DemoSessionProvider` 返回固定演示身份：
 
@@ -375,13 +449,12 @@ type SessionContext = {
 - 数据库阶段必须在服务端按 session 再做授权与范围过滤。
 - 不提前引入账号表、密码、OAuth 或权限后台。
 
-## 9. 当前技术风险
+## 10. 当前技术风险
 
-1. 现有三课内容与新 13 课大纲的课号语义冲突，不能直接把旧 `lesson-02/03` 当作新大纲第 02/03 课。
-2. 当前 `Choice` 的错误提示硬编码为 HTML 语境，证明互动组件还未完全内容化。
-3. `RunTest` 只是字符串包含检查，不执行代码；名称和界面应持续明确为“安全规则检查”，不能宣称真实代码测试。
-4. 当前进度完成度固定按 6 步计算，尚不能表达选做项、作品完成或测试次数。
-5. 当前课程加载器手工导入文件，新增 13 课时容易漏注册。
-6. 当前无自动化组件/E2E 测试，响应式仅有 CSS 断点，尚未在目标平板尺寸验收。
-7. 模拟 AI 的交互方式、跨角色数据联动、作品发布方式等仍未确认，不能在架构设计中擅自实现。
-
+1. 当前第 01、06 课的 `TaskBuilder` 把“创造台”表现为课内原子，尚未接统一 ProjectDocument；迁移必须保留已保存进度并把产出映射到项目字段。
+2. 当前互动结果存放在学习进度中，不能承担 13 课持续项目；若直接扩展会把课程导航与作品版本耦合。
+3. `RunTest` 只是字符串包含检查，不执行代码；名称和界面应持续明确为安全规则检查。
+4. 当前进度完成度固定按 6 步计算，尚不能完整表达工具解锁、项目里程碑和发布准备度。
+5. 项目版本可能使 localStorage 增长；需先测量容量，再决定是否拆分版本或迁移 IndexedDB，不能预先引入复杂存储。
+6. 当前无完整自动化组件/E2E 测试，创造台多栏布局还需电脑和平板验收。
+7. 第 09 课运行时状态刷新策略、第 12 课正式概念、第 13 课发布方式仍待确认。

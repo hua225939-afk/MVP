@@ -16,8 +16,10 @@
 | `06-architecture.md` | 分析当前 MVP，并定义目标结构、五端路由、课程渲染和存储边界。 |
 | `07-course-schema.md` | 定义课程、单元、课次、六步和互动原子的目标 JSON/Zod 结构。 |
 | `08-data-model.md` | 定义五角色共享的组织、班级、进度、作品和反馈数据模型。 |
-| `09-implementation-plan.md` | 将后续开发拆为可独立验收的阶段，并设置样板课验收门。 |
+| `09-implementation-plan.md` | 按创造台底层、四组课程工具、五端联动和全站部署拆分后续阶段。 |
 | `10-test-plan.md` | 定义五端、课程 JSON、进度、设备适配和质量命令测试。 |
+| `creative-workbench-spec.md` | 定义“造物星球·创造台”的页面结构、ProjectDocument、同步、存储和工具注册机制。 |
+| `lesson-interaction-matrix.md` | 记录 13 课连续项目输入、六步互动、工具、测试、产出和多端摘要。 |
 | `references/` | 存放后续确认采用的参考材料；当前暂未收录材料。 |
 
 ## 使用约定
