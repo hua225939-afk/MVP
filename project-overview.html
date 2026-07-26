@@ -318,6 +318,17 @@
         border-radius: 20px;
         background: #fbfaff;
         padding: 20px;
+        cursor: pointer;
+        transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+      }
+
+      .roles article:hover,
+      .roles article:focus-visible,
+      .roles article[aria-pressed="true"] {
+        border-color: #8b65d3;
+        box-shadow: 0 16px 34px rgb(80 51 132 / 12%);
+        outline: none;
+        transform: translateY(-3px);
       }
 
       .role-number {
@@ -449,7 +460,7 @@
         gap: 8px;
       }
 
-      .lesson-dots span {
+      .lesson-dots button {
         display: grid;
         width: 38px;
         height: 38px;
@@ -458,8 +469,21 @@
         border-radius: 50%;
         background: white;
         color: #5e3fac;
+        cursor: pointer;
+        font: inherit;
         font-size: 11px;
         font-weight: 900;
+        transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+      }
+
+      .lesson-dots button:hover,
+      .lesson-dots button:focus-visible,
+      .lesson-dots button[aria-pressed="true"] {
+        border-color: #6740c1;
+        background: #6740c1;
+        color: white;
+        outline: none;
+        transform: scale(1.08);
       }
 
       .journey {
@@ -528,6 +552,17 @@
         gap: 24px;
         padding: 22px 0;
         border-bottom: 1px solid rgb(255 255 255 / 15%);
+        cursor: pointer;
+        transition: background 160ms ease, padding 160ms ease;
+      }
+
+      .layer:hover,
+      .layer:focus-visible,
+      .layer[aria-pressed="true"] {
+        margin-inline: -14px;
+        padding-inline: 14px;
+        background: rgb(255 255 255 / 7%);
+        outline: none;
       }
 
       .layer > span {
@@ -555,6 +590,67 @@
         color: #d8c9f0;
         padding: 8px 11px;
         font-size: 9px;
+      }
+
+      .interactive-panel {
+        display: grid;
+        grid-template-columns: minmax(180px, 0.45fr) minmax(0, 1fr);
+        gap: 28px;
+        margin-top: 22px;
+        border: 1px solid #ddd4eb;
+        border-radius: 20px;
+        background: #f7f4fc;
+        padding: 24px;
+      }
+
+      .interactive-panel small {
+        color: #7657ba;
+        font-size: 9px;
+        font-weight: 900;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .interactive-panel h3 {
+        margin: 7px 0 0;
+        font-size: 20px;
+      }
+
+      .interactive-panel p {
+        margin: 0;
+        color: #625a6c;
+        font-size: 12px;
+        line-height: 1.75;
+      }
+
+      .interactive-panel .detail-meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 14px;
+      }
+
+      .interactive-panel .detail-meta span {
+        border-radius: 999px;
+        background: white;
+        color: #60409d;
+        padding: 7px 10px;
+        font-size: 10px;
+        font-weight: 800;
+      }
+
+      .architecture .interactive-panel {
+        border-color: rgb(255 255 255 / 14%);
+        background: rgb(255 255 255 / 6%);
+      }
+
+      .architecture .interactive-panel p {
+        color: #c8bfd3;
+      }
+
+      .architecture .interactive-panel .detail-meta span {
+        background: rgb(255 255 255 / 9%);
+        color: #dbcdf0;
       }
 
       .system-cards {
@@ -709,6 +805,11 @@
           justify-content: flex-start;
         }
 
+        .interactive-panel {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
         .layer {
           grid-template-columns: 36px minmax(0, 1fr);
           align-items: start;
@@ -797,36 +898,44 @@
         </div>
 
         <div class="roles">
-          <article>
+          <article tabindex="0" role="button" aria-pressed="true" data-role="hq">
             <span class="role-number">01</span><span class="role-symbol">总</span>
             <small>课程与运营团队</small><h3>总部</h3>
             <p>查看平台整体运营、课程结构与互动组件使用情况。</p>
             <footer>聚合平台、课程与内容视图</footer>
           </article>
-          <article>
+          <article tabindex="0" role="button" aria-pressed="false" data-role="partner">
             <span class="role-number">02</span><span class="role-symbol">合</span>
             <small>校区运营负责人</small><h3>合作伙伴</h3>
             <p>查看所属演示校区、班级、教师与课程进展。</p>
             <footer>聚合校区与班级视图</footer>
           </article>
-          <article>
+          <article tabindex="0" role="button" aria-pressed="false" data-role="teacher">
             <span class="role-number">03</span><span class="role-symbol">师</span>
             <small>授课教师</small><h3>教师</h3>
             <p>查看学生进度、项目证据并填写独立的结构化评语。</p>
             <footer>只读项目与教学工作流</footer>
           </article>
-          <article>
+          <article tabindex="0" role="button" aria-pressed="false" data-role="student">
             <span class="role-number">04</span><span class="role-symbol">学</span>
             <small>小学高年级至初中生</small><h3>学生</h3>
             <p>继续学习与创作，并在当前浏览器保存进度和项目。</p>
             <footer>课程、创造台与持续作品</footer>
           </article>
-          <article>
+          <article tabindex="0" role="button" aria-pressed="false" data-role="parent">
             <span class="role-number">05</span><span class="role-symbol">家</span>
             <small>学生家长</small><h3>家长</h3>
             <p>查看关联学生的成长摘要、作品版本与教师评语。</p>
             <footer>安全精简的成长视图</footer>
           </article>
+        </div>
+
+        <div class="interactive-panel" id="role-detail" aria-live="polite">
+          <div><small>当前角色 · 点击上方切换</small><h3 data-detail-title>总部</h3></div>
+          <div>
+            <p data-detail-copy>聚合查看平台运营、课程结构与互动组件使用情况，读取共享模拟数据，不直接修改学生作品。</p>
+            <div class="detail-meta" data-detail-meta><span>关键页面 /hq</span><span>权限 聚合只读</span><span>数据 平台级视图</span></div>
+          </div>
         </div>
 
         <div class="boundary">
@@ -856,28 +965,36 @@
           <article class="unit">
             <div class="unit-index">01<small>UNIT</small></div>
             <div><h3>认识 Vibe Coding Lab</h3><p>从自然语言需求出发，认识网页与人机协作。</p></div>
-            <div class="lesson-dots"><span>1</span><span>2</span></div>
+            <div class="lesson-dots"><button type="button" data-lesson="1" aria-pressed="true">1</button><button type="button" data-lesson="2" aria-pressed="false">2</button></div>
           </article>
           <article class="unit">
             <div class="unit-index">02<small>UNIT</small></div>
             <div><h3>搭建网页界面</h3><p>学习网页结构、视觉样式和组件组合。</p></div>
-            <div class="lesson-dots"><span>3</span><span>4</span><span>5</span></div>
+            <div class="lesson-dots"><button type="button" data-lesson="3" aria-pressed="false">3</button><button type="button" data-lesson="4" aria-pressed="false">4</button><button type="button" data-lesson="5" aria-pressed="false">5</button></div>
           </article>
           <article class="unit">
             <div class="unit-index">03<small>UNIT</small></div>
             <div><h3>让网页真正动起来</h3><p>用事件、输入、条件和状态构建互动。</p></div>
-            <div class="lesson-dots"><span>6</span><span>7</span><span>8</span><span>9</span></div>
+            <div class="lesson-dots"><button type="button" data-lesson="6" aria-pressed="false">6</button><button type="button" data-lesson="7" aria-pressed="false">7</button><button type="button" data-lesson="8" aria-pressed="false">8</button><button type="button" data-lesson="9" aria-pressed="false">9</button></div>
           </article>
           <article class="unit">
             <div class="unit-index">04<small>UNIT</small></div>
             <div><h3>完成自己的网页应用</h3><p>组合功能、调试问题并根据反馈迭代。</p></div>
-            <div class="lesson-dots"><span>10</span><span>11</span><span>12</span></div>
+            <div class="lesson-dots"><button type="button" data-lesson="10" aria-pressed="false">10</button><button type="button" data-lesson="11" aria-pressed="false">11</button><button type="button" data-lesson="12" aria-pressed="false">12</button></div>
           </article>
           <article class="unit">
             <div class="unit-index">05<small>UNIT</small></div>
             <div><h3>应用发布与成果展示</h3><p>完成发布检查并清楚介绍创作过程。</p></div>
-            <div class="lesson-dots"><span>13</span></div>
+            <div class="lesson-dots"><button type="button" data-lesson="13" aria-pressed="false">13</button></div>
           </article>
+        </div>
+
+        <div class="interactive-panel" id="lesson-detail" aria-live="polite">
+          <div><small>第 01 课 · 点击课次切换</small><h3 data-detail-title>一句话唤醒第一个网页</h3></div>
+          <div>
+            <p data-detail-copy>体验真实网页案例，识别结构化需求，并通过本地模板完成可调整、可测试的网页原型。</p>
+            <div class="detail-meta" data-detail-meta><span>单元 01</span><span>工具 意图画布</span><span>产出 创建主项目</span></div>
+          </div>
         </div>
 
         <div class="journey">
@@ -899,21 +1016,29 @@
         </div>
 
         <div class="layers">
-          <article class="layer">
+          <article class="layer" tabindex="0" role="button" aria-pressed="true" data-layer="content">
             <span>01</span><div><h3>课程内容层</h3><p>5 单元与 13 课保存在 JSON 中，页面不逐课写死。</p></div><code>content / Course / Lesson</code>
           </article>
-          <article class="layer">
+          <article class="layer" tabindex="0" role="button" aria-pressed="false" data-layer="render">
             <span>02</span><div><h3>校验与渲染层</h3><p>Zod 校验课程内容，LessonRenderer 分发可复用互动原子。</p></div><code>Zod / LessonRenderer</code>
           </article>
-          <article class="layer">
+          <article class="layer" tabindex="0" role="button" aria-pressed="false" data-layer="project">
             <span>03</span><div><h3>持续创作层</h3><p>13 个注册工具共同编辑同一份 ProjectDocument，并限制字段权限。</p></div><code>CourseToolHost / ProjectPatch</code>
           </article>
-          <article class="layer">
+          <article class="layer" tabindex="0" role="button" aria-pressed="false" data-layer="storage">
             <span>04</span><div><h3>数据与存储层</h3><p>课程进度、学生项目和模拟业务数据分层保存，通过仓储接口访问。</p></div><code>Repository / localStorage</code>
           </article>
-          <article class="layer">
+          <article class="layer" tabindex="0" role="button" aria-pressed="false" data-layer="roles">
             <span>05</span><div><h3>五角色体验层</h3><p>学生创作，教师与家长只读查看，总部与合作伙伴读取聚合视图。</p></div><code>RoleShell / ViewModel</code>
           </article>
+        </div>
+
+        <div class="interactive-panel" id="layer-detail" aria-live="polite">
+          <div><small>当前架构层 · 点击上方切换</small><h3 data-detail-title>课程内容层</h3></div>
+          <div>
+            <p data-detail-copy>JSON 提供 5 单元、13 课的结构化内容，是渲染与项目工具的上游输入。</p>
+            <div class="detail-meta" data-detail-meta><span>输入 课程设计</span><span>输出 Lesson JSON</span><span>下游 Zod 校验</span></div>
+          </div>
         </div>
 
         <div class="system-cards">
@@ -953,5 +1078,77 @@
       <span>Vibe Coding Lab · AI 创意编程实验室</span>
       <span>独立 HTML 项目概览 · 2026-07-27</span>
     </footer>
+    <script>
+      const roleDetails = {
+        hq: ["总部", "聚合查看平台运营、课程结构与互动组件使用情况，读取共享模拟数据，不直接修改学生作品。", ["关键页面 /hq", "权限 聚合只读", "数据 平台级视图"]],
+        partner: ["合作伙伴", "查看所属演示校区、班级、教师和课程进展，只能访问本校区范围内的汇总信息。", ["关键页面 /partner", "权限 校区只读", "数据 校区与班级"]],
+        teacher: ["教师", "跟踪学生进度与项目证据，填写独立结构化评语；课程预览保持只读，不写入学生状态。", ["关键页面 /teacher", "权限 项目只读", "可写 教师评语"]],
+        student: ["学生", "进入课程和创造台，持续修改同一个 ProjectDocument，并在当前浏览器保存项目与学习进度。", ["关键页面 /student", "权限 创作与测试", "数据 个人项目"]],
+        parent: ["家长", "查看关联学生的成长摘要、作品版本与教师评语，界面只呈现安全、精简的信息。", ["关键页面 /parent", "权限 关联学生只读", "数据 成长摘要"]]
+      };
+
+      const lessonDetails = [
+        ["一句话唤醒第一个网页", "体验真实网页案例，识别结构化需求，并通过本地模板完成可调整、可测试的网页原型。", "01", "意图画布", "创建主项目"],
+        ["把灵感变成 App 任务", "读取第 1 课创作意图，通过功能星系与用户故事板确定可完成的 App 范围。", "01", "项目边界", "确认项目范围"],
+        ["搭好网页的内容骨架", "通过网页透视、页面草图和结构建议建立学生可修改的 HTML 页面骨架。", "02", "页面骨架", "生成 HTML 结构"],
+        ["给网页穿上设计外衣", "建立视觉情绪板，修改并确认样式草稿，实时同步 CSS 与页面。", "02", "外观主题", "形成 StyleTokens"],
+        ["用组件拼出功能页面", "操作组件案例、开放组装页面，并把自定义草图转为安全组件规格。", "02", "组件中心", "组装功能页面"],
+        ["点击之后会发生什么", "建立触发—动作—反馈关系，组合至少两个点击效果并完成真实测试。", "03", "点击事件", "建立点击反馈"],
+        ["让网页听懂我的输入", "加入受验证的输入组件，连接实时结果并完成正常、空和异常输入测试。", "03", "输入输出", "连接输入结果"],
+        ["不同选择，不同结果", "把输入接入安全条件判断，检查重复、遗漏和边界，解释如果—那么—否则规则。", "03", "条件判断", "建立分支规则"],
+        ["让网页记住操作过程", "选择需要保留的项目状态，验证刷新恢复、清空和项目隔离。", "03", "状态记忆", "保存互动状态"],
+        ["把功能组装成完整 App", "把第 2—9 课页面和功能编排为可达流程，完成角色试航与 App 1.0 快照。", "04", "应用流程编排器", "形成 App 1.0"],
+        ["在 App 现场标记并修复 Bug", "记录真实问题证据，比较调试建议，完成局部修复、差异查看和复测。", "04", "Bug 标注工作室", "修复并复测"],
+        ["邀请同伴试玩并升级 App", "通过只读试玩收集页面标注和体验曲线，选择问题修改并复测生成 2.0。", "04", "同伴试玩工作室", "形成 App 2.0"],
+        ["造物发布", "选择可公开故事，完成发布视觉、介绍修订、演示和访客隐私测试。", "05", "造物发布", "生成只读作品页"]
+      ];
+
+      const layerDetails = {
+        content: ["课程内容层", "JSON 提供 5 单元、13 课的结构化内容，是渲染与项目工具的上游输入。", ["输入 课程设计", "输出 Lesson JSON", "下游 Zod 校验"]],
+        render: ["校验与渲染层", "Zod 先验证内容结构，LessonRenderer 再把互动原子分发为统一的课程体验。", ["上游 Lesson JSON", "契约 Zod Schema", "下游 互动组件"]],
+        project: ["持续创作层", "注册工具只修改声明过的字段，并把变更提交为可校验、可审计的 ProjectPatch。", ["输入 工具操作", "核心 ProjectDocument", "输出 ProjectPatch"]],
+        storage: ["数据与存储层", "Repository 隔离课程进度、学生项目与模拟业务数据，让未来存储迁移不影响页面。", ["上游 ProjectPatch", "接口 Repository", "当前 localStorage"]],
+        roles: ["五角色体验层", "同一事实经 ViewModel 转换为五种角色视角；学生可创作，其余角色按范围读取。", ["输入 共享数据", "适配 ViewModel", "输出 五角色页面"]]
+      };
+
+      function updatePanel(panelId, detail) {
+        const panel = document.getElementById(panelId);
+        panel.querySelector("[data-detail-title]").textContent = detail[0];
+        panel.querySelector("[data-detail-copy]").textContent = detail[1];
+        const meta = panel.querySelector("[data-detail-meta]");
+        meta.replaceChildren(...detail[2].map((text) => {
+          const tag = document.createElement("span");
+          tag.textContent = text;
+          return tag;
+        }));
+      }
+
+      function connectInteractiveItems(selector, panelId, getDetail) {
+        const items = [...document.querySelectorAll(selector)];
+        items.forEach((item) => {
+          const activate = () => {
+            items.forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate === item)));
+            updatePanel(panelId, getDetail(item));
+          };
+          item.addEventListener("click", activate);
+          if (item.getAttribute("role") === "button") {
+            item.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                activate();
+              }
+            });
+          }
+        });
+      }
+
+      connectInteractiveItems("[data-role]", "role-detail", (item) => roleDetails[item.dataset.role]);
+      connectInteractiveItems("[data-lesson]", "lesson-detail", (item) => {
+        const lesson = lessonDetails[Number(item.dataset.lesson) - 1];
+        document.querySelector("#lesson-detail small").textContent = `第 ${String(item.dataset.lesson).padStart(2, "0")} 课 · 点击课次切换`;
+        return [lesson[0], lesson[1], [`单元 ${lesson[2]}`, `工具 ${lesson[3]}`, `产出 ${lesson[4]}`]];
+      });
+      connectInteractiveItems("[data-layer]", "layer-detail", (item) => layerDetails[item.dataset.layer]);
+    </script>
   </body>
 </html>
