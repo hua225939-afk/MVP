@@ -16,14 +16,20 @@ const rawLesson03 = readJson("content/lessons/lesson-03.json");
 const rawLesson04 = readJson("content/lessons/lesson-04.json");
 const rawLesson05 = readJson("content/lessons/lesson-05.json");
 const rawLesson06 = readJson("content/lessons/lesson-06.json");
+const rawLesson07 = readJson("content/lessons/lesson-07.json");
+const rawLesson08 = readJson("content/lessons/lesson-08.json");
+const rawLesson09 = readJson("content/lessons/lesson-09.json");
 
-test("正式课程与第3—5课 JSON 通过 Schema", () => {
+test("正式课程与第3—9课 JSON 通过 Schema", () => {
   assert.equal(courseSchema.parse(rawCourse).totalLessons, 13);
   assert.equal(lessonSchema.parse(rawLesson01).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson03).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson04).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson05).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson06).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson07).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson08).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson09).steps.length, 6);
 });
 
 test("六步顺序错误会被拒绝并定位到 phase", () => {
@@ -43,7 +49,7 @@ test("六步顺序错误会被拒绝并定位到 phase", () => {
 });
 
 test("Choice 的正确答案必须引用现有选项", () => {
-  const lesson = structuredClone(rawLesson06) as {
+  const lesson = structuredClone(rawLesson01) as {
     steps: Array<{
       atoms: Array<{ type: string; correctOptionId?: string }>;
     }>;

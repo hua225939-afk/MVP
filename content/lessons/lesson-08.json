@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-08",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-03",
+  "order": 8,
+  "title": "不同选择，不同结果",
+  "subtitle": "用两至三个条件为自己的 App 设计不同路线",
+  "studentSubtitle": "造物星球·路线分岔任务",
+  "durationMinutes": 90,
+  "coreGoal": "把第7课输入接入安全条件判断，检查重复遗漏和边界，并解释如果那么否则规则。",
+  "keyConcepts": ["if", "else", "条件成立", "条件不成立", "边界值"],
+  "skills": ["条件表设计", "路线测试", "边界调试", "规则表达"],
+  "output": {"title": "条件判断表", "description": "两至三个条件、实时路线、边界测试和修复记录。", "acceptanceCriteria": ["体验不同结果", "制作判断表", "检查重复遗漏", "测试边界值", "解释并保存规则"]},
+  "teacherNotes": {"objectives": ["理解同一输入可进入不同路线", "能测试条件边界"], "preparation": ["确认第7课输入已保存"], "commonIssues": ["条件互相重复", "只测明显值不测边界"], "facilitationTips": ["用相邻值测试边界", "先画表再看代码"]},
+  "studentContent": {"opening": "同一个输入会因为规则不同走向不同结果。", "safetyNote": "条件由受控运算符计算，不执行学生输入或任意表达式。", "completionMessage": "你的 App 已能安全选择不同路线。"},
+  "parentSummary": {"theme": "用条件设计不同结果", "learned": "孩子能设计判断表、检查边界并解释规则。", "artifact": "条件表、局部逻辑和修复记录。", "conversationStarter": "请孩子用如果那么否则解释一条 App 规则。"},
+  "steps": [
+    {
+      "id": "lesson-08.look", "phase": "看", "title": "观察同一输入的不同结果", "durationMinutes": 15, "goal": "改变测试值并实际走不同路线",
+      "studentContent": {"intro": "判断实验室会实时显示匹配结果。", "instructions": "测试20、50和80，观察结果怎样变化。", "completionMessage": "你走过了不同路线。"},
+      "teacherNotes": {"purpose": "从结果差异引出条件", "talkingPoints": ["规则决定路线"], "observeFor": ["是否修改测试值"]},
+      "assistant": {"mode": "preset", "message": "记录哪一个值让结果发生变化。", "hints": ["20", "50", "80"]},
+      "atoms": [{"id": "lesson-08.look.condition", "type": "courseTool", "title": "ConditionBuilder 路线体验", "instructions": "实际测试不同输入路线。", "required": true, "toolId": "condition-branch", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.look.condition"]}
+    },
+    {
+      "id": "lesson-08.explain", "phase": "讲", "title": "理解 if 与 else", "durationMinutes": 10, "goal": "区分条件成立与不成立",
+      "studentContent": {"intro": "if 检查一条规则，else 接住前面没有匹配的情况。", "instructions": "揭示路线逻辑并对照实时结果。", "completionMessage": "你理解成立与不成立。"},
+      "teacherNotes": {"purpose": "建立条件语言", "talkingPoints": ["顺序会影响结果"], "observeFor": ["能否指出 else"]},
+      "assistant": {"mode": "preset", "message": "每条条件都问：成立吗？", "hints": ["if", "else"]},
+      "atoms": [{"id": "lesson-08.explain.if", "type": "reveal", "title": "条件路线规则", "required": true, "prompt": "条件不成立时会怎样？", "content": "系统按顺序检查受控条件；第一条成立就显示对应结果，不成立则继续，最后由 else 提供没有命中时的反馈。", "buttonLabel": "揭示路线逻辑"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.explain.if"]}
+    },
+    {
+      "id": "lesson-08.think", "phase": "想", "title": "写出如果那么否则", "durationMinutes": 10, "goal": "先用自然语言说明规则",
+      "studentContent": {"intro": "自然语言规则帮助你发现遗漏。", "instructions": "写出至少两条结果和一个否则。", "completionMessage": "条件计划可转成判断表。"},
+      "teacherNotes": {"purpose": "在代码前梳理规则", "talkingPoints": ["否则不能缺少"], "observeFor": ["是否覆盖不成立"]},
+      "assistant": {"mode": "preset", "message": "使用完整的如果、那么、否则。", "hints": ["比较值", "结果", "否则"]},
+      "atoms": [{"id": "lesson-08.think.rule", "type": "textInput", "title": "自然语言规则", "required": true, "question": "用“如果……那么……否则……”解释你的规则。", "placeholder": "如果数值小于……那么……否则……", "validation": {"mode": "minLength", "minLength": 20}, "successMessage": "规则表达完整。", "hint": "补上否则路线。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.think.rule"]}
+    },
+    {
+      "id": "lesson-08.make", "phase": "做", "title": "制作条件判断表", "durationMinutes": 30, "goal": "修改比较值与反馈并补全两至三条条件",
+      "studentContent": {"intro": "ConditionBuilder 读取第7课输入。", "instructions": "调整运算符、比较值、路线结果和顺序，修复重复或遗漏。", "completionMessage": "判断表已连接 App 实时结果。"},
+      "teacherNotes": {"purpose": "完成开放条件创作", "talkingPoints": ["自由模式可修改安全参数而非任意执行"], "observeFor": ["条件是否与自己的任务有关"]},
+      "assistant": {"mode": "preset", "message": "先改结果文字，再检查相邻条件。", "hints": ["两至三条", "不重复", "不遗漏"]},
+      "atoms": [{"id": "lesson-08.make.condition", "type": "courseTool", "title": "ConditionBuilder", "instructions": "完成判断表、实时测试和保存。", "required": true, "toolId": "condition-branch", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.make.condition"]}
+    },
+    {
+      "id": "lesson-08.test", "phase": "测", "title": "攻克条件边界", "durationMinutes": 20, "goal": "测试相邻边界并修复不合理结果",
+      "studentContent": {"intro": "49和50能揭示小于与大于等于是否衔接。", "instructions": "在工具记录49、50及两条不同路线；修复后补全扫描。", "completionMessage": "路线和边界测试通过。"},
+      "teacherNotes": {"purpose": "学习边界测试", "talkingPoints": ["相邻值最容易暴露空档"], "observeFor": ["是否测试49和50"]},
+      "assistant": {"mode": "preset", "message": "边界两侧都要测试。", "hints": ["49", "50", "else"]},
+      "atoms": [{"id": "lesson-08.test.boundary", "type": "runTest", "title": "条件边界扫描", "instructions": "补全50所属路线和否则反馈。", "required": true, "description": "检查边界覆盖。", "language": "text", "testMode": "contains", "initialCode": "49: low\n50: TODO\nelse: TODO", "tests": [{"id": "below", "label": "边界下方", "includes": "49: low", "message": "保留49路线。"}, {"id": "edge", "label": "边界值", "includes": "50: high", "message": "让50进入正确路线。"}, {"id": "fallback", "label": "否则路线", "includes": "else: feedback", "message": "补上否则反馈。"}], "successMessage": "边界和否则路线齐全。", "retryMessage": "修复 TODO 后重测。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.test.boundary"]}
+    },
+    {
+      "id": "lesson-08.share", "phase": "说", "title": "解释判断规则", "durationMinutes": 5, "goal": "用自然语言说明路线",
+      "studentContent": {"intro": "条件表和测试证据已保存。", "instructions": "演示边界两侧并解释规则。", "completionMessage": "第8课条件档案完成。"},
+      "teacherNotes": {"purpose": "确认逻辑理解", "talkingPoints": ["说明成立和不成立"], "observeFor": ["表达是否对应作品"]},
+      "assistant": {"mode": "preset", "message": "不要只念代码，说出用户会看到什么。", "hints": ["如果", "那么", "否则"]},
+      "atoms": [{"id": "lesson-08.share.rule", "type": "reveal", "title": "规则说明句式", "required": true, "prompt": "怎样介绍判断路线？", "content": "如果输入满足第一条条件，那么显示对应结果；否则继续检查下一条，最后显示我设计的兜底反馈。", "buttonLabel": "查看说明句式"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-08.share.rule"]}
+    }
+  ]
+}

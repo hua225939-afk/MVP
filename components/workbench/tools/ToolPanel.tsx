@@ -1,15 +1,18 @@
 "use client";
 
 import type { ProjectDocument } from "@/lib/projects/project-document";
-import {
-  applyToolChanges,
-  type CourseToolDefinition,
-} from "@/lib/tools/course-tool-registry";
+import type { CourseToolDefinition } from "@/lib/tools/course-tool-registry";
 import { ProjectBoundaryTool } from "./ProjectBoundaryTool";
 import { UnitOneIntentTool } from "./UnitOneIntentTool";
 import { PageStructureStudio } from "./PageStructureStudio";
 import { MoodboardThemeStudio } from "./MoodboardThemeStudio";
 import { ComponentStudio } from "./ComponentStudio";
+import {
+  ConditionBuilder,
+  EventBuilder,
+  InputOutputBuilder,
+  StateBuilder,
+} from "./UnitThreeTools";
 
 export function ToolPanel({
   definition,
@@ -41,75 +44,19 @@ export function ToolPanel({
   }
 
   if (definition.id === "click-event") {
-    const current = project.interactions[0];
-    return (
-      <div className="tool-form">
-        <label>
-          点击后的反馈
-          <input
-            onChange={(event) => {
-              const interaction = current ?? {
-                id: "interaction-primary-click",
-                componentId: "component-action",
-                trigger: "click" as const,
-                action: "message" as const,
-                config: {},
-              };
-              onChange(
-                applyToolChanges(project, definition, {
-                  interactions: [
-                    {
-                      ...interaction,
-                      config: {
-                        ...interaction.config,
-                        feedback: event.target.value,
-                      },
-                    },
-                    ...project.interactions.slice(current ? 1 : 0),
-                  ],
-                }),
-              );
-            }}
-            placeholder="例如：喝水记录成功"
-            value={String(current?.config.feedback ?? "")}
-          />
-        </label>
-        <label>
-          起始次数
-          <input
-            min="0"
-            onChange={(event) => {
-              const interaction = current ?? {
-                id: "interaction-primary-click",
-                componentId: "component-action",
-                trigger: "click" as const,
-                action: "message" as const,
-                config: {},
-              };
-              onChange(
-                applyToolChanges(project, definition, {
-                  interactions: [
-                    {
-                      ...interaction,
-                      config: {
-                        ...interaction.config,
-                        startValue: Number(event.target.value) || 0,
-                      },
-                    },
-                    ...project.interactions.slice(current ? 1 : 0),
-                  ],
-                }),
-              );
-            }}
-            type="number"
-            value={Number(current?.config.startValue) || 0}
-          />
-        </label>
-        <p className="tool-note">
-          当前工具修改后会使相关测试失效；请在“测试”模式重新运行。
-        </p>
-      </div>
-    );
+    return <EventBuilder definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "input-output") {
+    return <InputOutputBuilder definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "condition-branch") {
+    return <ConditionBuilder definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "state-memory") {
+    return <StateBuilder definition={definition} onChange={onChange} project={project} />;
   }
 
   return (

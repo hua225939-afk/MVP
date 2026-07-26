@@ -70,8 +70,8 @@ for (const lesson of lessons) {
   }
 }
 
-if (["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06"].some((id) => !seenLessonIds.has(id))) {
-  throw new Error("当前阶段必须包含 lesson-01—05 与 lesson-06 回归样板");
+if (Array.from({ length: 9 }, (_, index) => `lesson-${String(index + 1).padStart(2, "0")}`).some((id) => !seenLessonIds.has(id))) {
+  throw new Error("当前阶段必须包含 lesson-01—09");
 }
 console.log(
   `内容验证通过：1 门课程、${course.units.length} 个单元、${lessons.length} 节样板课、${registeredTypes.size} 类互动原子。`,

@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-09",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-03",
+  "order": 9,
+  "title": "让网页记住操作过程",
+  "subtitle": "为自己的项目添加可更新、可恢复也可清空的本地记忆",
+  "studentSubtitle": "造物星球·记忆核心任务",
+  "durationMinutes": 90,
+  "coreGoal": "选择需要保留的项目状态，将试运行与正式作品分开，并验证刷新恢复、清空和项目隔离。",
+  "keyConcepts": ["状态", "更新", "本地记忆", "刷新恢复", "项目隔离"],
+  "skills": ["状态设计", "保存修复", "恢复测试", "数据旅程表达"],
+  "output": {"title": "项目记忆核心", "description": "可更新状态、数据旅程、刷新恢复和清空测试记录。", "acceptanceCriteria": ["比较消失与保留", "选择一种状态", "更新和重置", "修复保存失败", "刷新恢复且项目隔离"]},
+  "teacherNotes": {"objectives": ["理解状态是变化中的数据", "区分试跑和正式保存", "理解项目隔离"], "preparation": ["确认第8课条件已保存"], "commonIssues": ["试跑后忘记保存", "刷新测试读取了别的项目"], "facilitationTips": ["先演示消失再保存", "切换项目验证隔离"]},
+  "studentContent": {"opening": "页面刷新后，临时操作会消失；记忆核心能让重要数据回来。", "safetyNote": "状态保存在当前 ProjectDocument，每个 projectId 独立，试跑不会覆盖正式值。", "completionMessage": "你的 App 拥有了可恢复、可清空的项目记忆。"},
+  "parentSummary": {"theme": "让网页记住操作", "learned": "孩子能设计状态、修复保存并验证刷新恢复和项目隔离。", "artifact": "数据旅程和记忆测试记录。", "conversationStarter": "请孩子说明哪些数据值得记住，哪些不应该保存。"},
+  "steps": [
+    {
+      "id": "lesson-09.look", "phase": "看", "title": "比较消失与保留", "durationMinutes": 15, "goal": "体验试运行状态和正式项目状态",
+      "studentContent": {"intro": "左侧试运行不保存，右侧显示当前项目正式值。", "instructions": "更新试运行，再模拟刷新，比较两个区域。", "completionMessage": "你看见临时状态与持久状态的差别。"},
+      "teacherNotes": {"purpose": "用对比建立持久化需求", "talkingPoints": ["刷新恢复依赖正式保存"], "observeFor": ["是否比较两个区域"]},
+      "assistant": {"mode": "preset", "message": "先更新但不要保存，再模拟刷新。", "hints": ["试运行", "正式状态"]},
+      "atoms": [{"id": "lesson-09.look.state", "type": "courseTool", "title": "StateBuilder 记忆对比", "instructions": "体验更新、刷新与正式值。", "required": true, "toolId": "state-memory", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.look.state"]}
+    },
+    {
+      "id": "lesson-09.explain", "phase": "讲", "title": "理解状态的数据旅程", "durationMinutes": 10, "goal": "理解操作更新保存恢复清空",
+      "studentContent": {"intro": "状态不是静止文字，而是会随操作改变的数据。", "instructions": "展开数据旅程。", "completionMessage": "你能指出状态的每一站。"},
+      "teacherNotes": {"purpose": "建立状态生命周期", "talkingPoints": ["清空也是一次状态更新"], "observeFor": ["是否区分试跑和保存"]},
+      "assistant": {"mode": "preset", "message": "跟着数据从组件走到项目。", "hints": ["更新", "保存", "恢复", "清空"]},
+      "atoms": [{"id": "lesson-09.explain.journey", "type": "reveal", "title": "数据旅程", "required": true, "prompt": "状态怎样跨过刷新？", "content": "组件操作先更新受控试运行状态；确认保存后写入当前项目 ProjectDocument；刷新时按 projectId 恢复，也可以重置为空值。", "buttonLabel": "展开数据旅程"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.explain.journey"]}
+    },
+    {
+      "id": "lesson-09.think", "phase": "想", "title": "选择值得记住的数据", "durationMinutes": 10, "goal": "确定状态和不保存的内容",
+      "studentContent": {"intro": "不是所有输入都值得长期保留。", "instructions": "从计数勾选收藏或最近结果选择一种，并说明原因。", "completionMessage": "记忆目标清楚。"},
+      "teacherNotes": {"purpose": "培养有目的的数据设计", "talkingPoints": ["只保存完成任务所需数据"], "observeFor": ["理由是否具体"]},
+      "assistant": {"mode": "preset", "message": "问自己：刷新后用户还需要它吗？", "hints": ["计数", "勾选", "收藏", "最近结果"]},
+      "atoms": [{"id": "lesson-09.think.memory", "type": "textInput", "title": "记忆选择", "required": true, "question": "你的 App 要记住什么，为什么刷新后仍然需要？", "placeholder": "我要记住……因为用户刷新后……", "validation": {"mode": "minLength", "minLength": 18}, "successMessage": "记忆理由清楚。", "hint": "说明刷新后的用途。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.think.memory"]}
+    },
+    {
+      "id": "lesson-09.make", "phase": "做", "title": "安装记忆核心", "durationMinutes": 30, "goal": "添加更新删除保存与恢复能力",
+      "studentContent": {"intro": "StateBuilder 写入当前项目独立状态。", "instructions": "选择状态，更新和清空，修复保存失败，再保存。", "completionMessage": "记忆核心已进入自己的 App。"},
+      "teacherNotes": {"purpose": "完成开放状态创作", "talkingPoints": ["自由模式可选择状态与命名"], "observeFor": ["是否先修复保存故障"]},
+      "assistant": {"mode": "preset", "message": "试运行确认后再保存到作品。", "hints": ["更新", "清空", "修复保存"]},
+      "atoms": [{"id": "lesson-09.make.state", "type": "courseTool", "title": "StateBuilder", "instructions": "完成记忆状态、保存修复与数据旅程。", "required": true, "toolId": "state-memory", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.make.state"]}
+    },
+    {
+      "id": "lesson-09.test", "phase": "测", "title": "验证刷新恢复与隔离", "durationMinutes": 20, "goal": "测试保存恢复清空和项目边界",
+      "studentContent": {"intro": "状态只能回到创建它的项目。", "instructions": "运行工具测试，再补全项目隔离检查单。", "completionMessage": "记忆测试通过。"},
+      "teacherNotes": {"purpose": "验证持久化与隔离", "talkingPoints": ["projectId 是隔离边界"], "observeFor": ["是否切换项目检查"]},
+      "assistant": {"mode": "preset", "message": "保存、刷新、清空、切项目四步都要走。", "hints": ["projectId", "formal", "clear"]},
+      "atoms": [{"id": "lesson-09.test.memory", "type": "runTest", "title": "记忆核心扫描", "instructions": "补全恢复清空与隔离标记。", "required": true, "description": "复核项目状态契约。", "language": "text", "testMode": "contains", "initialCode": "save: project\nrefresh: TODO\nclear: TODO\nisolation: TODO", "tests": [{"id": "save", "label": "保存到项目", "includes": "save: project", "message": "状态写入项目。"}, {"id": "refresh", "label": "刷新恢复", "includes": "refresh: restore", "message": "补上刷新恢复。"}, {"id": "clear", "label": "可以清空", "includes": "clear: empty", "message": "补上清空。"}, {"id": "isolation", "label": "项目隔离", "includes": "isolation: projectId", "message": "按projectId隔离。"}], "successMessage": "记忆核心契约通过。", "retryMessage": "修复 TODO 后重测。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.test.memory"]}
+    },
+    {
+      "id": "lesson-09.share", "phase": "说", "title": "展示数据旅程", "durationMinutes": 5, "goal": "解释状态怎样更新恢复和清空",
+      "studentContent": {"intro": "数据旅程和测试记录已进入作品档案。", "instructions": "演示更新、保存、恢复和清空。", "completionMessage": "第三单元完成，不继续开发第四单元。"},
+      "teacherNotes": {"purpose": "确认状态理解与单元收束", "talkingPoints": ["强调当前项目边界"], "observeFor": ["能否解释完整旅程"]},
+      "assistant": {"mode": "preset", "message": "用数据走过的顺序介绍。", "hints": ["操作", "更新", "保存", "恢复"]},
+      "atoms": [{"id": "lesson-09.share.journey", "type": "reveal", "title": "记忆说明句式", "required": true, "prompt": "怎样介绍记忆核心？", "content": "用户操作先更新试运行状态；我确认后保存到当前项目，刷新能恢复，清空能删除，而且切换 projectId 不会读到别的项目。", "buttonLabel": "查看说明句式"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-09.share.journey"]}
+    }
+  ]
+}

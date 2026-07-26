@@ -112,38 +112,16 @@ test("网页创造台的七项调整生成实时 HTML，页面适配可由失败
   assert.equal(responsiveResult.generatedCode.includes('name="viewport"'), true);
 });
 
-test("事件创造台强制至少两个效果与指定修改，并生成可修复 Bug", () => {
+test("第6课迁入统一 EventBuilder，不再保留重复 taskBuilder", () => {
   const lesson = readLesson("content/lessons/lesson-06.json");
-  const builder = lesson.steps
-    .flatMap((step) => step.atoms)
-    .find(
-      (atom) =>
-        atom.type === "taskBuilder" && atom.id === "lesson-06.make.builder",
-    );
-  assert.ok(builder?.type === "taskBuilder");
-  const defaults = getTaskBuilderDefaults(builder);
+  const atoms = lesson.steps.flatMap((step) => step.atoms);
+  assert.equal(atoms.some((atom) => atom.type === "taskBuilder"), false);
   assert.equal(
-    evaluateTaskBuilder(builder, {
-      ...defaults,
-      "event-task": "喝水记录器",
-      effects: ["message"],
-      "feedback-text": "喝水记录成功",
-      "event-color": "#2563EB",
-      "start-value": "1",
-    }).ready,
-    false,
+    atoms.some((atom) => atom.type === "courseTool" && atom.toolId === "click-event"),
+    true,
   );
-
-  const result = evaluateTaskBuilder(builder, {
-    ...defaults,
-    "event-task": "喝水记录器",
-    effects: ["message", "counter"],
-    "feedback-text": "喝水记录成功",
-    "event-color": "#2563EB",
-    "start-value": "1",
-  });
-  assert.equal(result.ready, true);
-  assert.equal(result.generatedCode.includes("onClick={handleActivate}"), true);
-  assert.equal(result.generatedCode.includes("setCount(count + 0)"), true);
-  assert.equal(result.generatedCode.includes("setCount(1)"), true);
+  const scan = atoms.find((atom) => atom.type === "runTest");
+  assert.ok(scan?.type === "runTest");
+  assert.match(scan.initialCode ?? "", /count \+ 0/);
+  assert.match(scan.initialCode ?? "", /setCount\(1\)/);
 });

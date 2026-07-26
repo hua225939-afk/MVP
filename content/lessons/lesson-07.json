@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-07",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-03",
+  "order": 7,
+  "title": "让网页听懂我的输入",
+  "subtitle": "把文字、数字或选择信号连接到自己的 App 结果",
+  "studentSubtitle": "造物星球·信号接收任务",
+  "durationMinutes": 90,
+  "coreGoal": "在已有页面加入受验证的输入组件，连接实时结果并完成正常、空和异常输入测试。",
+  "keyConcepts": ["输入", "处理", "输出", "校验", "错误提示"],
+  "skills": ["输入设计", "结果连接", "边界限制", "错误修复"],
+  "output": {"title": "输入输出路线图", "description": "输入组件、实时结果、校验规则和测试记录。", "acceptanceCriteria": ["体验三类输入", "修改标签占位语和提示", "实时输出", "三类测试通过", "保存路线图"]},
+  "teacherNotes": {"objectives": ["理解输入处理输出", "用错误提示帮助用户"], "preparation": ["确认第6课事件已保存"], "commonIssues": ["只添加输入框没有结果", "错误提示不具体"], "facilitationTips": ["先测试空值再补提示", "异常值由规则拦截"]},
+  "studentContent": {"opening": "网页要先接收到信号，才能给出有用结果。", "safetyNote": "输入先通过 Zod 数据结构和受控规则，不拼接执行代码。", "completionMessage": "你的 App 已能听懂输入并回应。"},
+  "parentSummary": {"theme": "连接输入与结果", "learned": "孩子能设计输入、限制异常内容并提供清楚反馈。", "artifact": "输入输出路线图和测试记录。", "conversationStarter": "请孩子演示空输入时网页怎样帮助用户。"},
+  "steps": [
+    {
+      "id": "lesson-07.look", "phase": "看", "title": "体验三类输入信号", "durationMinutes": 15, "goal": "实际操作文字数字和选择输入",
+      "studentContent": {"intro": "同一个工具能切换三类输入。", "instructions": "逐个切换并输入或选择内容，观察结果。", "completionMessage": "你体验了三类真实输入。"},
+      "teacherNotes": {"purpose": "从操作认识输入差异", "talkingPoints": ["输入类型决定有效范围"], "observeFor": ["是否实际输入"]},
+      "assistant": {"mode": "preset", "message": "每切换一种类型，都试一个有效值。", "hints": ["文字", "数字", "选择"]},
+      "atoms": [{"id": "lesson-07.look.input", "type": "courseTool", "title": "InputOutputBuilder 输入实验", "instructions": "切换并操作三类输入。", "required": true, "toolId": "input-output", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.look.input"]}
+    },
+    {
+      "id": "lesson-07.explain", "phase": "讲", "title": "拆解输入处理输出", "durationMinutes": 10, "goal": "理解信号经过校验后才产生结果",
+      "studentContent": {"intro": "输入不是直接变成答案，中间还有规则。", "instructions": "展开路线说明。", "completionMessage": "你能指出处理过程。"},
+      "teacherNotes": {"purpose": "建立输入输出模型", "talkingPoints": ["空值和超范围也是输入"], "observeFor": ["能否解释错误提示"]},
+      "assistant": {"mode": "preset", "message": "把错误提示看作一种有用输出。", "hints": ["接收", "校验", "结果"]},
+      "atoms": [{"id": "lesson-07.explain.route", "type": "reveal", "title": "信号路线", "required": true, "prompt": "输入为什么需要先处理？", "content": "组件接收值，规则检查空值、长度或范围；有效值形成实时结果，无效值形成清楚的错误提示。", "buttonLabel": "展开信号路线"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.explain.route"]}
+    },
+    {
+      "id": "lesson-07.think", "phase": "想", "title": "规划自己的输入输出", "durationMinutes": 10, "goal": "确定输入处理与结果",
+      "studentContent": {"intro": "输入应服务第2课核心任务。", "instructions": "写出用户输入、处理规则和输出。", "completionMessage": "输入输出目标清楚。"},
+      "teacherNotes": {"purpose": "避免为了输入而输入", "talkingPoints": ["结果应帮助服务对象"], "observeFor": ["是否有处理规则"]},
+      "assistant": {"mode": "preset", "message": "使用“用户输入……系统检查……页面显示……”句式。", "hints": ["服务对象", "范围", "结果"]},
+      "atoms": [{"id": "lesson-07.think.plan", "type": "textInput", "title": "输入输出计划", "required": true, "question": "你的 App 接收什么，怎样处理，输出什么？", "placeholder": "用户输入……系统检查……页面显示……", "validation": {"mode": "minLength", "minLength": 18}, "successMessage": "路线计划完整。", "hint": "补上处理过程。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.think.plan"]}
+    },
+    {
+      "id": "lesson-07.make", "phase": "做", "title": "连接实时结果", "durationMinutes": 30, "goal": "加入输入组件并修改标签提示与结果",
+      "studentContent": {"intro": "工具把输入安装到已有页面。", "instructions": "选择类型，修改标签、占位语、结果表达，再实际输入。", "completionMessage": "输入和结果已经作用于 App 预览。"},
+      "teacherNotes": {"purpose": "完成开放输入创作", "talkingPoints": ["自由模式可自定表达"], "observeFor": ["是否修改默认文字"]},
+      "assistant": {"mode": "preset", "message": "让提示语符合你的服务对象。", "hints": ["标签", "占位语", "结果模板"]},
+      "atoms": [{"id": "lesson-07.make.input", "type": "courseTool", "title": "InputOutputBuilder", "instructions": "安装输入、连接结果并保存。", "required": true, "toolId": "input-output", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.make.input"]}
+    },
+    {
+      "id": "lesson-07.test", "phase": "测", "title": "测试异常并修复提示", "durationMinutes": 20, "goal": "完成正常空值和异常输入测试",
+      "studentContent": {"intro": "先让空值和异常值暴露问题，再增加错误提示。", "instructions": "在工具运行三项测试并重测；补全下面的提示规则。", "completionMessage": "输入边界测试通过。"},
+      "teacherNotes": {"purpose": "建立输入防护意识", "talkingPoints": ["失败结果应帮助修复"], "observeFor": ["是否测试超范围"]},
+      "assistant": {"mode": "preset", "message": "错误提示要告诉用户下一步怎么做。", "hints": ["required", "maxLength", "errorMessage"]},
+      "atoms": [{"id": "lesson-07.test.rules", "type": "runTest", "title": "输入规则扫描", "instructions": "补上缺失的错误提示标记。", "required": true, "description": "复核正常空值异常三类路线。", "language": "text", "testMode": "contains", "initialCode": "normal: result\nempty: TODO\nabnormal: TODO", "tests": [{"id": "normal", "label": "正常输入有结果", "includes": "normal: result", "message": "保留正常结果。"}, {"id": "empty", "label": "空输入有错误提示", "includes": "empty: errorMessage", "message": "为空值补 errorMessage。"}, {"id": "abnormal", "label": "异常输入有错误提示", "includes": "abnormal: errorMessage", "message": "为异常值补 errorMessage。"}], "successMessage": "三类输入规则齐全。", "retryMessage": "修复 TODO 后重测。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.test.rules"]}
+    },
+    {
+      "id": "lesson-07.share", "phase": "说", "title": "展示信号路线图", "durationMinutes": 5, "goal": "解释输入怎样变成结果",
+      "studentContent": {"intro": "路线图已保存到项目。", "instructions": "演示一次有效输入和一次错误提示。", "completionMessage": "第7课输入输出档案完成。"},
+      "teacherNotes": {"purpose": "确认学生能解释路线", "talkingPoints": ["错误提示也是输出"], "observeFor": ["是否演示两种结果"]},
+      "assistant": {"mode": "preset", "message": "指出输入、处理和输出三站。", "hints": ["有效", "无效"]},
+      "atoms": [{"id": "lesson-07.share.route", "type": "reveal", "title": "路线说明句式", "required": true, "prompt": "怎样介绍输入输出？", "content": "用户输入内容后，系统先检查空值与范围；有效时显示结果，无效时显示我设计的修复提示。", "buttonLabel": "查看说明句式"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-07.share.route"]}
+    }
+  ]
+}

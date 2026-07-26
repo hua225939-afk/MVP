@@ -116,21 +116,24 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   }, [activeTool.id, activeTool.lessonId, project, projectId, ready]);
 
   const unlockedContext = useMemo(
-    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06"], project }),
+    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06", "lesson-07", "lesson-08", "lesson-09"], project }),
     [project],
   );
   const changeProject = (next: ProjectDocument) => {
     const now = new Date().toISOString();
     const upstreamChanged = activeTool.outputFields.some(
       (field) =>
-        ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "styleTokens", "moodboard", "components", "customComponentBriefs", "interactions", "state"].includes(field) &&
+        ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "styleTokens", "moodboard", "components", "customComponentBriefs", "interactions", "inputs", "conditions", "state"].includes(field) &&
         JSON.stringify(project[field]) !== JSON.stringify(next[field]),
     );
-    const invalidated = next.tests.map((item) =>
-      upstreamChanged
+    const invalidated = next.tests.map((item) => {
+      const previous = project.tests.find((test) => test.id === item.id);
+      const recordedWithThisChange =
+        !previous || JSON.stringify(previous) !== JSON.stringify(item);
+      return upstreamChanged && !recordedWithThisChange
         ? { ...item, status: "pending" as const, message: "项目已修改，请重新测试", updatedAt: now }
-        : item,
-    );
+        : item;
+    });
     setHistory((current) =>
       pushHistory(current, { ...next, tests: invalidated, updatedAt: now }),
     );
@@ -143,18 +146,22 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
       { id: "project-audience", name: "目标用户", passed: project.audience.primary.trim().length > 1, message: "说明应用要帮助谁" },
       { id: "safe-preview", name: "安全预览", passed: PREVIEW_RENDERER_MODE === "controlled-react", message: "预览必须使用受控渲染器" },
     ];
+    const checkIds = new Set(checks.map((check) => check.id));
     changeProject({
       ...project,
-      tests: checks.map((check) => ({
-        id: check.id,
-        name: check.name,
-        status: check.passed ? "pass" : "fail",
-        projectRevision: project.revision,
-        toolId: activeTool.id,
-        message: check.passed ? "检查通过" : check.message,
-        attempts: (project.tests.find((item) => item.id === check.id)?.attempts ?? 0) + 1,
-        updatedAt: now,
-      })),
+      tests: [
+        ...project.tests.filter((item) => !checkIds.has(item.id)),
+        ...checks.map((check) => ({
+          id: check.id,
+          name: check.name,
+          status: check.passed ? "pass" as const : "fail" as const,
+          projectRevision: project.revision,
+          toolId: activeTool.id,
+          message: check.passed ? "检查通过" : check.message,
+          attempts: (project.tests.find((item) => item.id === check.id)?.attempts ?? 0) + 1,
+          updatedAt: now,
+        })),
+      ],
     });
   };
 
