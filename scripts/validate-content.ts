@@ -56,22 +56,22 @@ for (const lesson of lessons) {
     records: atoms.filter(
       (atom) => atom.type === "taskBuilder" && atom.preview.type === "record",
     ).length,
+    courseTools: atoms.filter((atom) => atom.type === "courseTool").length,
   };
-  if (
-    counts.choices < 2 ||
-    counts.textInputs < 2 ||
-    counts.liveBuilders < 1 ||
-    counts.tests < 1 ||
-    counts.records < 1
-  ) {
+  const usesFormalCourseTool = counts.courseTools > 0;
+  const invalid = usesFormalCourseTool
+    ? counts.textInputs < 1 || counts.tests < 1
+    : counts.choices < 2 || counts.textInputs < 2 || counts.liveBuilders < 1 ||
+      counts.tests < 1 || counts.records < 1;
+  if (invalid) {
     throw new Error(
       `${lesson.id} 未达到互动密度：${JSON.stringify(counts)}`,
     );
   }
 }
 
-if (!seenLessonIds.has("lesson-01") || !seenLessonIds.has("lesson-06")) {
-  throw new Error("样板阶段必须包含 lesson-01 和 lesson-06");
+if (!seenLessonIds.has("lesson-01") || !seenLessonIds.has("lesson-02") || !seenLessonIds.has("lesson-06")) {
+  throw new Error("第一单元阶段必须包含 lesson-01、lesson-02 和 lesson-06 回归样板");
 }
 console.log(
   `内容验证通过：1 门课程、${course.units.length} 个单元、${lessons.length} 节样板课、${registeredTypes.size} 类互动原子。`,

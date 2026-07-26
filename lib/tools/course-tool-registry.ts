@@ -47,8 +47,8 @@ const tool = (
 });
 
 export const courseToolRegistry: readonly CourseToolDefinition[] = [
-  tool("intent-canvas", "意图画布", 1, [], ["title", "audience", "scenario", "intent"], "跟随任务卡完成首次应用意图", "从空白意图画布开始创造", ["应用有名称", "目标用户与任务意图已记录"], "IntentCanvasTool"),
-  tool("project-boundary", "项目边界", 2, ["title", "audience", "scenario", "intent"], ["scope", "pages", "decisions"], "用必做清单定义应用边界", "自由增删范围与核心流程", ["至少有一项必做功能", "核心流程可以讲清楚"], "ProjectBoundaryTool"),
+  tool("intent-canvas", "意图画布", 1, [], ["title", "audience", "scenario", "intent", "inspirationSources", "interestMap", "sketch", "keywords", "aiDraft", "studentRevision", "finalIntent", "aiMode", "aiProvenance", "pages", "structure", "styles", "components", "decisions", "artifacts", "tests"], "探索生活场景，建立兴趣地图并确认首个网页意图", "继续修订场景、画板、意图与网页原型", ["画板和关键词已保存", "学生修改并确认 AI 意图", "网页原型反映最终意图"], "IntentCanvasTool"),
+  tool("project-boundary", "项目边界", 2, ["title", "audience", "scenario", "intent", "finalIntent", "interestMap", "artifacts"], ["scope", "pages", "components", "decisions", "artifacts", "tests"], "用功能星系和三格故事板定义应用边界", "自由调整功能范围与三步用户故事", ["至少一个核心功能", "三格故事完整", "范围不过大"], "ProjectBoundaryTool"),
   tool("page-structure", "页面骨架", 3, ["scope", "pages"], ["pages", "structure", "artifacts"], "用推荐区块搭建单页骨架", "自由组合页面和层级", ["节点顺序有效", "每个节点属于有效页面"], "PageStructureTool"),
   tool("appearance-theme", "外观主题", 4, ["audience", "pages", "structure"], ["styles", "decisions", "artifacts"], "选择主题并调整关键样式", "自由编辑设计令牌", ["颜色值有效", "文字对比可读"], "AppearanceThemeTool"),
   tool("component-center", "组件中心", 5, ["scope", "pages", "structure", "styles"], ["components", "pages", "structure"], "安装推荐组件", "自由组合已支持组件", ["组件属于有效页面", "关键组件齐全"], "ComponentCenterTool"),
@@ -84,7 +84,8 @@ export function isCourseToolUnlocked(
     case "click-event":
       return (project?.components.length ?? 0) > 0;
     case "project-boundary":
-      return context.completedLessonIds?.includes("lesson-01") === true;
+      return Boolean(project?.finalIntent) ||
+        context.completedLessonIds?.includes("lesson-01") === true;
     case "page-structure":
       return (project?.scope.coreFlow.length ?? 0) > 0;
     case "appearance-theme":

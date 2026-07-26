@@ -419,6 +419,14 @@ const taskBuilderAtomSchema = atomBaseSchema
     });
   });
 
+const courseToolAtomSchema = atomBaseSchema
+  .extend({
+    type: z.literal("courseTool"),
+    toolId: z.enum(["intent-canvas", "project-boundary"]),
+    mode: z.enum(["basic", "free"]),
+  })
+  .strict();
+
 export const interactionAtomSchema = z.discriminatedUnion("type", [
   revealAtomSchema,
   choiceAtomSchema,
@@ -426,6 +434,7 @@ export const interactionAtomSchema = z.discriminatedUnion("type", [
   codePreviewAtomSchema,
   runTestAtomSchema,
   taskBuilderAtomSchema,
+  courseToolAtomSchema,
 ]);
 
 const stepStudentContentSchema = z

@@ -327,6 +327,15 @@
       },
       "atoms": [
         {
+          "id": "lesson-01.make.intent-canvas",
+          "type": "courseTool",
+          "title": "第一单元意图画布",
+          "instructions": "完成生活场景探索、兴趣地图、创意画板、AI意图修改与网页原型。",
+          "required": true,
+          "toolId": "intent-canvas",
+          "mode": "basic"
+        },
+        {
           "id": "lesson-01.make.builder",
           "type": "taskBuilder",
           "title": "首次登陆创造台",
@@ -447,7 +456,10 @@
       ],
       "completion": {
         "mode": "allRequired",
-        "requiredAtomIds": ["lesson-01.make.builder"]
+        "requiredAtomIds": [
+          "lesson-01.make.intent-canvas",
+          "lesson-01.make.builder"
+        ]
       }
     },
     {

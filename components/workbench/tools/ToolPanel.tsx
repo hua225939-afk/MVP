@@ -5,6 +5,8 @@ import {
   applyToolChanges,
   type CourseToolDefinition,
 } from "@/lib/tools/course-tool-registry";
+import { ProjectBoundaryTool } from "./ProjectBoundaryTool";
+import { UnitOneIntentTool } from "./UnitOneIntentTool";
 
 export function ToolPanel({
   definition,
@@ -16,63 +18,11 @@ export function ToolPanel({
   onChange: (next: ProjectDocument) => void;
 }) {
   if (definition.id === "intent-canvas") {
-    return (
-      <div className="tool-form">
-        <label>
-          应用名称
-          <input
-            onChange={(event) =>
-              onChange(
-                applyToolChanges(project, definition, {
-                  title: event.target.value || "未命名应用",
-                }),
-              )
-            }
-            value={project.title}
-          />
-        </label>
-        <label>
-          服务谁
-          <input
-            onChange={(event) =>
-              onChange(
-                applyToolChanges(project, definition, {
-                  audience: { ...project.audience, primary: event.target.value },
-                }),
-              )
-            }
-            placeholder="例如：经常忘记喝水的同学"
-            value={project.audience.primary}
-          />
-        </label>
-        <label>
-          生活问题
-          <textarea
-            onChange={(event) =>
-              onChange(
-                applyToolChanges(project, definition, {
-                  scenario: { ...project.scenario, problem: event.target.value },
-                }),
-              )
-            }
-            value={project.scenario.problem}
-          />
-        </label>
-        <label>
-          一句话任务
-          <textarea
-            onChange={(event) =>
-              onChange(
-                applyToolChanges(project, definition, {
-                  intent: { ...project.intent, statement: event.target.value },
-                }),
-              )
-            }
-            value={project.intent.statement}
-          />
-        </label>
-      </div>
-    );
+    return <UnitOneIntentTool onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "project-boundary") {
+    return <ProjectBoundaryTool onChange={onChange} project={project} />;
   }
 
   if (definition.id === "click-event") {

@@ -57,3 +57,28 @@ test("工具只能修改注册表声明的输出字段", () => {
   assert.ok(clickTool);
   assert.throws(() => applyToolChanges(project, clickTool, { title: "越权标题" }));
 });
+
+test("第2课项目边界只在同一项目存在 finalIntent 后解锁", () => {
+  const project = createDefaultProject();
+  const boundary = getCourseTool("project-boundary");
+  assert.ok(boundary);
+  assert.equal(isCourseToolUnlocked(boundary, {
+    availableLessonIds: ["lesson-01", "lesson-02"],
+    project,
+  }), false);
+  project.finalIntent = {
+    appIntent: "帮助同学整理任务",
+    audience: "同学",
+    scenario: "学习",
+    problem: "任务容易遗漏",
+    coreFunctions: ["记录任务"],
+    possibleInputs: ["任务"],
+    possibleOutputs: ["清单"],
+    visualStyle: "清楚",
+    uncertainties: [],
+  };
+  assert.equal(isCourseToolUnlocked(boundary, {
+    availableLessonIds: ["lesson-01", "lesson-02"],
+    project,
+  }), true);
+});

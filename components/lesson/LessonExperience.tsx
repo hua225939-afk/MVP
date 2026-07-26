@@ -54,7 +54,10 @@ export function LessonExperience({
         setProgress(emptyProgress(lesson));
       } else {
         const repository = getBrowserProjectRepository();
-        setActiveProjectId(repository?.getActiveProjectId() ?? null);
+        const currentProjectId = lesson.id === "lesson-01"
+          ? repository?.initializeSeedProject().projectId
+          : repository?.getActiveProjectId();
+        setActiveProjectId(currentProjectId ?? null);
         const saved = readProgress(lesson.courseId, lesson);
         const merged = mergeProjectIntoLessonProgress(lesson, saved);
         setProgress(merged);

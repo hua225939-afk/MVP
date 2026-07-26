@@ -7,6 +7,7 @@ export const registeredInteractionTypes = [
   "codePreview",
   "runTest",
   "taskBuilder",
+  "courseTool",
 ] as const satisfies readonly InteractionAtom["type"][];
 
 export type InteractionType = (typeof registeredInteractionTypes)[number];
@@ -23,5 +24,9 @@ export const interactionMetadata: Record<
   taskBuilder: {
     name: "结构化创造台",
     purpose: "通过选择、填写和即时预览生成或保存结构化作品",
+  },
+  courseTool: {
+    name: "课程创造工具",
+    purpose: "通过统一工具注册表读写当前 ProjectDocument",
   },
 };

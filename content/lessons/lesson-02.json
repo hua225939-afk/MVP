@@ -1,0 +1,291 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-02",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-01",
+  "order": 2,
+  "title": "把灵感变成 App 任务",
+  "subtitle": "用功能星系与三格故事板确定本次 App 范围",
+  "studentSubtitle": "造物星球·灵感采集任务",
+  "durationMinutes": 90,
+  "coreGoal": "读取第1课 finalIntent，通过功能星系与三格用户故事板确定可完成的 App 范围。",
+  "keyConcepts": ["finalIntent", "核心功能", "项目范围", "用户流程", "输入", "输出"],
+  "skills": ["范围判断", "功能取舍", "用户故事", "任务表达"],
+  "output": {
+    "title": "App 任务与范围",
+    "description": "一份功能星系、三格用户故事板和学生确认的 App 任务。",
+    "acceptanceCriteria": [
+      "只读取第1课确认后的 finalIntent",
+      "确定核心、必须、辅助、以后增加和本次不做的功能",
+      "完成三格用户故事板",
+      "修改并确认整理后的 App 任务",
+      "范围测试通过"
+    ]
+  },
+  "teacherNotes": {
+    "objectives": ["帮助学生从想法转向可完成范围", "保留学生对 AI 建议的修改证据", "形成三步用户流程"],
+    "preparation": ["确认学生已完成第1课 finalIntent", "提醒学生功能少而清楚比堆砌功能更重要"],
+    "commonIssues": ["把 AI 草稿当作最终答案", "内圈功能过多", "故事板只写功能名而没有用户问题与结果"],
+    "facilitationTips": ["追问这次最重要的一件事", "鼓励把复杂功能移到以后增加", "让学生用故事板验证范围"]
+  },
+  "studentContent": {
+    "opening": "这节课不换主题。你将继续修改第1课的同一个 App，把 finalIntent 变成可以完成的任务。",
+    "safetyNote": "故事板不要写真实姓名、住址或私人信息；本地规则不会声称理解涂鸦。",
+    "completionMessage": "你已经为同一个 App 确定了功能边界与三步用户故事。"
+  },
+  "parentSummary": {
+    "theme": "从灵感到可完成任务",
+    "learned": "孩子能比较功能优先级、删除过大范围，并用三格故事说明用户怎样获得结果。",
+    "artifact": "功能星系、三格用户故事板和最终 App 任务。",
+    "conversationStarter": "请孩子解释为什么有些功能被放到以后增加或本次不做。"
+  },
+  "steps": [
+    {
+      "id": "lesson-02.look",
+      "phase": "看",
+      "title": "体验清楚与混乱的任务入口",
+      "durationMinutes": 10,
+      "goal": "通过操作比较单一核心任务与功能堆叠的差异",
+      "studentContent": {
+        "intro": "先操作一个入口清楚的 App，再观察一个同时要求很多操作的 App。",
+        "instructions": "点击预览并写下哪一种更容易开始。",
+        "completionMessage": "你发现了清楚核心任务的重要性。"
+      },
+      "teacherNotes": {
+        "purpose": "用可操作对比建立范围意识",
+        "talkingPoints": ["核心入口应该让用户一眼知道先做什么"],
+        "observeFor": ["学生是否从使用过程而不是功能数量判断"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "注意第一次打开时，你是否知道先按哪个按钮。",
+        "hints": ["一个页面只突出一个核心动作", "辅助功能不能遮住核心入口"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.look.focused",
+          "type": "codePreview",
+          "title": "清楚的任务入口",
+          "instructions": "点击开始，观察问题—操作—结果是否连贯。",
+          "required": true,
+          "description": "页面只突出一次核心操作。",
+          "language": "html",
+          "code": "<h1>今天先完成一件事</h1><button>开始记录</button>",
+          "preview": {
+            "eyebrow": "任务对比",
+            "heading": "今天先完成一件事",
+            "text": "选择后立即得到清楚反馈。",
+            "accent": "#315C8C",
+            "interaction": {
+              "type": "message",
+              "buttonLabel": "开始记录",
+              "clickedHeading": "核心任务已开始",
+              "clickedText": "入口、操作和结果保持在一条路径上。"
+            }
+          },
+          "confirmationLabel": "我完成了核心任务"
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.look.focused"] }
+    },
+    {
+      "id": "lesson-02.explain",
+      "phase": "讲",
+      "title": "解码 App 任务链",
+      "durationMinutes": 10,
+      "goal": "理解谁、场景、问题、输入、处理和输出",
+      "studentContent": {
+        "intro": "App 任务不是功能清单，而是一条用户能够完成的生活路径。",
+        "instructions": "观察任务链预览，并找到输入与输出。",
+        "completionMessage": "你已经能读懂完整任务链。"
+      },
+      "teacherNotes": {
+        "purpose": "为功能星系和故事板建立共同结构",
+        "talkingPoints": ["输入来自用户", "输出是用户得到的结果"],
+        "observeFor": ["学生是否把视觉风格当成功能输出"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "从谁遇到问题开始，沿着操作一直走到结果。",
+        "hints": ["输入是用户提供的内容", "输出应该能被用户看见"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.explain.chain",
+          "type": "codePreview",
+          "title": "用户任务链",
+          "instructions": "按顺序读完六个环节。",
+          "required": true,
+          "description": "谁 → 场景 → 问题 → 输入 → 处理 → 输出。",
+          "language": "text",
+          "code": "用户 → 生活场景 → 具体问题 → 输入 → App处理 → 可见输出",
+          "preview": {
+            "eyebrow": "任务链",
+            "heading": "谁遇到问题，怎样得到结果",
+            "text": "功能必须服务这条路径。",
+            "accent": "#426E67",
+            "interaction": {
+              "type": "none",
+              "buttonLabel": "查看完整任务链",
+              "observationMessage": "输入、处理和输出共同完成一次用户任务。"
+            }
+          },
+          "confirmationLabel": "我找到了输入与输出"
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.explain.chain"] }
+    },
+    {
+      "id": "lesson-02.think",
+      "phase": "想",
+      "title": "写下这次最重要的一件事",
+      "durationMinutes": 15,
+      "goal": "在整理功能前先做一次自己的范围判断",
+      "studentContent": {
+        "intro": "不要先看功能越多越好。写下这次 App 最重要的一件事。",
+        "instructions": "必须说明用户和完成结果。",
+        "completionMessage": "你的核心范围判断已经形成。"
+      },
+      "teacherNotes": {
+        "purpose": "保证学生先判断再使用 AI 建议",
+        "talkingPoints": ["一句话只保留一个主要结果"],
+        "observeFor": ["是否出现多个互不相关的任务"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "使用“帮助……完成……”句式。",
+        "hints": ["先写服务对象", "再写最重要的结果"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.think.core",
+          "type": "textInput",
+          "title": "核心任务判断",
+          "instructions": "用一句话写出核心任务。",
+          "required": true,
+          "question": "这次 App 最重要的是帮助谁完成什么？",
+          "placeholder": "帮助……完成……",
+          "validation": { "mode": "minLength", "minLength": 12 },
+          "successMessage": "核心任务表达清楚。",
+          "hint": "删掉与主要结果无关的第二个任务。"
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.think.core"] }
+    },
+    {
+      "id": "lesson-02.make",
+      "phase": "做",
+      "title": "整理功能星系与三格故事板",
+      "durationMinutes": 35,
+      "goal": "确定功能区域并把用户问题、使用过程和结果画成三格故事",
+      "studentContent": {
+        "intro": "打开项目边界工具，继续修改第1课的同一个 ProjectDocument。",
+        "instructions": "先整理功能星系，再完成三格故事板，最后由学生修改并确认任务说明。",
+        "completionMessage": "功能范围和用户故事已经保存。"
+      },
+      "teacherNotes": {
+        "purpose": "完成本课主要创造行为",
+        "talkingPoints": ["平板端通过选择功能再选区域", "故事板必须有问题、操作和结果"],
+        "observeFor": ["是否删除或降级至少一个复杂功能"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先让中心只有一个核心功能，再决定其他功能在哪一圈。",
+        "hints": ["必须完成不等于所有想法", "三格分别是问题、使用和结果", "本次不做也是重要决定"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.make.project-boundary",
+          "type": "courseTool",
+          "title": "项目边界",
+          "instructions": "完成星系、故事板、学生确认与范围测试。",
+          "required": true,
+          "toolId": "project-boundary",
+          "mode": "basic"
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.make.project-boundary"] }
+    },
+    {
+      "id": "lesson-02.test",
+      "phase": "测",
+      "title": "运行范围扫描",
+      "durationMinutes": 15,
+      "goal": "检查一句话、三步故事和功能规模，失败后返回修改",
+      "studentContent": {
+        "intro": "范围扫描读取 ProjectDocument 中已经确认的任务与故事板。",
+        "instructions": "先运行；失败时返回项目边界工具调整，再重新测试。",
+        "completionMessage": "范围扫描全部通过。"
+      },
+      "teacherNotes": {
+        "purpose": "建立范围失败—修改—重试闭环",
+        "talkingPoints": ["测试证据关联当前项目 revision"],
+        "observeFor": ["学生是否根据失败项返回正确区域"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "这是一项安全文本规则检查；完整范围测试也会写入 ProjectDocument。",
+        "hints": ["任务说明需要明确结果", "故事板必须有三步", "内圈功能不要过多"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.test.scope",
+          "type": "runTest",
+          "title": "范围规则检查",
+          "instructions": "补齐三个范围证据后运行。",
+          "required": true,
+          "description": "检查一句话任务、三步流程与本次不做。",
+          "language": "text",
+          "testMode": "contains",
+          "initialCode": "任务：\n三步：\n本次不做：",
+          "tests": [
+            { "id": "task", "label": "有一句话任务", "includes": "任务：", "message": "补充任务说明。" },
+            { "id": "flow", "label": "有三步故事", "includes": "三步：", "message": "补充三格故事。" },
+            { "id": "boundary", "label": "记录本次不做", "includes": "本次不做：", "message": "记录至少一项范围取舍。" }
+          ],
+          "successMessage": "三项范围规则已通过。",
+          "retryMessage": "返回项目边界工具修改后再试。",
+          "editable": true
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.test.scope"] }
+    },
+    {
+      "id": "lesson-02.share",
+      "phase": "说",
+      "title": "发布 App 任务宣言",
+      "durationMinutes": 5,
+      "goal": "说明为谁制作、解决什么以及这次不做什么",
+      "studentContent": {
+        "intro": "用自己的话说出任务宣言，并解释一个范围取舍。",
+        "instructions": "至少写 18 个字。",
+        "completionMessage": "第一单元完成。"
+      },
+      "teacherNotes": {
+        "purpose": "确认学生能够表达自己的产品判断",
+        "talkingPoints": ["范围取舍比功能数量更能体现判断"],
+        "observeFor": ["是否能说明一个删除或延期理由"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "说清帮助谁、完成什么、为什么暂时不做某个功能。",
+        "hints": ["引用功能星系中的边界外区域", "引用故事板的最终结果"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-02.share.declaration",
+          "type": "textInput",
+          "title": "任务宣言",
+          "instructions": "写下最终 App 任务和一个范围理由。",
+          "required": true,
+          "question": "你的 App 为谁解决什么？这次为什么不做某项功能？",
+          "placeholder": "我要为……制作……；这次不做……因为……",
+          "validation": { "mode": "minLength", "minLength": 18 },
+          "successMessage": "任务宣言表达清楚。",
+          "hint": "补上一个具体的范围取舍理由。"
+        }
+      ],
+      "completion": { "mode": "allRequired", "requiredAtomIds": ["lesson-02.share.declaration"] }
+    }
+  ]
+}

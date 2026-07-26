@@ -3,6 +3,52 @@ import { z } from "zod";
 const isoDate = z.iso.datetime();
 const valueSchema = z.union([z.string(), z.number(), z.boolean()]);
 
+const creativeIntentSchema = z.object({
+  appIntent: z.string(),
+  audience: z.string(),
+  scenario: z.string(),
+  problem: z.string(),
+  coreFunctions: z.array(z.string()),
+  possibleInputs: z.array(z.string()),
+  possibleOutputs: z.array(z.string()),
+  visualStyle: z.string(),
+  uncertainties: z.array(z.string()),
+});
+
+const inspirationSourceSchema = z.object({
+  id: z.string().min(1),
+  category: z.enum(["learning", "campus", "interest", "habit", "family", "community"]),
+  title: z.string().min(1),
+  detail: z.string(),
+  imageData: z.string(),
+  hotspotId: z.string().nullable(),
+  marker: z.enum(["like", "curious", "solve", "favorite"]),
+});
+
+const interestNodeSchema = z.object({
+  id: z.string().min(1),
+  category: z.enum(["learning", "campus", "interest", "habit", "family", "community"]),
+  label: z.string().min(1),
+  detail: z.string(),
+  imageData: z.string(),
+  sourceId: z.string().nullable(),
+  role: z.enum(["like", "problem", "audience"]),
+  color: z.string(),
+  icon: z.string(),
+});
+
+const canvasElementSchema = z.object({
+  id: z.string().min(1),
+  type: z.enum(["stroke", "sticker", "note", "arrow", "shape", "image"]),
+  x: z.number(),
+  y: z.number(),
+  width: z.number(),
+  height: z.number(),
+  color: z.string(),
+  text: z.string(),
+  points: z.array(z.object({ x: z.number(), y: z.number() })),
+});
+
 const pageSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
@@ -85,6 +131,33 @@ export const projectDocumentSchema = z
       statement: z.string(),
       expectedOutcome: z.string(),
     }),
+    inspirationSources: z.array(inspirationSourceSchema),
+    interestMap: z.object({
+      nodes: z.array(interestNodeSchema),
+      links: z.array(
+        z.object({
+          id: z.string().min(1),
+          nodeIds: z.array(z.string()).min(2).max(3),
+          statement: z.string(),
+        }),
+      ),
+    }),
+    sketch: z.object({
+      compressedImage: z.string().nullable(),
+      elements: z.array(canvasElementSchema),
+      updatedAt: isoDate.nullable(),
+    }),
+    keywords: z.array(z.string()),
+    aiDraft: creativeIntentSchema.nullable(),
+    studentRevision: creativeIntentSchema.nullable(),
+    finalIntent: creativeIntentSchema.nullable(),
+    aiMode: z.enum(["live", "demo"]).nullable(),
+    aiProvenance: z.object({
+      provider: z.string(),
+      model: z.string(),
+      generatedAt: isoDate,
+      disclaimer: z.string(),
+    }).nullable(),
     scope: z.object({
       mustHave: z.array(z.string()),
       shouldHave: z.array(z.string()),
@@ -189,6 +262,15 @@ export const PROJECT_EDITABLE_FIELDS = [
   "audience",
   "scenario",
   "intent",
+  "inspirationSources",
+  "interestMap",
+  "sketch",
+  "keywords",
+  "aiDraft",
+  "studentRevision",
+  "finalIntent",
+  "aiMode",
+  "aiProvenance",
   "scope",
   "pages",
   "structure",
@@ -226,6 +308,15 @@ export function createDefaultProject(
     audience: { primary: "", needs: [] },
     scenario: { context: "", problem: "" },
     intent: { statement: "", expectedOutcome: "" },
+    inspirationSources: [],
+    interestMap: { nodes: [], links: [] },
+    sketch: { compressedImage: null, elements: [], updatedAt: null },
+    keywords: [],
+    aiDraft: null,
+    studentRevision: null,
+    finalIntent: null,
+    aiMode: null,
+    aiProvenance: null,
     scope: { mustHave: [], shouldHave: [], outOfScope: [], coreFlow: [] },
     pages: [{ id: "page-home", name: "首页", slug: "home", order: 0, structureRootIds: ["node-title", "node-message", "node-action"] }],
     structure: [
@@ -304,6 +395,12 @@ export function migrateProjectDocument(
         ? legacy.name
         : "迁移后的应用";
   const migrated = createDefaultProject(projectId, now, title);
+  const source = legacy as Partial<ProjectDocument>;
+  for (const field of PROJECT_EDITABLE_FIELDS) {
+    if (source[field] !== undefined) {
+      (migrated as unknown as Record<string, unknown>)[field] = source[field];
+    }
+  }
   const legacyCode = [legacy.html, legacy.css, legacy.js]
     .filter((value): value is string => typeof value === "string" && value.length > 0)
     .join("\n\n");

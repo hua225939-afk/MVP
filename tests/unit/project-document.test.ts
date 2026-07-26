@@ -12,7 +12,9 @@ test("默认 ProjectDocument 包含正式字段并通过严格验证", () => {
   const project = createDefaultProject("project-test", "2026-07-26T00:00:00.000Z");
   assert.equal(projectDocumentSchema.safeParse(project).success, true);
   for (const field of [
-    "projectId", "title", "audience", "scenario", "intent", "scope", "pages",
+    "projectId", "title", "audience", "scenario", "intent", "inspirationSources",
+    "interestMap", "sketch", "keywords", "aiDraft", "studentRevision",
+    "finalIntent", "aiMode", "aiProvenance", "scope", "pages",
     "structure", "styles", "components", "interactions", "inputs", "conditions",
     "state", "tests", "artifacts", "decisions", "feedback", "versions", "publication",
   ]) {

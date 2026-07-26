@@ -78,6 +78,10 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
       const repository = getBrowserProjectRepository();
       if (!repository) return;
       const loaded = repository.ensure(projectId);
+      const requestedTool = new URLSearchParams(window.location.search).get("tool");
+      if (requestedTool && courseToolRegistry.some((item) => item.id === requestedTool)) {
+        setActiveToolId(requestedTool);
+      }
       setHistory(createHistory(loaded));
       skipNextSave.current = true;
       setReady(true);
@@ -112,7 +116,7 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   }, [activeTool.id, activeTool.lessonId, project, projectId, ready]);
 
   const unlockedContext = useMemo(
-    () => ({ availableLessonIds: ["lesson-01", "lesson-06"], project }),
+    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-06"], project }),
     [project],
   );
   const changeProject = (next: ProjectDocument) => {

@@ -7,6 +7,7 @@ import { Reveal } from "@/components/interactions/Reveal";
 import { RunTest } from "@/components/interactions/RunTest";
 import { TaskBuilder } from "@/components/interactions/TaskBuilder";
 import { TextInput } from "@/components/interactions/TextInput";
+import { CourseToolHost } from "@/components/interactions/CourseToolHost";
 import { interactionMetadata, type InteractionType } from "@/lib/interaction-types";
 import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
@@ -58,6 +59,13 @@ export const interactionRegistry = {
     render: (props) =>
       props.block.type === "taskBuilder" ? (
         <TaskBuilder {...props} block={props.block} />
+      ) : null,
+  },
+  courseTool: {
+    ...interactionMetadata.courseTool,
+    render: (props) =>
+      props.block.type === "courseTool" ? (
+        <CourseToolHost {...props} block={props.block} />
       ) : null,
   },
 } satisfies Record<InteractionType, RegistryEntry>;
