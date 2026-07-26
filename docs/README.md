@@ -20,6 +20,7 @@
 | `10-test-plan.md` | 定义五端、课程 JSON、进度、设备适配和质量命令测试。 |
 | `creative-workbench-spec.md` | 定义“造物星球·创造台”的页面结构、ProjectDocument、同步、存储和工具注册机制。 |
 | `lesson-interaction-matrix.md` | 记录 13 课连续项目输入、六步互动、工具、测试、产出和多端摘要。 |
+| `deployment.md` | 说明 Vinext 应用在 Cloudflare Workers 的本地检查、预览、dry-run、部署和自定义域名流程。 |
 | `references/` | 存放后续确认采用的参考材料；当前暂未收录材料。 |
 
 ## 使用约定
