@@ -449,6 +449,35 @@ type SessionContext = {
 - 数据库阶段必须在服务端按 session 再做授权与范围过滤。
 - 不提前引入账号表、密码、OAuth 或权限后台。
 
+## 9.3 五端动态联动实现
+
+第一阶段使用一套固定演示关系：一名学生、一名教师、一名关联家长、
+一个班级、一个合作伙伴校区和一个总部身份。组织与身份关系由
+`DemoIdentityRepository` 提供；学生项目继续只由 `ProjectRepository`
+提供，课程进度由 `LearningProgressRepository` 提供。
+
+`RoleDashboardService` 是五个角色页面的统一查询入口：
+
+```text
+DemoIdentityRepository
+        + LearningProgressRepository
+        + ProjectRepository
+        + Course / Lesson / Tool registries
+        + PlatformRepository（教师评语与关注标记）
+        = 五角色 view model
+```
+
+- 学生端读取完整的本人进度与项目，并读取对学生可见的教师评语。
+- 教师端只读取演示班级学生的进度、项目、测试、Bug、反馈和版本；评语
+  写入 `PlatformRepository`，不修改 `ProjectDocument.revision`。
+- 家长端只读取关联学生的非技术摘要、行为证据、版本与可见评语。
+- 合作伙伴端只读取演示校区汇总。
+- 总部端读取平台汇总、课程 JSON、互动组件注册表和课程工具注册表。
+
+所有浏览器数据均带 `schemaVersion` 并经 Zod 校验。损坏记录安全回退，
+旧进度和旧项目在迁移成功前保留原键或备份。此联动只在当前浏览器有效，
+不表示真实账号、跨设备同步或正式权限控制。
+
 ## 10. 当前技术风险
 
 1. 当前第 01、06 课的 `TaskBuilder` 把“创造台”表现为课内原子，尚未接统一 ProjectDocument；迁移必须保留已保存进度并把产出映射到项目字段。

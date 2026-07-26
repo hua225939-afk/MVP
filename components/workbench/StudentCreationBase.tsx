@@ -11,13 +11,27 @@ import {
   StatGrid,
 } from "@/components/platform/DashboardUI";
 import { brand } from "@/config/brand";
+import { lessons as courseLessons } from "@/lib/lesson-loader";
+import {
+  PLATFORM_UPDATED_EVENT,
+  getBrowserPlatformRepository,
+  type TeacherFeedback,
+} from "@/lib/platform/platform-repository";
 import type { ProjectDocument } from "@/lib/projects/project-document";
 import { createActiveProject } from "@/lib/projects/project-actions";
 import {
   getBrowserProjectRepository,
   PROJECT_UPDATED_EVENT,
 } from "@/lib/projects/project-repository";
-import { readCourseProgressSummary } from "@/lib/progress-storage";
+import {
+  getBrowserLearningProgressRepository,
+  PROGRESS_UPDATED_EVENT,
+  readCourseProgressSummary,
+} from "@/lib/progress-storage";
+import {
+  courseToolRegistry,
+  type CourseToolDefinition,
+} from "@/lib/tools/course-tool-registry";
 
 type LessonSummary = {
   id: string;
@@ -43,6 +57,10 @@ export function StudentCreationBase({
   const [projectCount, setProjectCount] = useState(0);
   const [newTitle, setNewTitle] = useState("");
   const [showCreate, setShowCreate] = useState(false);
+  const [teacherFeedback, setTeacherFeedback] = useState<TeacherFeedback[]>([]);
+  const [unlockedTools, setUnlockedTools] = useState<
+    readonly CourseToolDefinition[]
+  >([]);
   const [courseProgress, setCourseProgress] = useState(() => ({
     completedLessons: 0,
     currentLessonId: "lesson-01",
@@ -60,15 +78,37 @@ export function StudentCreationBase({
     const project = repository.initializeSeedProject();
     setActiveProject(project);
     setProjectCount(repository.list().length);
-    setCourseProgress(readCourseProgressSummary(courseId, 13));
+    const summary = readCourseProgressSummary(courseId, 13);
+    const progressRepository = getBrowserLearningProgressRepository();
+    const platformRepository = getBrowserPlatformRepository();
+    setCourseProgress(summary);
+    setTeacherFeedback(
+      platformRepository?.listFeedback(project.studentId) ?? [],
+    );
+    setUnlockedTools(
+      courseToolRegistry.filter((tool) => {
+        const lesson = courseLessons.find((item) => item.id === tool.lessonId);
+        return (
+          lesson &&
+          progressRepository?.readLesson(courseId, lesson).status !==
+            "not_started"
+        );
+      }),
+    );
   };
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(refresh);
     window.addEventListener(PROJECT_UPDATED_EVENT, refresh);
+    window.addEventListener(PROGRESS_UPDATED_EVENT, refresh);
+    window.addEventListener(PLATFORM_UPDATED_EVENT, refresh);
+    window.addEventListener("storage", refresh);
     return () => {
       window.cancelAnimationFrame(frame);
       window.removeEventListener(PROJECT_UPDATED_EVENT, refresh);
+      window.removeEventListener(PROGRESS_UPDATED_EVENT, refresh);
+      window.removeEventListener(PLATFORM_UPDATED_EVENT, refresh);
+      window.removeEventListener("storage", refresh);
     };
   }, []);
 
@@ -232,7 +272,7 @@ export function StudentCreationBase({
           </div>
 
           <DashboardPanel
-            description="当前已实现的正式样板课"
+            description="由同一课程 JSON 和 LessonRenderer 提供的 13 课"
             title={brand.learningCenterName}
           >
             <div className="student-course-grid">
@@ -262,6 +302,90 @@ export function StudentCreationBase({
               ))}
             </div>
           </DashboardPanel>
+
+          <div className="dashboard-columns">
+            <DashboardPanel
+              description="由实际进入课次和项目使用状态生成"
+              title="已解锁工具"
+            >
+              {unlockedTools.length ? (
+                <div className="skill-list">
+                  {unlockedTools.map((tool) => (
+                    <span key={tool.id}>
+                      {tool.lessonId} · {tool.name}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <div className="project-empty-note">
+                  进入第 1 课并开始创作后，工具会逐步解锁。
+                </div>
+              )}
+            </DashboardPanel>
+            <DashboardPanel
+              description="教师评语写入集中平台数据，不修改项目"
+              title="教师评语"
+            >
+              {teacherFeedback.length ? (
+                <div className="feedback-list">
+                  {teacherFeedback.map((item) => (
+                    <article key={item.id}>
+                      <span className="avatar-letter">师</span>
+                      <div>
+                        <b>演示教师</b>
+                        <small>
+                          {new Date(item.updatedAt).toLocaleDateString("zh-CN")}
+                        </small>
+                        <p>{item.summary}</p>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="project-empty-note">
+                  教师在工作台保存评语后会显示在这里。
+                </div>
+              )}
+            </DashboardPanel>
+          </div>
+
+          <div className="dashboard-columns">
+            <DashboardPanel description="来自当前 ProjectDocument" title="版本记录">
+              {activeProject.versions.length ? (
+                <div className="data-list">
+                  {activeProject.versions.slice(-4).reverse().map((version) => (
+                    <article className="data-row" key={version.id}>
+                      <span className="data-row-mark">版</span>
+                      <div>
+                        <b>{version.label}</b>
+                        <small>{version.description || `修订 ${version.revision}`}</small>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="project-empty-note">
+                  在创造台保存版本后会显示 1.0、1.1、2.0 等记录。
+                </div>
+              )}
+            </DashboardPanel>
+            <DashboardPanel description="发布状态与公开地址来自当前项目" title="最终作品">
+              <div className="metric-notes">
+                <p><span>作品名称</span><b>{activeProject.publication.title || activeProject.title}</b></p>
+                <p><span>发布状态</span><b>{activeProject.publication.status}</b></p>
+                <p>
+                  <span>公开作品地址</span>
+                  <b>
+                    {activeProject.publication.url ? (
+                      <Link href={activeProject.publication.url}>打开最终作品</Link>
+                    ) : (
+                      "完成第 13 课发布后生成"
+                    )}
+                  </b>
+                </p>
+              </div>
+            </DashboardPanel>
+          </div>
         </>
       ) : (
         <section className="no-active-project">

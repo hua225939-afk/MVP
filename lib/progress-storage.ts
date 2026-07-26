@@ -19,7 +19,7 @@ export type LessonProgress = {
   completedAt: string | null;
 };
 
-type CourseProgress = {
+export type CourseProgress = {
   schemaVersion: 1;
   studentId: string;
   courseId: string;
@@ -48,7 +48,7 @@ const lessonProgressSchema = z
   })
   .strict();
 
-const courseProgressSchema = z
+export const courseProgressSchema = z
   .object({
     schemaVersion: z.literal(1),
     studentId: z.string().min(1),
@@ -60,7 +60,13 @@ const courseProgressSchema = z
 export const DEMO_STUDENT_ID = "student-an";
 export const PROGRESS_PREFIX = "vibe-coding:v1:progress:";
 const LEGACY_PROGRESS_PREFIX = "vibe-course-progress:";
+export const PROGRESS_UPDATED_EVENT = "vibe-coding:progress-updated";
 const epoch = new Date(0).toISOString();
+
+export interface ProgressStorage {
+  getItem(key: string): string | null;
+  setItem(key: string, value: string): void;
+}
 
 export function emptyProgress(lesson: Lesson): LessonProgress {
   return {
@@ -74,21 +80,29 @@ export function emptyProgress(lesson: Lesson): LessonProgress {
   };
 }
 
-function storageKey(courseId: string) {
-  return `${PROGRESS_PREFIX}${DEMO_STUDENT_ID}:${courseId}`;
+function storageKey(courseId: string, studentId = DEMO_STUDENT_ID) {
+  return `${PROGRESS_PREFIX}${studentId}:${courseId}`;
 }
 
-function readCourseProgress(courseId: string): CourseProgress {
+function browserStorage(): ProgressStorage | null {
+  return typeof window === "undefined" ? null : window.localStorage;
+}
+
+function readCourseProgressRecord(
+  courseId: string,
+  storage: ProgressStorage | null,
+  studentId = DEMO_STUDENT_ID,
+): CourseProgress {
   const empty: CourseProgress = {
     schemaVersion: 1,
-    studentId: DEMO_STUDENT_ID,
+    studentId,
     courseId,
     lessons: {},
   };
-  if (typeof window === "undefined") return empty;
+  if (!storage) return empty;
 
   try {
-    const saved = window.localStorage.getItem(storageKey(courseId));
+    const saved = storage.getItem(storageKey(courseId, studentId));
     if (!saved) return empty;
     const result = courseProgressSchema.safeParse(JSON.parse(saved));
     if (!result.success) {
@@ -101,10 +115,13 @@ function readCourseProgress(courseId: string): CourseProgress {
   }
 }
 
-function migrateLegacyProgress(lesson: Lesson): LessonProgress | null {
-  if (typeof window === "undefined") return null;
+function migrateLegacyProgress(
+  lesson: Lesson,
+  storage: ProgressStorage | null,
+): LessonProgress | null {
+  if (!storage) return null;
   try {
-    const saved = window.localStorage.getItem(`${LEGACY_PROGRESS_PREFIX}${lesson.id}`);
+    const saved = storage.getItem(`${LEGACY_PROGRESS_PREFIX}${lesson.id}`);
     if (!saved) return null;
     const legacy = JSON.parse(saved) as {
       currentStep?: unknown;
@@ -175,7 +192,16 @@ function migrateLegacyProgress(lesson: Lesson): LessonProgress | null {
 }
 
 export function readProgress(courseId: string, lesson: Lesson): LessonProgress {
-  const courseProgress = readCourseProgress(courseId);
+  return new LearningProgressRepository(browserStorage()).readLesson(
+    courseId,
+    lesson,
+  );
+}
+
+function normalizeLessonProgress(
+  courseProgress: CourseProgress,
+  lesson: Lesson,
+): LessonProgress | null {
   const saved = courseProgress.lessons[lesson.id];
   const validStepIds = new Set(lesson.steps.map((step) => step.id));
 
@@ -202,12 +228,7 @@ export function readProgress(courseId: string, lesson: Lesson): LessonProgress {
     };
   }
 
-  const legacy = migrateLegacyProgress(lesson);
-  if (legacy) {
-    writeProgress(courseId, lesson.id, legacy);
-    return legacy;
-  }
-  return emptyProgress(lesson);
+  return null;
 }
 
 export function writeProgress(
@@ -215,13 +236,11 @@ export function writeProgress(
   lessonId: string,
   progress: LessonProgress,
 ) {
-  if (typeof window === "undefined") return;
-  const current = readCourseProgress(courseId);
-  const next: CourseProgress = {
-    ...current,
-    lessons: { ...current.lessons, [lessonId]: progress },
-  };
-  window.localStorage.setItem(storageKey(courseId), JSON.stringify(next));
+  new LearningProgressRepository(browserStorage()).writeLesson(
+    courseId,
+    lessonId,
+    progress,
+  );
 }
 
 export function progressPercent(progress: LessonProgress, totalSteps = 6) {
@@ -234,7 +253,78 @@ export function readCourseProgressSummary(
   courseId: string,
   totalLessons = 13,
 ) {
-  const courseProgress = readCourseProgress(courseId);
+  return new LearningProgressRepository(browserStorage()).summary(
+    courseId,
+    totalLessons,
+  );
+}
+
+export class LearningProgressRepository {
+  private readonly storage: ProgressStorage | null;
+  private readonly studentId: string;
+
+  constructor(
+    storage: ProgressStorage | null,
+    studentId = DEMO_STUDENT_ID,
+  ) {
+    this.storage = storage;
+    this.studentId = studentId;
+  }
+
+  readCourse(courseId: string): CourseProgress {
+    const record = readCourseProgressRecord(
+      courseId,
+      this.storage,
+      this.studentId,
+    );
+    if (record.studentId !== this.studentId) {
+      return {
+        schemaVersion: 1,
+        studentId: this.studentId,
+        courseId,
+        lessons: {},
+      };
+    }
+    return record;
+  }
+
+  readLesson(courseId: string, lesson: Lesson): LessonProgress {
+    const current = this.readCourse(courseId);
+    const normalized = normalizeLessonProgress(current, lesson);
+    if (normalized) return normalized;
+    const legacy = migrateLegacyProgress(lesson, this.storage);
+    if (legacy) {
+      this.writeLesson(courseId, lesson.id, legacy);
+      return legacy;
+    }
+    return emptyProgress(lesson);
+  }
+
+  writeLesson(
+    courseId: string,
+    lessonId: string,
+    progress: LessonProgress,
+  ) {
+    if (!this.storage) return;
+    const current = this.readCourse(courseId);
+    const next = courseProgressSchema.parse({
+      ...current,
+      lessons: { ...current.lessons, [lessonId]: progress },
+    });
+    this.storage.setItem(
+      storageKey(courseId, this.studentId),
+      JSON.stringify(next),
+    );
+    if (
+      typeof window !== "undefined" &&
+      typeof window.dispatchEvent === "function"
+    ) {
+      window.dispatchEvent(new CustomEvent(PROGRESS_UPDATED_EVENT));
+    }
+  }
+
+  summary(courseId: string, totalLessons = 13) {
+    const courseProgress = this.readCourse(courseId);
   const lessons = Object.entries(courseProgress.lessons);
   const completedLessons = lessons.filter(
     ([, lesson]) => lesson.status === "completed",
@@ -252,4 +342,14 @@ export function readCourseProgressSummary(
     ),
     totalLessons,
   };
+  }
+}
+
+export function getBrowserLearningProgressRepository(
+  studentId = DEMO_STUDENT_ID,
+) {
+  const storage = browserStorage();
+  return storage
+    ? new LearningProgressRepository(storage, studentId)
+    : null;
 }

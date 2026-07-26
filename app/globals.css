@@ -3436,6 +3436,243 @@ a {
   }
 }
 
+/* Multi-role linked demo data */
+.dashboard-loading {
+  border: 1px solid #e3ddf1;
+  border-radius: 18px;
+  background: #fff;
+  color: #6e6480;
+  padding: 28px;
+}
+
+.lesson-output-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.lesson-output-grid article {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  border: 1px solid #ebe6f4;
+  border-radius: 14px;
+  background: #fbfaff;
+  padding: 12px;
+}
+
+.lesson-output-grid article > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 10px;
+  background: #eee8ff;
+  color: #6844c8;
+  font-weight: 900;
+}
+
+.lesson-output-grid article div {
+  min-width: 0;
+}
+
+.lesson-output-grid b,
+.lesson-output-grid small {
+  display: block;
+}
+
+.lesson-output-grid small {
+  margin-top: 3px;
+  color: #776e84;
+}
+
+.lesson-output-grid i {
+  font-style: normal;
+}
+
+.comparison-stack {
+  display: grid;
+  gap: 10px;
+}
+
+.comparison-stack article {
+  border-left: 3px solid #a78bfa;
+  border-radius: 0 12px 12px 0;
+  background: #faf8ff;
+  padding: 12px 14px;
+}
+
+.comparison-stack small {
+  color: #7055b2;
+  font-weight: 800;
+}
+
+.comparison-stack p {
+  margin: 6px 0 0;
+  color: #4d4658;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+}
+
+.teacher-feedback-form {
+  display: grid;
+  gap: 12px;
+}
+
+.teacher-feedback-form label {
+  display: grid;
+  gap: 8px;
+  color: #4d4658;
+  font-weight: 800;
+}
+
+.teacher-feedback-form textarea {
+  width: 100%;
+  resize: vertical;
+  border: 1px solid #dcd3ee;
+  border-radius: 12px;
+  background: #fff;
+  color: #241d31;
+  font: inherit;
+  line-height: 1.6;
+  padding: 12px;
+}
+
+.teacher-feedback-form > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.teacher-feedback-form button {
+  border: 1px solid #d5caed;
+  border-radius: 10px;
+  background: #f8f5ff;
+  color: #5e3db1;
+  font-weight: 800;
+  padding: 10px 14px;
+}
+
+.teacher-feedback-form button:first-child,
+.teacher-feedback-form button.is-selected {
+  border-color: #7451cb;
+  background: #7451cb;
+  color: #fff;
+}
+
+.teacher-feedback-form button:disabled {
+  cursor: not-allowed;
+  opacity: .45;
+}
+
+.form-success {
+  margin: 0;
+  color: #237553;
+  font-weight: 700;
+}
+
+.ability-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.ability-grid article {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr);
+  gap: 12px;
+  border: 1px solid #e7e0f2;
+  border-radius: 15px;
+  background: #fcfbff;
+  padding: 14px;
+}
+
+.ability-grid article > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eee8ff;
+  color: #6744bf;
+  font-weight: 900;
+}
+
+.ability-grid b {
+  color: #30263e;
+}
+
+.ability-grid p {
+  margin: 5px 0 0;
+  color: #6a6075;
+  line-height: 1.6;
+}
+
+.unit-progress-list,
+.tool-usage-list {
+  display: grid;
+  gap: 14px;
+}
+
+.tool-usage-list p {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0;
+  border-bottom: 1px solid #ece7f3;
+  padding: 0 0 10px;
+}
+
+.tool-usage-list span {
+  color: #554c61;
+}
+
+.tool-usage-list b {
+  color: #6744bf;
+  text-align: right;
+}
+
+.lesson-plan-detailed article {
+  align-items: start;
+}
+
+.lesson-plan-detailed article div {
+  min-width: 0;
+}
+
+.lesson-plan-detailed small {
+  display: block;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 900px) {
+  .lesson-output-grid,
+  .ability-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .lesson-output-grid article {
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .lesson-output-grid article > i {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .tool-usage-list p {
+    display: grid;
+  }
+
+  .tool-usage-list b {
+    text-align: left;
+  }
+}
+
 @media (max-width: 900px) {
   .role-entry-hero {
     gap: 28px;
