@@ -12,6 +12,11 @@ import {
   type InteractionProgress,
   type LessonProgress,
 } from "@/lib/progress-storage";
+import { getBrowserProjectRepository } from "@/lib/projects/project-repository";
+import {
+  mergeProjectIntoLessonProgress,
+  syncLessonProgressToProject,
+} from "@/lib/projects/lesson-project-sync";
 
 const stepIcons = ["◉", "▤", "◇", "✦", "✓", "◌"];
 const studentStepCaptions = [
@@ -40,11 +45,25 @@ export function LessonExperience({
 }) {
   const [progress, setProgress] = useState<LessonProgress>(() => emptyProgress(lesson));
   const [ready, setReady] = useState(false);
+  const [activeProjectId, setActiveProjectId] = useState<string | null>();
   const [hintIndex, setHintIndex] = useState(0);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      setProgress(readOnly ? emptyProgress(lesson) : readProgress(lesson.courseId, lesson));
+      if (readOnly) {
+        setProgress(emptyProgress(lesson));
+      } else {
+        const repository = getBrowserProjectRepository();
+        setActiveProjectId(repository?.getActiveProjectId() ?? null);
+        const saved = readProgress(lesson.courseId, lesson);
+        const merged = mergeProjectIntoLessonProgress(lesson, saved);
+        setProgress(merged);
+        if (merged !== saved) {
+          writeProgress(lesson.courseId, lesson.id, merged);
+        } else {
+          syncLessonProgressToProject(lesson.id, saved);
+        }
+      }
       setReady(true);
     });
     return () => window.cancelAnimationFrame(frame);
@@ -68,7 +87,10 @@ export function LessonExperience({
   const save = (updater: (current: LessonProgress) => LessonProgress) => {
     setProgress((current) => {
       const next = updater(current);
-      if (!readOnly) writeProgress(lesson.courseId, lesson.id, next);
+      if (!readOnly) {
+        writeProgress(lesson.courseId, lesson.id, next);
+        syncLessonProgressToProject(lesson.id, next);
+      }
       return next;
     });
   };
@@ -273,7 +295,18 @@ export function LessonExperience({
         </aside>
 
         <section className="lesson-main">
-          {!readOnly && <div className="task-deck-label">任务舱 · 创造台</div>}
+          {!readOnly && (
+            <div className="task-deck-label">
+              <span>任务舱 · 创造台</span>
+              {activeProjectId ? (
+                <Link href={`/student/workbench/${activeProjectId}`}>
+                  打开完整创造台 →
+                </Link>
+              ) : (
+                <Link href="/student/projects">先选择造物项目 →</Link>
+              )}
+            </div>
+          )}
           <div className="lesson-main-heading">
             <div>
               <span className="step-pill">
@@ -291,6 +324,18 @@ export function LessonExperience({
           {!ready ? (
             <div className="loading-card">
               {readOnly ? "正在打开教师预览…" : "正在接上你的学习进度…"}
+            </div>
+          ) : !readOnly && !activeProjectId ? (
+            <div className="lesson-project-required">
+              <span>需要一个当前持续项目</span>
+              <h3>先创建或选择项目，再开始本课创造</h3>
+              <p>
+                本课成果会写入当前 ProjectDocument，不能保存为独立的单课作品。
+              </p>
+              <div>
+                <Link href="/student">去创造基地创建</Link>
+                <Link href="/student/projects">从我的作品选择</Link>
+              </div>
             </div>
           ) : (
             <LessonRenderer

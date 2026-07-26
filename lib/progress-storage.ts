@@ -229,3 +229,27 @@ export function progressPercent(progress: LessonProgress, totalSteps = 6) {
     (Math.min(progress.completedStepIds.length, totalSteps) / totalSteps) * 100,
   );
 }
+
+export function readCourseProgressSummary(
+  courseId: string,
+  totalLessons = 13,
+) {
+  const courseProgress = readCourseProgress(courseId);
+  const lessons = Object.entries(courseProgress.lessons);
+  const completedLessons = lessons.filter(
+    ([, lesson]) => lesson.status === "completed",
+  ).length;
+  const current =
+    [...lessons]
+      .filter(([, lesson]) => lesson.status !== "completed")
+      .sort(([, a], [, b]) => b.updatedAt.localeCompare(a.updatedAt))[0] ??
+    [...lessons].sort(([, a], [, b]) => b.updatedAt.localeCompare(a.updatedAt))[0];
+  return {
+    completedLessons,
+    currentLessonId: current?.[0] ?? "lesson-01",
+    percent: Math.round(
+      (Math.min(completedLessons, totalLessons) / totalLessons) * 100,
+    ),
+    totalLessons,
+  };
+}

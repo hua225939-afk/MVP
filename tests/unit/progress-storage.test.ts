@@ -5,6 +5,7 @@ import test from "node:test";
 import { lessonSchema } from "../../lib/lesson-schema.ts";
 import {
   emptyProgress,
+  readCourseProgressSummary,
   readProgress,
   writeProgress,
 } from "../../lib/progress-storage.ts";
@@ -75,5 +76,51 @@ test("结构化选择、输入、测试与修改记录可保存并恢复", () =>
     8,
   );
 
+  Reflect.deleteProperty(globalThis, "window");
+});
+
+test("创造基地的 13 课进度来自真实课程进度存储", () => {
+  const lesson01 = lessonSchema.parse(
+    JSON.parse(
+      readFileSync(
+        resolve(process.cwd(), "content/lessons/lesson-01.json"),
+        "utf8",
+      ),
+    ),
+  );
+  const lesson06 = lessonSchema.parse(
+    JSON.parse(
+      readFileSync(
+        resolve(process.cwd(), "content/lessons/lesson-06.json"),
+        "utf8",
+      ),
+    ),
+  );
+  const values = new Map<string, string>();
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      localStorage: {
+        getItem: (key: string) => values.get(key) ?? null,
+        setItem: (key: string, value: string) => values.set(key, value),
+      },
+    },
+  });
+  const now = new Date().toISOString();
+  writeProgress(lesson01.courseId, lesson01.id, {
+    ...emptyProgress(lesson01),
+    status: "completed",
+    updatedAt: now,
+    completedAt: now,
+  });
+  writeProgress(lesson06.courseId, lesson06.id, {
+    ...emptyProgress(lesson06),
+    status: "in_progress",
+    updatedAt: new Date(Date.now() + 10).toISOString(),
+  });
+  const summary = readCourseProgressSummary(lesson01.courseId, 13);
+  assert.equal(summary.completedLessons, 1);
+  assert.equal(summary.currentLessonId, "lesson-06");
+  assert.equal(summary.percent, 8);
   Reflect.deleteProperty(globalThis, "window");
 });

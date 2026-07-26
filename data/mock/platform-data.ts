@@ -59,9 +59,9 @@ export const demoRoles: DemoRole[] = [
     href: "/student",
     symbol: "学",
     navigation: [
-      { label: "学习中心", href: "/student", symbol: "⌂" },
-      { label: "示例课程", href: "/student/courses", symbol: "课" },
-      { label: "我的作品", href: "/student#works", symbol: "作" },
+      { label: "创造基地", href: "/student", symbol: "⌂" },
+      { label: "学习中心", href: "/student/courses", symbol: "课" },
+      { label: "我的作品", href: "/student/projects", symbol: "作" },
     ],
   },
   {
@@ -351,15 +351,8 @@ export function getTeacherDashboard() {
   };
 }
 
-export function getStudentDashboard() {
-  const student = students.find((item) => item.id === demoStudentId)!;
-  const studentProgress = progress.find((item) => item.studentId === demoStudentId)!;
-  const studentWorks = works.filter((work) => work.studentId === demoStudentId);
-  return {
-    student,
-    progress: studentProgress,
-    works: studentWorks,
-  };
+export function getDemoStudentProfile() {
+  return students.find((item) => item.id === demoStudentId)!;
 }
 
 export function getParentDashboard() {
