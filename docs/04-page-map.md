@@ -99,3 +99,14 @@
     └── /parent/feedback
 ```
 
+## 10. 高保真演示外壳与教师工作流补充
+
+本阶段在不引入真实登录、数据库、消息服务和真实 AI 的前提下，补充统一产品外壳和教师可点击工作流。
+
+- 五个角色端复用同一 `RoleShell` 顶部栏、侧边导航、演示标识、搜索面板、消息预览和用户菜单。
+- `/profile`、`/messages`、`/settings`、`/help` 为五个角色共用页面，通过演示角色上下文展示不同静态内容，不复制五套页面。
+- 教师流程为 `/teacher` → `/teacher/students` → `/teacher/students/[studentId]` → `/teacher/evidence` → `/teacher/reviews`。
+- 教师学生详情只读投影学习进度与 `ProjectDocument`；教师评语写入独立 `PlatformRepository`，不得修改学生项目 revision。
+- `/teacher/courses`、`/teacher/prep`、`/teacher/reports` 为只读教学辅助页面；课程预览继续使用 `mode=preview`。
+- 其他角色新增导航中的业务入口可使用完整静态演示页面，不提供看似可操作但无反馈的主要按钮。
+- 公共页通过 `?role=hq|partner|teacher|student|parent` 保留演示角色上下文；无参数时默认学生角色。

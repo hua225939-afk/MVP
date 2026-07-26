@@ -8,6 +8,12 @@ const teacherFeedbackSchema = z.object({
   teacherId: z.string().min(1),
   studentId: z.string().min(1),
   summary: z.string().trim().min(2).max(300),
+  strengths: z.string().max(300).default(""),
+  suggestion: z.string().max(300).default(""),
+  lessonId: z.string().nullable().default(null),
+  evidenceId: z.string().nullable().default(null),
+  mark: z.enum(["doing_well", "needs_attention"]).default("doing_well"),
+  status: z.enum(["pending", "needs_recheck", "completed"]).default("completed"),
   visibility: z.literal("student_and_parent"),
   isDemo: z.literal(true),
   createdAt: isoDate,
@@ -81,23 +87,42 @@ export class PlatformRepository {
       .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
   }
 
+  listAllFeedback() {
+    return this.read().teacherFeedback.sort((a, b) =>
+      b.updatedAt.localeCompare(a.updatedAt),
+    );
+  }
+
   saveTeacherFeedback(input: {
     teacherId: string;
     studentId: string;
     summary: string;
+    strengths?: string;
+    suggestion?: string;
+    lessonId?: string | null;
+    evidenceId?: string | null;
+    mark?: "doing_well" | "needs_attention";
+    status?: "pending" | "needs_recheck" | "completed";
   }) {
     const state = this.read();
     const timestamp = this.now();
     const existing = state.teacherFeedback.find(
       (item) =>
         item.teacherId === input.teacherId &&
-        item.studentId === input.studentId,
+        item.studentId === input.studentId &&
+        (input.evidenceId ? item.evidenceId === input.evidenceId : true),
     );
     const feedback = teacherFeedbackSchema.parse({
       id: existing?.id ?? createId("teacher-feedback", timestamp),
       teacherId: input.teacherId,
       studentId: input.studentId,
       summary: input.summary,
+      strengths: input.strengths ?? existing?.strengths ?? "",
+      suggestion: input.suggestion ?? existing?.suggestion ?? "",
+      lessonId: input.lessonId ?? existing?.lessonId ?? null,
+      evidenceId: input.evidenceId ?? existing?.evidenceId ?? null,
+      mark: input.mark ?? existing?.mark ?? "doing_well",
+      status: input.status ?? existing?.status ?? "completed",
       visibility: "student_and_parent",
       isDemo: true,
       createdAt: existing?.createdAt ?? timestamp,

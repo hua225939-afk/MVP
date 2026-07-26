@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
 import { courseSchema, lessonSchema, type Lesson } from "../../lib/lesson-schema.ts";
+import { demoStudentRecords } from "../../data/mock/product-shell-data.ts";
 import { demoIdentities } from "../../lib/platform/demo-identities.ts";
 import { PlatformRepository } from "../../lib/platform/platform-repository.ts";
 import { RoleDashboardService } from "../../lib/platform/role-dashboard-service.ts";
@@ -131,9 +132,20 @@ test("合作伙伴汇总由同一班级进度与项目明细计算", () => {
   );
   const partner = service(storage).getPartnerDashboard();
   assert.equal(partner.stats.classes, 1);
-  assert.equal(partner.stats.students, 1);
+  assert.equal(partner.stats.students, demoStudentRecords.length);
   assert.equal(partner.stats.projects, 1);
-  assert.equal(partner.stats.averageProgress, Math.round(100 / 13));
+  assert.equal(
+    partner.stats.averageProgress,
+    Math.round(
+      demoStudentRecords
+        .map((record) =>
+          record.id === demoIdentities.student.id
+            ? Math.round(100 / 13)
+            : Math.round((record.completedLessons / 13) * 100),
+        )
+        .reduce((sum, value) => sum + value, 0) / demoStudentRecords.length,
+    ),
+  );
 });
 
 test("总部统计读取课程、身份、项目和发布明细", () => {
@@ -291,5 +303,5 @@ test("完整验收流程在刷新后保持学生项目、版本、评语与汇�
     "acceptance-project",
   );
   assert.equal(refreshed.getParentDashboard().student?.feedback.length, 1);
-  assert.equal(refreshed.getPartnerDashboard().stats.averageProgress, 8);
+  assert.equal(refreshed.getPartnerDashboard().stats.averageProgress, 27);
 });

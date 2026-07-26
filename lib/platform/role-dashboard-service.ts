@@ -7,6 +7,7 @@ import {
 } from "../projects/project-repository.ts";
 import type { CourseToolDefinition } from "../tools/course-tool-registry.ts";
 import { interactionMetadata } from "../interaction-types.ts";
+import { demoStudentRecords } from "../../data/mock/product-shell-data.ts";
 import { demoIdentities } from "./demo-identities.ts";
 import { PlatformRepository } from "./platform-repository.ts";
 
@@ -260,10 +261,22 @@ export class RoleDashboardService {
       teachers: [demoIdentities.teacher],
       stats: {
         classes: 1,
-        students: 1,
+        students: demoStudentRecords.length,
         teachers: 1,
-        averageProgress: student.progressPercent,
-        completionRate: student.progressPercent,
+        averageProgress: average(
+          demoStudentRecords.map((record) =>
+            record.id === demoIdentities.student.id
+              ? student.progressPercent
+              : Math.round((record.completedLessons / this.course.totalLessons) * 100),
+          ),
+        ),
+        completionRate: average(
+          demoStudentRecords.map((record) =>
+            record.id === demoIdentities.student.id
+              ? student.progressPercent
+              : Math.round((record.completedLessons / this.course.totalLessons) * 100),
+          ),
+        ),
         projects: projects.length,
         published,
         activeLessonId: student.currentLessonId,
@@ -291,7 +304,7 @@ export class RoleDashboardService {
         partners: 1,
         campuses: 1,
         classes: 1,
-        students: 1,
+        students: demoStudentRecords.length,
         teachers: 1,
         courses: 1,
         lessons: this.lessons.length,
