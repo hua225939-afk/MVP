@@ -435,6 +435,7 @@ const courseToolAtomSchema = atomBaseSchema
       "app-composer",
       "bug-scanner",
       "playtest-feedback",
+      "work-publisher",
     ]),
     mode: z.enum(["basic", "free"]),
   })

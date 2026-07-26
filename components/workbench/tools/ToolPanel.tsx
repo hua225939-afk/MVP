@@ -18,6 +18,7 @@ import {
   BugAnnotationStudio,
   PeerReviewStudio,
 } from "./UnitFourTools";
+import { WorkPublisherTool } from "./UnitFiveTools";
 
 export function ToolPanel({
   definition,
@@ -74,6 +75,10 @@ export function ToolPanel({
 
   if (definition.id === "playtest-feedback") {
     return <PeerReviewStudio definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "work-publisher") {
+    return <WorkPublisherTool definition={definition} onChange={onChange} project={project} />;
   }
 
   return (

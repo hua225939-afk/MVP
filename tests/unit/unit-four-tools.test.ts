@@ -50,7 +50,7 @@ function assembledProject() {
   return project;
 }
 
-test("第10—12课分别接入流程、Bug与试玩工作室，且未创建第13课正文", () => {
+test("第10—12课分别接入流程、Bug与试玩工作室", () => {
   const expected = ["app-composer", "bug-scanner", "playtest-feedback"];
   expected.forEach((toolId, index) => {
     const lesson = lessonSchema.parse(
@@ -61,7 +61,6 @@ test("第10—12课分别接入流程、Bug与试玩工作室，且未创建第1
     assert.ok(atoms.some((atom) => atom.type === "textInput"));
     assert.ok(atoms.some((atom) => atom.type === "runTest"));
   });
-  assert.throws(() => read("content/lessons/lesson-13.json"));
 });
 
 test("页面流程编排支持排序、起点核心入口结果页、返回和重启", () => {

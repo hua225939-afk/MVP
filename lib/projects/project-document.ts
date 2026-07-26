@@ -99,6 +99,7 @@ const artifactSchema = z.object({
   type: z.enum(["code", "preview", "cover", "document", "lesson-binding", "screenshot"]),
   name: z.string().min(1),
   content: z.string(),
+  visibility: z.enum(["private", "public"]).optional(),
   createdAt: isoDate,
   updatedAt: isoDate,
 });
@@ -255,6 +256,162 @@ const experienceCurveSchema = z.object({
     note: z.string(),
   })).length(3),
 });
+
+const storyMarkerSchema = z.enum([
+  "most-important",
+  "ai-helped",
+  "ai-rejected",
+  "peer-changed",
+]);
+
+const projectStorySchema = z.object({
+  nodes: z.array(z.object({
+    id: z.string().min(1),
+    source: z.enum([
+      "interest-map",
+      "intent-draft",
+      "student-intent",
+      "page-sketch",
+      "visual-theme",
+      "component",
+      "interaction",
+      "bug",
+      "peer-feedback",
+      "version",
+      "student-note",
+    ]),
+    title: z.string().min(1),
+    summary: z.string(),
+    selected: z.boolean(),
+    order: z.number().int().nonnegative(),
+    screenshotArtifactId: z.string().nullable(),
+    note: z.string(),
+    markers: z.array(storyMarkerSchema),
+  })),
+  updatedAt: isoDate.nullable(),
+}).default({ nodes: [], updatedAt: null });
+
+const launchVisualsSchema = z.object({
+  themeId: z.string(),
+  customThemeName: z.string(),
+  background: z.string(),
+  textColor: z.string(),
+  layoutMode: z.enum(["template", "free"]),
+  layoutId: z.string(),
+  title: z.string(),
+  icon: z.string(),
+  keywords: z.array(z.string()),
+  coverArtifactId: z.string().nullable(),
+  screenshots: z.array(z.object({
+    artifactId: z.string().min(1),
+    order: z.number().int().nonnegative(),
+    cropX: z.number().min(0).max(100),
+    cropY: z.number().min(0).max(100),
+    zoom: z.number().min(1).max(3),
+    caption: z.string(),
+  })),
+  blocks: z.array(z.object({
+    id: z.string().min(1),
+    type: z.enum(["cover", "feature", "version", "screenshot"]),
+    title: z.string(),
+    text: z.string(),
+    order: z.number().int().nonnegative(),
+  })),
+  previewDevice: z.enum(["desktop", "tablet"]),
+}).default({
+  themeId: "cosmic",
+  customThemeName: "",
+  background: "#F4F0FF",
+  textColor: "#20183A",
+  layoutMode: "template",
+  layoutId: "story-first",
+  title: "",
+  icon: "✦",
+  keywords: [],
+  coverArtifactId: null,
+  screenshots: [],
+  blocks: [],
+  previewDevice: "desktop",
+});
+
+const presentationSectionIdSchema = z.enum([
+  "one-line",
+  "audience",
+  "problem",
+  "features",
+  "experience",
+  "upgrade",
+  "ai-role",
+  "student-decision",
+]);
+
+const presentationDraftSchema = z.object({
+  generatedAt: isoDate.nullable(),
+  sourceRevision: z.number().int().nonnegative(),
+  disclaimer: z.string(),
+  sections: z.array(z.object({
+    id: presentationSectionIdSchema,
+    label: z.string().min(1),
+    content: z.string(),
+  })),
+  minuteScript: z.string(),
+}).default({
+  generatedAt: null,
+  sourceRevision: 0,
+  disclaimer: "",
+  sections: [],
+  minuteScript: "",
+});
+
+const studentPresentationSchema = z.object({
+  sections: z.array(z.object({
+    id: presentationSectionIdSchema,
+    label: z.string().min(1),
+    aiOriginal: z.string(),
+    studentDraft: z.string(),
+    finalText: z.string(),
+    included: z.boolean(),
+    order: z.number().int().nonnegative(),
+  })),
+  minuteScript: z.object({
+    aiOriginal: z.string(),
+    studentDraft: z.string(),
+    finalText: z.string(),
+  }),
+  finalizedAt: isoDate.nullable(),
+}).default({
+  sections: [],
+  minuteScript: { aiOriginal: "", studentDraft: "", finalText: "" },
+  finalizedAt: null,
+});
+
+const demoScriptSchema = z.object({
+  stages: z.array(z.object({
+    id: z.enum(["opening", "problem", "core-action", "result", "upgrade", "ai-student", "closing"]),
+    label: z.string().min(1),
+    script: z.string(),
+    seconds: z.number().int().min(0).max(60),
+    assetType: z.enum(["page", "screenshot", "live"]),
+    assetId: z.string().nullable(),
+    order: z.number().int().nonnegative(),
+  })),
+  rehearsal: z.object({
+    durationSeconds: z.number().int().nonnegative(),
+    overTime: z.boolean(),
+    testedAt: isoDate.nullable(),
+  }),
+}).default({
+  stages: [],
+  rehearsal: { durationSeconds: 0, overTime: false, testedAt: null },
+});
+
+const finalVersionSchema = z.object({
+  versionId: z.string().min(1),
+  sourceVersionId: z.string().nullable(),
+  label: z.string().min(1),
+  summary: z.string(),
+  createdAt: isoDate,
+}).nullable().default(null);
 
 export const projectDocumentSchema = z
   .object({
@@ -462,6 +619,11 @@ export const projectDocumentSchema = z
     studentFixes: z.array(studentFixSchema).default([]),
     peerReviews: z.array(peerReviewSchema).default([]),
     experienceCurves: z.array(experienceCurveSchema).default([]),
+    projectStory: projectStorySchema,
+    launchVisuals: launchVisualsSchema,
+    presentationDraft: presentationDraftSchema,
+    studentPresentation: studentPresentationSchema,
+    demoScript: demoScriptSchema,
     tests: z.array(testSchema),
     artifacts: z.array(artifactSchema),
     decisions: z.array(
@@ -504,7 +666,17 @@ export const projectDocumentSchema = z
       url: z.string().nullable(),
       qrCodeArtifactId: z.string().nullable(),
       publishedAt: isoDate.nullable(),
+      oneLine: z.string().default(""),
+      audience: z.string().default(""),
+      problem: z.string().default(""),
+      featureTags: z.array(z.string()).default([]),
+      category: z.string().default("其他"),
+      experienceInstructions: z.string().default(""),
+      featuredPageIds: z.array(z.string()).default([]),
+      storyNodeIds: z.array(z.string()).default([]),
+      learningReflection: z.string().default(""),
     }),
+    finalVersion: finalVersionSchema,
     createdAt: isoDate,
     updatedAt: isoDate,
   })
@@ -552,12 +724,18 @@ export const PROJECT_EDITABLE_FIELDS = [
   "studentFixes",
   "peerReviews",
   "experienceCurves",
+  "projectStory",
+  "launchVisuals",
+  "presentationDraft",
+  "studentPresentation",
+  "demoScript",
   "tests",
   "artifacts",
   "decisions",
   "feedback",
   "versions",
   "publication",
+  "finalVersion",
 ] as const satisfies readonly ProjectTopLevelField[];
 
 export const PROJECT_SCHEMA_VERSION = 1;
@@ -658,6 +836,38 @@ export function createDefaultProject(
     studentFixes: [],
     peerReviews: [],
     experienceCurves: [],
+    projectStory: { nodes: [], updatedAt: null },
+    launchVisuals: {
+      themeId: "cosmic",
+      customThemeName: "",
+      background: "#F4F0FF",
+      textColor: "#20183A",
+      layoutMode: "template",
+      layoutId: "story-first",
+      title,
+      icon: "✦",
+      keywords: [],
+      coverArtifactId: null,
+      screenshots: [],
+      blocks: [],
+      previewDevice: "desktop",
+    },
+    presentationDraft: {
+      generatedAt: null,
+      sourceRevision: 0,
+      disclaimer: "",
+      sections: [],
+      minuteScript: "",
+    },
+    studentPresentation: {
+      sections: [],
+      minuteScript: { aiOriginal: "", studentDraft: "", finalText: "" },
+      finalizedAt: null,
+    },
+    demoScript: {
+      stages: [],
+      rehearsal: { durationSeconds: 0, overTime: false, testedAt: null },
+    },
     tests: [],
     artifacts: [],
     decisions: [],
@@ -674,7 +884,17 @@ export function createDefaultProject(
       url: null,
       qrCodeArtifactId: null,
       publishedAt: null,
+      oneLine: "",
+      audience: "",
+      problem: "",
+      featureTags: [],
+      category: "其他",
+      experienceInstructions: "",
+      featuredPageIds: [],
+      storyNodeIds: [],
+      learningReflection: "",
     },
+    finalVersion: null,
     createdAt: now,
     updatedAt: now,
   };

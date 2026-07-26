@@ -117,7 +117,7 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   }, [activeTool.id, activeTool.lessonId, project, projectId, ready]);
 
   const unlockedContext = useMemo(
-    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06", "lesson-07", "lesson-08", "lesson-09", "lesson-10", "lesson-11", "lesson-12"], project }),
+    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06", "lesson-07", "lesson-08", "lesson-09", "lesson-10", "lesson-11", "lesson-12", "lesson-13"], project }),
     [project],
   );
   const changeProject = (next: ProjectDocument) => {
@@ -257,7 +257,7 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
           <Link aria-current="page" href={`/student/workbench/${projectId}`}>创造台</Link>
           <Link href="/student/projects">我的作品</Link>
           <Link href="/student/courses">学习中心</Link>
-          <span aria-disabled="true">作品广场</span>
+          <Link href="/gallery">作品广场</Link>
           <span aria-disabled="true">成就</span>
         </nav>
         <div className="workbench-save-state">

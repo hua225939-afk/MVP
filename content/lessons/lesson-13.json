@@ -1,0 +1,278 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-13",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-05",
+  "order": 13,
+  "title": "造物发布",
+  "subtitle": "整理项目故事、设计发布视觉、编排一分钟演示并生成公开作品页",
+  "studentSubtitle": "造物星球·公开首发任务",
+  "durationMinutes": 150,
+  "coreGoal": "从13课持续项目轨迹中选择可公开故事，完成发布视觉、AI介绍学生修订、一分钟演示和访客隐私测试，生成公开只读作品页。",
+  "keyConcepts": ["项目故事", "发布视觉", "公开投影", "AI原稿", "学生最终稿", "演示脚本", "隐私边界"],
+  "skills": ["证据选择", "视觉编排", "内容改写", "演示计时", "访客测试", "安全发布"],
+  "output": {
+    "title": "公开发布版",
+    "description": "包含学生选择的项目故事、产品封面、代表页面、最终介绍、演示脚本、隐私检查和只读体验入口。",
+    "acceptanceCriteria": ["故事节点经过选择排序并标记关键决定", "封面、截图裁切和电脑平板预览完成", "AI原稿经过逐项学生修改并确认最终稿", "一分钟演示预演不超时", "公开页只显示安全投影", "作品广场只收录published项目"]
+  },
+  "teacherNotes": {
+    "objectives": ["把创作过程整理为可讲述证据", "区分AI草稿与学生最终表达", "理解公开页面的数据最小化"],
+    "preparation": ["确认试玩升级版2.0已生成", "准备可公开与不可公开素材示例"],
+    "commonIssues": ["只写名称介绍而没有项目故事", "直接发布AI原稿", "把localhost二维码当跨设备链接", "公开未选择草稿"],
+    "facilitationTips": ["要求学生说明一个未采用的AI建议", "演示计时只检查时长与编排，不进行语音识别", "发布前逐项做访客视角检查"]
+  },
+  "studentContent": {
+    "opening": "发布不是把作品名称填进表格，而是决定访客先看到什么、怎样体验、为什么相信这是你的作品。",
+    "safetyNote": "公开页只读取学生明确选择的最终内容；私人图片、测试答案、教师数据、其他项目和未选择草稿不会进入公开投影。",
+    "completionMessage": "你完成了从最初兴趣到公开作品页的完整造物旅程。"
+  },
+  "parentSummary": {
+    "theme": "把长期作品整理成可安全分享的公开成果",
+    "learned": "孩子能选择创作证据、修改AI草稿、编排演示并判断哪些数据适合公开。",
+    "artifact": "公开作品页、项目故事、产品封面和一分钟演示脚本。",
+    "conversationStarter": "请孩子展示一个最重要的决定、一次没有采用的AI建议，以及为什么公开页没有显示全部草稿。"
+  },
+  "steps": [
+    {
+      "id": "lesson-13.look",
+      "phase": "看",
+      "title": "回看13课造物轨迹",
+      "durationMinutes": 25,
+      "goal": "从完整项目中发现值得公开讲述的关键节点",
+      "studentContent": {
+        "intro": "系统会读取兴趣地图、意图草稿、学生修改、草图、视觉、组件、互动、Bug、同伴反馈与三个关键版本。",
+        "instructions": "进入项目故事画布，删除不想展示的节点、添加便签截图、调整顺序并标记学生、AI与同伴的作用。",
+        "completionMessage": "你的项目历程已经变成一条有选择的故事。"
+      },
+      "teacherNotes": {
+        "purpose": "建立发布的证据选择意识",
+        "talkingPoints": ["公开故事不是完整日志", "删除与不公开也是学生决定"],
+        "observeFor": ["是否标记最重要决定", "是否说明未采用的AI建议"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先找转折点：想法改变、Bug修复、反馈带来的升级。",
+        "hints": ["最初兴趣", "学生决定", "AI帮助", "同伴改变"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.look.story",
+          "type": "courseTool",
+          "title": "ProjectStoryCanvas",
+          "instructions": "读取、选择、排序并标记项目故事节点。",
+          "required": true,
+          "toolId": "work-publisher",
+          "mode": "basic"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.look.story"]
+      }
+    },
+    {
+      "id": "lesson-13.explain",
+      "phase": "讲",
+      "title": "理解公开投影与发布视觉",
+      "durationMinutes": 15,
+      "goal": "区分完整项目、学生选择与访客可见内容",
+      "studentContent": {
+        "intro": "公开页不是把localStorage里的整份项目复制出去，而是生成字段白名单投影。",
+        "instructions": "展开发布边界，观察哪些字段可以公开、哪些必须隐藏。",
+        "completionMessage": "你知道公开页面为什么要只读和最小化。"
+      },
+      "teacherNotes": {
+        "purpose": "建立隐私与数据最小化概念",
+        "talkingPoints": ["公开选择不等于完整数据", "代表性截图需要学生确认"],
+        "observeFor": ["是否把测试答案当作品内容"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "访客只需要理解、体验和回看故事，不需要编辑与调试数据。",
+        "hints": ["白名单", "只读", "明确选择"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.explain.boundary",
+          "type": "reveal",
+          "title": "公开页面安全边界",
+          "required": true,
+          "prompt": "公开页能读取什么？",
+          "content": "只读取发布标题、学生最终介绍、明确选择的封面与截图、代表页面、已选故事节点、版本摘要和学习回顾；不读取编辑按钮、测试答案、教师数据、私人图片、未选草稿或localStorage中的其他项目。",
+          "buttonLabel": "展开安全边界"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.explain.boundary"]
+      }
+    },
+    {
+      "id": "lesson-13.think",
+      "phase": "想",
+      "title": "选择一分钟里最重要的故事",
+      "durationMinutes": 15,
+      "goal": "确定发布叙事主线而不是堆满全部功能",
+      "studentContent": {
+        "intro": "一分钟无法讲完13课，但可以让访客记住一个问题、一个关键操作和一次升级。",
+        "instructions": "写出你希望访客一分钟后记住的三件事。",
+        "completionMessage": "你的发布主线已经足够清楚。"
+      },
+      "teacherNotes": {
+        "purpose": "形成演示取舍",
+        "talkingPoints": ["功能数量不等于故事质量"],
+        "observeFor": ["是否包含用户问题、操作和升级"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "用“为谁—做什么—为什么比1.0更好”组织。",
+        "hints": ["用户", "操作", "升级"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.think.focus",
+          "type": "textInput",
+          "title": "一分钟记忆点",
+          "required": true,
+          "question": "访客应该记住哪位用户、哪个操作和哪次升级？",
+          "placeholder": "为……设计；核心操作是……；2.0最重要的升级是……",
+          "validation": {
+            "mode": "minLength",
+            "minLength": 28
+          },
+          "successMessage": "发布主线包含用户、操作与升级。",
+          "hint": "不要只列功能名称。"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.think.focus"]
+      }
+    },
+    {
+      "id": "lesson-13.make",
+      "phase": "做",
+      "title": "设计视觉、改写介绍并编排演示",
+      "durationMinutes": 60,
+      "goal": "完成视觉、文字和演示三个发布层",
+      "studentContent": {
+        "intro": "模板可以作为起点，自由模式允许重新组合功能卡、版本卡、封面和截图。",
+        "instructions": "制作封面，选择并裁切代表截图；生成AI介绍原稿后逐项修改、删除、排序并确认最终稿；为七个演示阶段选择页面、截图或实时操作。",
+        "completionMessage": "你的作品已经有发布视觉、自己的介绍和一分钟演示。"
+      },
+      "teacherNotes": {
+        "purpose": "完成多模态发布编排",
+        "talkingPoints": ["AI原稿必须保留且不能直接替代学生稿", "自由模式要能重组版式"],
+        "observeFor": ["每项介绍是否真的改写", "截图裁切是否突出操作"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先完成封面与代表页面，再让介绍文字对应这些视觉证据。",
+        "hints": ["封面", "裁切", "逐项改写", "七段演示"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.make.publisher",
+          "type": "courseTool",
+          "title": "LaunchVisualStudio · AI介绍 · DemoScriptStudio",
+          "instructions": "完成发布工具中的视觉、介绍和演示阶段。",
+          "required": true,
+          "toolId": "work-publisher",
+          "mode": "free"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.make.publisher"]
+      }
+    },
+    {
+      "id": "lesson-13.test",
+      "phase": "测",
+      "title": "以访客身份测试公开体验",
+      "durationMinutes": 20,
+      "goal": "验证一分钟时长、只读体验、隐私隐藏与链接规则",
+      "studentContent": {
+        "intro": "发布前最后一次测试不再从编辑者角度看，而是从访客能否理解、操作和返回看。",
+        "instructions": "完成计时预演、只读体验、隐私投影、广场状态和分享链接检查。",
+        "completionMessage": "公开发布契约已经通过。"
+      },
+      "teacherNotes": {
+        "purpose": "完成发布前契约测试",
+        "talkingPoints": ["本地链接可以演示但不能生成跨设备二维码"],
+        "observeFor": ["是否误把localhost当公网链接"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "公开页只能看到你明确选择的最终内容。",
+        "hints": ["60秒", "read-only", "privacy", "published", "domain"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.test.release",
+          "type": "runTest",
+          "title": "造物发布扫描",
+          "instructions": "按发布工具实际结果补全检查标记。",
+          "required": true,
+          "description": "复核故事、视觉、介绍、演示、隐私与链接。",
+          "language": "text",
+          "testMode": "contains",
+          "initialCode": "story: TODO\nvisual: TODO\npresentation: TODO\ndemo: TODO\nprivacy: TODO\nshare: TODO",
+          "tests": [
+            {"id": "story", "label": "项目故事", "includes": "story: selected", "message": "选择并排序故事节点。"},
+            {"id": "visual", "label": "发布视觉", "includes": "visual: desktop-tablet", "message": "检查电脑和平板预览。"},
+            {"id": "presentation", "label": "学生最终稿", "includes": "presentation: revised", "message": "逐项修改AI原稿。"},
+            {"id": "demo", "label": "一分钟演示", "includes": "demo: under-60", "message": "计时预演不得超时。"},
+            {"id": "privacy", "label": "只读与隐私", "includes": "privacy: pass", "message": "隐藏编辑、答案、教师数据、私人图片和未选草稿。"},
+            {"id": "share", "label": "分享规则", "includes": "share: domain-aware", "message": "本地不生成跨设备二维码。"}
+          ],
+          "successMessage": "造物发布检查全部通过。",
+          "retryMessage": "还有发布证据未完成。",
+          "editable": true
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.test.release"]
+      }
+    },
+    {
+      "id": "lesson-13.share",
+      "phase": "说",
+      "title": "生成公开作品页",
+      "durationMinutes": 15,
+      "goal": "确认公开内容并进入作品广场",
+      "studentContent": {
+        "intro": "发布后，公开页展示作品、实时只读体验、项目故事、版本历程和学习回顾。",
+        "instructions": "确认学生最终稿与公开素材，生成链接，打开公开页并检查作品广场卡片。",
+        "completionMessage": "第五单元完成；本轮停止，不进行五端最终数据联动。"
+      },
+      "teacherNotes": {
+        "purpose": "完成成果表达与安全发布",
+        "talkingPoints": ["published是进入广场的唯一状态"],
+        "observeFor": ["公开页是否仍出现编辑入口"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "最后说明一个你做出的决定，而不只是展示功能。",
+        "hints": ["公开页", "只读体验", "项目故事", "学习回顾"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-13.share.final",
+          "type": "reveal",
+          "title": "一分钟发布介绍顺序",
+          "required": true,
+          "prompt": "怎样带访客看公开页？",
+          "content": "开场说明服务对象与问题；演示核心操作和结果；展示一次关键升级；说明AI帮助、学生决定与未采用建议；邀请访客进入只读体验；最后回看从1.0到2.0的学习轨迹。",
+          "buttonLabel": "查看发布顺序"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-13.share.final"]
+      }
+    }
+  ]
+}
