@@ -16,7 +16,9 @@ test("默认 ProjectDocument 包含正式字段并通过严格验证", () => {
     "interestMap", "sketch", "keywords", "aiDraft", "studentRevision",
     "finalIntent", "aiMode", "aiProvenance", "scope", "pages",
     "structure", "styles", "components", "interactions", "inputs", "conditions",
-    "state", "tests", "artifacts", "decisions", "feedback", "versions", "publication",
+    "styleTokens", "moodboard", "customComponentBriefs", "aiDrafts",
+    "studentRevisions", "state", "tests", "artifacts", "decisions", "feedback",
+    "versions", "publication",
   ]) {
     assert.equal(field in project, true, `缺少字段 ${field}`);
   }

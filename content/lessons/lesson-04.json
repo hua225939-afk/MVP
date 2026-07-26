@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-04",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-02",
+  "order": 4,
+  "title": "给网页穿上设计外衣",
+  "subtitle": "从视觉参考与色彩提取走向可检查的 CSS 设计令牌",
+  "studentSubtitle": "造物星球·外观装配任务",
+  "durationMinutes": 90,
+  "coreGoal": "读取第3课页面结构与兴趣图片，建立视觉情绪板，修改并确认 AI StyleTokens 草稿，实时同步 CSS 与页面。",
+  "keyConcepts": ["CSS", "StyleTokens", "色彩", "视觉层级", "可读性", "响应式"],
+  "skills": ["参考图组合", "色彩提取", "视觉参数编辑", "CSS 同步", "可访问性检查"],
+  "output": {"title": "可复用的 App 视觉主题", "description": "情绪板、StyleTokens、CSS 变量、前后对比和体检记录。", "acceptanceCriteria": ["组合本地或导入参考图", "记录视觉选择理由", "逐项修改并确认 StyleTokens", "CSS 与页面实时同步", "完成对比度、字号与平板检查"]},
+  "teacherNotes": {
+    "objectives": ["让设计选择服务目标用户", "理解设计令牌与 CSS 变量", "保留 AI 草稿与学生逐项确认"],
+    "preparation": ["确认第3课结构已保存", "准备本地参考图与平板宽度"],
+    "commonIssues": ["只选一套预设主题", "颜色好看但文字不可读", "直接确认 AI 草稿"],
+    "facilitationTips": ["追问每个选择的理由", "鼓励组合多张图片", "保留一次失败—修复—重测"]
+  },
+  "studentContent": {"opening": "这节课不只换三套颜色。你会自己组合视觉参考、提取色彩并编辑完整的 CSS 视觉参数。", "safetyNote": "导入图片只保存在当前浏览器，不要上传含私人信息的照片。", "completionMessage": "你的页面骨架已经穿上适合目标用户且通过体检的设计外衣。"},
+  "parentSummary": {"theme": "用设计服务用户", "learned": "孩子能从参考图提取视觉线索，修改 CSS 参数并检查可读性。", "artifact": "视觉情绪板、StyleTokens、CSS 和修改前后对比。", "conversationStarter": "请孩子解释主色、字号、间距和圆角为什么适合目标用户。"},
+  "steps": [
+    {
+      "id": "lesson-04.look", "phase": "看", "title": "浏览并组合视觉案例", "durationMinutes": 15, "goal": "操作本地参考图库并提取候选色彩",
+      "studentContent": {"intro": "切换、收藏并组合青少年视觉案例，也可以导入自己的图片。", "instructions": "至少组合两张图片并点击候选色彩观察页面变化。", "completionMessage": "你找到了一组可以继续发展的视觉线索。"},
+      "teacherNotes": {"purpose": "用真实视觉材料代替单纯主题选择", "talkingPoints": ["同一图片可以提供多种候选色"], "observeFor": ["学生是否组合而不是只选一张"]},
+      "assistant": {"mode": "preset", "message": "先看画面带来的感觉，再关注颜色。", "hints": ["收藏喜欢的图", "组合两张参考", "点击色块试用"]},
+      "atoms": [{"id": "lesson-04.look.moodboard", "type": "courseTool", "title": "VisualMoodboard", "instructions": "进入情绪板工作区组合图片并提取色彩。", "required": true, "toolId": "appearance-theme", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.look.moodboard"]}
+    },
+    {
+      "id": "lesson-04.explain", "phase": "讲", "title": "理解设计令牌与 CSS 变量", "durationMinutes": 10, "goal": "理解集中视觉参数怎样同步影响整个页面",
+      "studentContent": {"intro": "StyleTokens 像一组统一旋钮，CSS 变量让页面各区域使用同一规则。", "instructions": "展开规则并找到颜色、字号、间距和圆角。", "completionMessage": "你知道为什么不应逐个卡片重复改样式。"},
+      "teacherNotes": {"purpose": "建立集中样式系统概念", "talkingPoints": ["变量改变会同步到多个组件"], "observeFor": ["是否区分结构与样式"]},
+      "assistant": {"mode": "preset", "message": "把变量想成整座基地共用的控制台。", "hints": ["主色影响按钮", "间距影响呼吸感"]},
+      "atoms": [{"id": "lesson-04.explain.tokens", "type": "reveal", "title": "StyleTokens 规则", "required": true, "prompt": "为什么用 CSS 变量集中管理视觉？", "content": "主色、背景、字号、间距、圆角、阴影等令牌可以同时驱动页面和组件，修改一次即可保持一致。", "buttonLabel": "展开 CSS 规则"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.explain.tokens"]}
+    },
+    {
+      "id": "lesson-04.think", "phase": "想", "title": "写下视觉关键词与理由", "durationMinutes": 10, "goal": "在 AI 建议前形成学生自己的视觉判断",
+      "studentContent": {"intro": "结合 finalIntent 与服务对象，先写视觉感受和理由。", "instructions": "说明关键词怎样帮助目标用户理解或操作。", "completionMessage": "你的设计理由已经形成。"},
+      "teacherNotes": {"purpose": "避免只追求好看", "talkingPoints": ["视觉选择要能服务使用场景"], "observeFor": ["理由是否关联服务对象"]},
+      "assistant": {"mode": "preset", "message": "使用“因为用户……所以页面需要……”句式。", "hints": ["考虑阅读", "考虑操作", "考虑情绪"]},
+      "atoms": [{"id": "lesson-04.think.reason", "type": "textInput", "title": "视觉选择理由", "required": true, "question": "你的页面需要什么视觉感觉，为什么适合服务对象？", "placeholder": "因为……所以页面需要清楚、活力……", "validation": {"mode": "minLength", "minLength": 12}, "successMessage": "视觉理由表达清楚。", "hint": "不要只写“好看”，说明它怎样帮助用户。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.think.reason"]}
+    },
+    {
+      "id": "lesson-04.make", "phase": "做", "title": "生成并逐项修改 StyleTokens", "durationMinutes": 35, "goal": "建立情绪板并用 ThemeEditor 同步修改 CSS 与页面",
+      "studentContent": {"intro": "组合图片、字体、形状、间距和按钮感觉，再生成 AI 草稿。", "instructions": "逐项修改颜色、字号、间距、圆角、边框、阴影、按钮和页面宽度。", "completionMessage": "StyleTokens 与 CSS 已写入同一个 ProjectDocument。"},
+      "teacherNotes": {"purpose": "完成开放视觉创作", "talkingPoints": ["AI 草稿必须由学生逐项确认"], "observeFor": ["是否使用前后对比和上一个版本恢复"]},
+      "assistant": {"mode": "preset", "message": "先完成情绪板，再生成草稿，最后逐项检查。", "hints": ["尝试自己的色彩", "查看窄屏", "写下理由"]},
+      "atoms": [{"id": "lesson-04.make.theme", "type": "courseTool", "title": "VisualMoodboard 与 ThemeEditor", "instructions": "完成情绪板、AI 草稿、学生修改与确认。", "required": true, "toolId": "appearance-theme", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.make.theme"]}
+    },
+    {
+      "id": "lesson-04.test", "phase": "测", "title": "运行视觉体检", "durationMinutes": 15, "goal": "检查对比度、字号、间距与平板适配",
+      "studentContent": {"intro": "先在 ThemeEditor 查看实时体检，再用规则清单复核。", "instructions": "至少保留一次失败—修改—重测证据。", "completionMessage": "视觉主题通过基础可读性与设备检查。"},
+      "teacherNotes": {"purpose": "让审美选择接受可验证规则", "talkingPoints": ["正文对比度建议至少 4.5"], "observeFor": ["学生是否根据失败项只改一个参数"]},
+      "assistant": {"mode": "preset", "message": "先修复最影响阅读的一项。", "hints": ["加深文字色", "正文字号至少 16px", "窄屏不要横向溢出"]},
+      "atoms": [{"id": "lesson-04.test.visual", "type": "runTest", "title": "CSS 变量复核", "required": true, "description": "检查主题是否包含关键 CSS 变量。", "language": "css", "testMode": "contains", "initialCode": ":root { --color-primary:#6D28D9; --color-background:#F8FAFC; --font-body:18px; --space:16px; }", "tests": [{"id": "color", "label": "包含主色", "includes": "--color-primary", "message": "补充主色变量。"}, {"id": "font", "label": "包含正文字号", "includes": "--font-body", "message": "补充正文字号。"}, {"id": "space", "label": "包含间距", "includes": "--space", "message": "补充页面间距。"}], "successMessage": "CSS 变量复核通过。", "retryMessage": "返回 ThemeEditor 修改后重新体检。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.test.visual"]}
+    },
+    {
+      "id": "lesson-04.share", "phase": "说", "title": "展示修改前后与设计理由", "durationMinutes": 5, "goal": "解释最终视觉参数怎样服务用户",
+      "studentContent": {"intro": "展示修改前后，并说明没有直接采用 AI 草稿的一项。", "instructions": "使用正式 CSS 和设计令牌术语。", "completionMessage": "视觉主题档案已经完成。"},
+      "teacherNotes": {"purpose": "确认学生的设计判断", "talkingPoints": ["可读性与情绪可以同时考虑"], "observeFor": ["能否把理由关联到用户"]},
+      "assistant": {"mode": "preset", "message": "说出一个参数、一次修改和一个用户影响。", "hints": ["主色", "字号", "对比度"]},
+      "atoms": [{"id": "lesson-04.share.design", "type": "reveal", "title": "设计说明句式", "required": true, "prompt": "怎样说明 StyleTokens 修改？", "content": "AI 建议的背景与文字对比不足；我加深文字色并重测，因为目标用户需要在平板上快速阅读。", "buttonLabel": "查看表达示例"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-04.share.design"]}
+    }
+  ]
+}

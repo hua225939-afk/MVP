@@ -422,7 +422,7 @@ const taskBuilderAtomSchema = atomBaseSchema
 const courseToolAtomSchema = atomBaseSchema
   .extend({
     type: z.literal("courseTool"),
-    toolId: z.enum(["intent-canvas", "project-boundary"]),
+    toolId: z.enum(["intent-canvas", "project-boundary", "page-structure", "appearance-theme", "component-center"]),
     mode: z.enum(["basic", "free"]),
   })
   .strict();

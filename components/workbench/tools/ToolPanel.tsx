@@ -7,6 +7,9 @@ import {
 } from "@/lib/tools/course-tool-registry";
 import { ProjectBoundaryTool } from "./ProjectBoundaryTool";
 import { UnitOneIntentTool } from "./UnitOneIntentTool";
+import { PageStructureStudio } from "./PageStructureStudio";
+import { MoodboardThemeStudio } from "./MoodboardThemeStudio";
+import { ComponentStudio } from "./ComponentStudio";
 
 export function ToolPanel({
   definition,
@@ -23,6 +26,18 @@ export function ToolPanel({
 
   if (definition.id === "project-boundary") {
     return <ProjectBoundaryTool onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "page-structure") {
+    return <PageStructureStudio onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "appearance-theme") {
+    return <MoodboardThemeStudio onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "component-center") {
+    return <ComponentStudio onChange={onChange} project={project} />;
   }
 
   if (definition.id === "click-event") {

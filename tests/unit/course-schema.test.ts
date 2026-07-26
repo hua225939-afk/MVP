@@ -12,11 +12,17 @@ const rawCourse = readJson(
   "content/courses/vibe-coding-foundations.json",
 );
 const rawLesson01 = readJson("content/lessons/lesson-01.json");
+const rawLesson03 = readJson("content/lessons/lesson-03.json");
+const rawLesson04 = readJson("content/lessons/lesson-04.json");
+const rawLesson05 = readJson("content/lessons/lesson-05.json");
 const rawLesson06 = readJson("content/lessons/lesson-06.json");
 
-test("正式课程与两节样板 JSON 通过 Schema", () => {
+test("正式课程与第3—5课 JSON 通过 Schema", () => {
   assert.equal(courseSchema.parse(rawCourse).totalLessons, 13);
   assert.equal(lessonSchema.parse(rawLesson01).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson03).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson04).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson05).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson06).steps.length, 6);
 });
 

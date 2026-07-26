@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-05",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-02",
+  "order": 5,
+  "title": "用组件拼出功能页面",
+  "subtitle": "在组件实验馆操作反馈，用安全组件组装自己的 App 页面",
+  "studentSubtitle": "造物星球·组件组装任务",
+  "durationMinutes": 90,
+  "coreGoal": "读取页面结构与 StyleTokens，操作组件案例、开放组装页面，并把自定义草图转为学生可修改的安全组件规格。",
+  "keyConcepts": ["组件", "属性", "状态", "反馈", "复用", "安全组合"],
+  "skills": ["组件操作", "页面组装", "属性修改", "自定义组件表达", "安全预览"],
+  "output": {"title": "组件化功能页面", "description": "组件画布、自定义组件规格、受控应用预览和组件巡检记录。", "acceptanceCriteria": ["操作组件馆案例", "在多个页面组装组件", "修改内容、属性和样式", "修改并确认自定义组件规格", "安全预览与平板操作通过"]},
+  "teacherNotes": {
+    "objectives": ["从反馈理解组件而非只记名称", "用组件完成真实页面流程", "理解 AI 规格不能直接执行"],
+    "preparation": ["确认第4课 StyleTokens 已保存", "准备键鼠和平板区域操作"],
+    "commonIssues": ["只添加组件不操作", "组件堆叠但没有页面职责", "期待 AI 任意代码直接运行"],
+    "facilitationTips": ["要求观察每个状态反馈", "先分配页面再调整顺序", "强调安全基础组件组合"]
+  },
+  "studentContent": {"opening": "这节课会把组件当作真正可操作的功能积木，而不是一串名称。", "safetyNote": "自定义组件由已注册安全组件组合，不执行 AI 生成的任意代码。", "completionMessage": "你的 App 已经拥有可操作、可继续扩展的组件化页面。"},
+  "parentSummary": {"theme": "用组件组装功能页面", "learned": "孩子能操作组件反馈、调整页面流程，并把草图转成安全组件规格。", "artifact": "组件画布、自定义组件规格和安全预览。", "conversationStarter": "请孩子演示一个组件的状态变化，并解释它解决什么问题。"},
+  "steps": [
+    {
+      "id": "lesson-05.look", "phase": "看", "title": "操作组件实验馆", "durationMinutes": 15, "goal": "点击、输入和切换十一类组件并观察反馈",
+      "studentContent": {"intro": "每个组件都可以实际操作，并展示问题、属性、代码和适用 App。", "instructions": "至少操作按钮、输入、选项、进度、提示和弹窗。", "completionMessage": "你从反馈而不是名称认识了组件。"},
+      "teacherNotes": {"purpose": "建立组件—状态—反馈联系", "talkingPoints": ["组件解决具体界面问题"], "observeFor": ["学生是否输入和切换状态"]},
+      "assistant": {"mode": "preset", "message": "每次操作后说出页面发生了什么。", "hints": ["点击按钮", "输入文字", "打开和关闭弹窗"]},
+      "atoms": [{"id": "lesson-05.look.museum", "type": "courseTool", "title": "ComponentMuseum", "instructions": "进入组件实验馆实际操作组件。", "required": true, "toolId": "component-center", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.look.museum"]}
+    },
+    {
+      "id": "lesson-05.explain", "phase": "讲", "title": "理解组件、属性和安全组合", "durationMinutes": 10, "goal": "理解复用组件怎样通过属性产生差异",
+      "studentContent": {"intro": "同一种卡片可以换内容、图片、样式和状态，不需要重复造一套。", "instructions": "展开安全组合规则。", "completionMessage": "你理解组件复用与受控预览。"},
+      "teacherNotes": {"purpose": "为开放组件画布建立边界", "talkingPoints": ["属性改变内容与状态", "安全预览只渲染注册组件"], "observeFor": ["是否区分组件规格与任意代码"]},
+      "assistant": {"mode": "preset", "message": "组件像有插槽的功能积木。", "hints": ["名称不等于属性", "状态会改变反馈"]},
+      "atoms": [{"id": "lesson-05.explain.safe", "type": "reveal", "title": "安全组件规则", "required": true, "prompt": "为什么 AI 组件代码不能直接在主页面执行？", "content": "AI 只整理名称、作用、内容区域、属性和互动需求；系统再用按钮、输入、结果卡等已注册受控组件组合实现。", "buttonLabel": "展开安全规则"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.explain.safe"]}
+    },
+    {
+      "id": "lesson-05.think", "phase": "想", "title": "规划组件操作路径", "durationMinutes": 10, "goal": "先决定用户在页面中怎样开始并获得结果",
+      "studentContent": {"intro": "根据第3课结构和第4课视觉，规划必要组件。", "instructions": "写出组件顺序与反馈。", "completionMessage": "组件组装有了清楚目的。"},
+      "teacherNotes": {"purpose": "避免无目的堆叠", "talkingPoints": ["组件顺序服务核心任务"], "observeFor": ["是否包含可见结果"]},
+      "assistant": {"mode": "preset", "message": "从用户先看到什么、操作什么、得到什么开始。", "hints": ["导航", "输入或选项", "按钮", "结果"]},
+      "atoms": [{"id": "lesson-05.think.flow", "type": "textInput", "title": "组件路径", "required": true, "question": "用户会按什么顺序操作哪些组件并得到什么反馈？", "placeholder": "导航 → 输入框 → 按钮 → 结果卡", "validation": {"mode": "minLength", "minLength": 12}, "successMessage": "组件操作路径表达清楚。", "hint": "至少写出三个组件和一个可见反馈。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.think.flow"]}
+    },
+    {
+      "id": "lesson-05.make", "phase": "做", "title": "开放组装并设计自定义组件", "durationMinutes": 35, "goal": "跨页面组装组件并修改 AI 安全规格",
+      "studentContent": {"intro": "从组件馆加入组件，调整顺序、内容、图片、属性、样式和页面。", "instructions": "再画一个自定义组件，标注输入、按钮或结果，修改 AI 规格后确认。", "completionMessage": "组件和自定义规格已写入同一个 ProjectDocument。"},
+      "teacherNotes": {"purpose": "完成本课主要开放创造", "talkingPoints": ["平板使用区域选择与上下移动", "自定义规格必须由学生确认"], "observeFor": ["是否复制并修改组件", "是否修改 AI 规格"]},
+      "assistant": {"mode": "preset", "message": "先组装基础页面，再补真正需要的自定义组件。", "hints": ["把组件放进不同页面", "修改状态", "标注输入按钮结果"]},
+      "atoms": [{"id": "lesson-05.make.canvas", "type": "courseTool", "title": "ComponentCanvas 与 CustomComponentBrief", "instructions": "完成组件组装、自定义草图、安全规格修改和确认。", "required": true, "toolId": "component-center", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.make.canvas"]}
+    },
+    {
+      "id": "lesson-05.test", "phase": "测", "title": "运行组件与安全预览巡检", "durationMinutes": 15, "goal": "检查组件操作、页面归属、自定义规格和受控渲染",
+      "studentContent": {"intro": "在画布操作组件，并确认预览只运行注册组件。", "instructions": "发现空内容或错页后返回画布修改再重测。", "completionMessage": "组件化页面通过安全巡检。"},
+      "teacherNotes": {"purpose": "建立功能与安全双重检查", "talkingPoints": ["未知组件不执行", "测试关联当前 revision"], "observeFor": ["是否在平板使用上下移动完成排序"]},
+      "assistant": {"mode": "preset", "message": "先检查页面归属，再实际点击组件。", "hints": ["内容不能空", "组件属于有效页面", "自定义组合只含安全类型"]},
+      "atoms": [{"id": "lesson-05.test.components", "type": "runTest", "title": "组件安全规则复核", "required": true, "description": "复核安全组件组合的关键标记。", "language": "text", "testMode": "contains", "initialCode": "组件：button + input + result-card\n预览：controlled-react\n平板：上下移动", "tests": [{"id": "safe", "label": "使用安全组件", "includes": "button", "message": "加入注册基础组件。"}, {"id": "preview", "label": "受控预览", "includes": "controlled-react", "message": "预览必须使用受控 React。"}, {"id": "tablet", "label": "平板可排序", "includes": "上下移动", "message": "提供不依赖精准拖拽的操作。"}], "successMessage": "组件安全规则复核通过。", "retryMessage": "返回组件画布修复后重试。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.test.components"]}
+    },
+    {
+      "id": "lesson-05.share", "phase": "说", "title": "说明组件职责与 AI 修改", "durationMinutes": 5, "goal": "展示组件页面并解释安全自定义组件",
+      "studentContent": {"intro": "演示一次完整操作，并指出你怎样修改 AI 规格。", "instructions": "说明组件解决的问题、可修改属性和反馈。", "completionMessage": "第二单元组件档案已经完成。"},
+      "teacherNotes": {"purpose": "确认学生理解与所有权", "talkingPoints": ["组件职责应具体"], "observeFor": ["能否解释安全组合"]},
+      "assistant": {"mode": "preset", "message": "使用“这个组件帮助……我修改了……操作后……”句式。", "hints": ["职责", "属性", "状态反馈"]},
+      "atoms": [{"id": "lesson-05.share.role", "type": "reveal", "title": "组件说明句式", "required": true, "prompt": "怎样说明自定义组件的实现？", "content": "AI 建议了输入、按钮和结果卡组合；我修改了按钮文字与结果区域，系统只用已注册组件安全实现。", "buttonLabel": "查看表达示例"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-05.share.role"]}
+    }
+  ]
+}

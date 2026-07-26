@@ -1,0 +1,110 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-03",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-02",
+  "order": 3,
+  "title": "搭好网页的内容骨架",
+  "subtitle": "从网页透视和页面草图走向可修改的 HTML 结构",
+  "studentSubtitle": "造物星球·骨架搭建任务",
+  "durationMinutes": 90,
+  "coreGoal": "读取 finalIntent、scope 与故事板，通过网页透视、页面草图和 AI 结构建议建立学生可修改的 HTML 页面骨架。",
+  "keyConcepts": ["HTML", "标签", "父子层级", "页面区域", "结构同步"],
+  "skills": ["网页观察", "草图表达", "层级调整", "HTML 修改", "结构测试"],
+  "output": {
+    "title": "可浏览的 HTML 页面骨架",
+    "description": "页面草图、AI 结构草稿、学生最终结构、HTML 与修复记录。",
+    "acceptanceCriteria": ["操作三个网页透视案例", "保存页面草图", "修改 AI 结构建议", "结构画布、HTML 与预览同步", "结构扫描通过"]
+  },
+  "teacherNotes": {
+    "objectives": ["让学生从真实页面发现结构", "用草图表达页面顺序", "保留 AI 草稿与学生修改证据"],
+    "preparation": ["确认第2课 scope 与故事板已保存", "准备平板触控操作"],
+    "commonIssues": ["只记标签名称不理解区域作用", "接受 AI 草稿而不修改", "把所有区域放在同一层"],
+    "facilitationTips": ["先猜作用再揭示", "要求至少调整一个标签或层级", "从错误定位返回结构画布"]
+  },
+  "studentContent": {
+    "opening": "这节课继续同一个 App。你会先给真实网页做透视，再把自己的页面草图变成可以修改的 HTML 骨架。",
+    "safetyNote": "HTML 编辑器只接受课程允许的安全标签，不执行脚本。",
+    "completionMessage": "你的 App 已经有了可以继续穿上视觉外衣的页面骨架。"
+  },
+  "parentSummary": {
+    "theme": "搭建网页内容骨架",
+    "learned": "孩子能从真实页面识别父子层级，并把自己的草图修改成 HTML 结构。",
+    "artifact": "页面草图、HTML 骨架和一次结构修复记录。",
+    "conversationStarter": "请孩子解释 header、main、section 和 footer 分别负责什么。"
+  },
+  "steps": [
+    {
+      "id": "lesson-03.look",
+      "phase": "看",
+      "title": "开启网页透视 WebXRay",
+      "durationMinutes": 15,
+      "goal": "操作三个差异明显的生活网页并同步定位 HTML",
+      "studentContent": {"intro": "切换正常页面、结构框线和标签模式，点击区域查看对应 HTML。", "instructions": "每个案例至少点击两个区域，并先猜作用再揭示。", "completionMessage": "你已经能从可见页面定位到 HTML 区域。"},
+      "teacherNotes": {"purpose": "建立页面与结构代码的双向联系", "talkingPoints": ["标签包住内容", "父子层级表达区域关系"], "observeFor": ["学生是否主动折叠和展开结构"]},
+      "assistant": {"mode": "preset", "message": "先在正常页面理解用途，再打开框线和标签。", "hints": ["点击页面区域", "观察父级", "先写猜测"]},
+      "atoms": [{"id": "lesson-03.look.xray", "type": "courseTool", "title": "WebXRay 网页透视", "instructions": "在页面骨架工具的网页透视工作区完成观察。", "required": true, "toolId": "page-structure", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.look.xray"]}
+    },
+    {
+      "id": "lesson-03.explain",
+      "phase": "讲",
+      "title": "读懂 HTML 层级",
+      "durationMinutes": 10,
+      "goal": "理解语义区域、开始结束标签与嵌套",
+      "studentContent": {"intro": "页面像有层级的房间，区域标签说明每个房间的用途。", "instructions": "展开结构规则并对照自己的透视结果。", "completionMessage": "你能解释常用结构标签与嵌套。"},
+      "teacherNotes": {"purpose": "为结构画布与 HTML 同步建立规则", "talkingPoints": ["main 是主要内容", "section 可以包含标题和操作"], "observeFor": ["是否把视觉样式误当成 HTML 结构"]},
+      "assistant": {"mode": "preset", "message": "从最外层区域一路读到里面的内容。", "hints": ["看缩进", "开始与结束标签要配对"]},
+      "atoms": [{"id": "lesson-03.explain.rules", "type": "reveal", "title": "HTML 骨架规则", "required": true, "prompt": "为什么页面区域需要父子层级？", "content": "header、main、section、footer 表达区域职责；h1、p、img、button 等内容标签放在区域内部。缩进帮助读出父子关系。", "buttonLabel": "展开结构规则"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.explain.rules"]}
+    },
+    {
+      "id": "lesson-03.think",
+      "phase": "想",
+      "title": "规划第一屏顺序",
+      "durationMinutes": 10,
+      "goal": "在 AI 生成前先做学生自己的页面判断",
+      "studentContent": {"intro": "根据第2课任务，先决定用户进入后依次看到什么。", "instructions": "写出至少三个区域和它们的顺序。", "completionMessage": "你已经形成自己的结构起点。"},
+      "teacherNotes": {"purpose": "避免 AI 代替学生规划", "talkingPoints": ["顺序服务核心任务"], "observeFor": ["是否说明用户先看什么再做什么"]},
+      "assistant": {"mode": "preset", "message": "从标题、说明、核心操作和结果开始。", "hints": ["先写最重要的区域", "用箭头表示顺序"]},
+      "atoms": [{"id": "lesson-03.think.order", "type": "textInput", "title": "页面顺序", "required": true, "question": "用户进入首页后依次看到哪些区域？", "placeholder": "标题 → 任务说明 → 输入 → 按钮 → 结果", "validation": {"mode": "minLength", "minLength": 12}, "successMessage": "页面顺序表达清楚。", "hint": "至少写出三个区域，并用箭头连接。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.think.order"]}
+    },
+    {
+      "id": "lesson-03.make",
+      "phase": "做",
+      "title": "草图转结构并继续修改",
+      "durationMinutes": 35,
+      "goal": "绘制页面草图、生成 AI 建议并同步修改结构、HTML 与预览",
+      "studentContent": {"intro": "导入第一课素材，绘制页面区域、箭头和便签，再生成结构建议。", "instructions": "必须更换标签、调整层级或顺序，并保存学生最终结构。", "completionMessage": "学生最终结构已经写入同一个 ProjectDocument。"},
+      "teacherNotes": {"purpose": "完成本课主要开放创造", "talkingPoints": ["AI 建议只是草稿", "安全 HTML 修改会同步回结构"], "observeFor": ["是否留下 AI 与学生最终结构差异"]},
+      "assistant": {"mode": "preset", "message": "先画页面区域，再让 AI 整理，不要从模板直接跳到结果。", "hints": ["添加便签和箭头", "更换一个标签", "调整一个父级"]},
+      "atoms": [{"id": "lesson-03.make.structure", "type": "courseTool", "title": "LayoutSketchCanvas 与 StructureBuilder", "instructions": "完成草图、AI 草稿、学生修改与三视图同步。", "required": true, "toolId": "page-structure", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.make.structure"]}
+    },
+    {
+      "id": "lesson-03.test",
+      "phase": "测",
+      "title": "定位并修复结构错误",
+      "durationMinutes": 15,
+      "goal": "检查 main、父子层级与空内容并返回结构画布修复",
+      "studentContent": {"intro": "先在 StructureBuilder 运行结构扫描，再用代码规则复核。", "instructions": "失败时根据定位修改对应区域，然后重新扫描。", "completionMessage": "页面骨架通过结构检查。"},
+      "teacherNotes": {"purpose": "形成错误定位—修复—重测闭环", "talkingPoints": ["测试关联当前项目 revision"], "observeFor": ["学生是否只修改被定位的问题"]},
+      "assistant": {"mode": "preset", "message": "先看失败项指向页面、父级还是空内容。", "hints": ["每页需要 main", "父级必须存在", "内容标签不能空白"]},
+      "atoms": [{"id": "lesson-03.test.html", "type": "runTest", "title": "HTML 层级复核", "required": true, "description": "复核结构中应有的语义区域。", "language": "html", "testMode": "contains", "initialCode": "<header></header>\n<main><section></section></main>\n<footer></footer>", "tests": [{"id": "main", "label": "包含 main", "includes": "<main>", "message": "补充主要内容区域。"}, {"id": "section", "label": "包含 section", "includes": "<section>", "message": "补充内容分区。"}, {"id": "footer", "label": "包含 footer", "includes": "<footer>", "message": "补充页尾区域。"}], "successMessage": "HTML 层级复核通过。", "retryMessage": "返回 StructureBuilder 定位并修复后重试。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.test.html"]}
+    },
+    {
+      "id": "lesson-03.share",
+      "phase": "说",
+      "title": "说明学生最终结构",
+      "durationMinutes": 5,
+      "goal": "比较 AI 草稿与学生最终结构并说明修改原因",
+      "studentContent": {"intro": "展示你修改的标签、层级或顺序。", "instructions": "指出 AI 建议中你没有直接采用的一处。", "completionMessage": "你完成了本课结构档案。"},
+      "teacherNotes": {"purpose": "确认学生拥有最终判断", "talkingPoints": ["修改理由比修改数量重要"], "observeFor": ["能否用正式 HTML 术语表达"]},
+      "assistant": {"mode": "preset", "message": "使用“AI 建议……我改成……因为……”句式。", "hints": ["说出一个标签", "说出一个父子关系"]},
+      "atoms": [{"id": "lesson-03.share.compare", "type": "reveal", "title": "结构说明句式", "required": true, "prompt": "怎样说明你对 AI 结构的修改？", "content": "AI 建议把区域放在顶层；我把它移入 main 的 section，因为它属于主要任务的一部分。", "buttonLabel": "查看表达示例"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-03.share.compare"]}
+    }
+  ]
+}

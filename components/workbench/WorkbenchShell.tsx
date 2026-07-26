@@ -116,14 +116,14 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   }, [activeTool.id, activeTool.lessonId, project, projectId, ready]);
 
   const unlockedContext = useMemo(
-    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-06"], project }),
+    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06"], project }),
     [project],
   );
   const changeProject = (next: ProjectDocument) => {
     const now = new Date().toISOString();
     const upstreamChanged = activeTool.outputFields.some(
       (field) =>
-        ["title", "audience", "scenario", "intent", "interactions", "state"].includes(field) &&
+        ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "styleTokens", "moodboard", "components", "customComponentBriefs", "interactions", "state"].includes(field) &&
         JSON.stringify(project[field]) !== JSON.stringify(next[field]),
     );
     const invalidated = next.tests.map((item) =>

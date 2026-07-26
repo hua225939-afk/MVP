@@ -1,4 +1,9 @@
 import type { ProjectDocument } from "@/lib/projects/project-document";
+import {
+  demoComponentSpec,
+  demoStructureDraft,
+  demoStyleTokens,
+} from "../unit-two/creative-tools.ts";
 
 export type CreativeAIInput = {
   interestMap: ProjectDocument["interestMap"];
@@ -18,6 +23,22 @@ export type CreativeAIResult = {
 
 export interface CreativeAIService {
   understand(input: CreativeAIInput, signal?: AbortSignal): Promise<CreativeAIResult>;
+}
+
+export function demoStructureSuggestion(project: ProjectDocument) {
+  return demoStructureDraft(project);
+}
+
+export function demoStyleTokenSuggestion(project: ProjectDocument) {
+  return demoStyleTokens(project);
+}
+
+export function demoSafeComponentSuggestion(
+  name: string,
+  purpose: string,
+  annotations: Array<{ kind: "input" | "button" | "result" | "note"; label: string }>,
+) {
+  return demoComponentSpec(name, purpose, annotations);
 }
 
 export function demoCreativeIntent(input: CreativeAIInput): CreativeAIOutput {
