@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { brand } from "@/config/brand";
 import { demoRoles } from "@/data/mock/platform-data";
 
 export default function Home() {
@@ -8,8 +9,8 @@ export default function Home() {
         <Link className="brand" href="/">
           <span className="brand-mark">V</span>
           <span>
-            Vibe Coding
-            <small>把想法变成作品</small>
+            {brand.platformName}
+            <small>{brand.platformSubtitle}</small>
           </span>
         </Link>
         <span className="entry-demo-label">
@@ -32,7 +33,7 @@ export default function Home() {
           </p>
           <div className="entry-highlights">
             <span>5 个角色视图</span>
-            <span>3 节现有示例课</span>
+            <span>13 节贯通课程</span>
             <span>电脑与平板适配</span>
           </div>
         </div>
@@ -72,7 +73,7 @@ export default function Home() {
       </section>
 
       <footer className="role-entry-footer">
-        <span>Vibe Coding 多角色平台框架</span>
+        <span>{brand.platformName} · {brand.platformSubtitle}</span>
         <p>浅灰白 · 紫色主调 · 模拟数据</p>
       </footer>
     </main>

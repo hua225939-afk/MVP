@@ -10,6 +10,8 @@ import { RoleShell } from "@/components/platform/RoleShell";
 import { getParentDashboard } from "@/data/mock/platform-data";
 import { lessonSummaries } from "@/lib/lesson-loader";
 
+export const metadata = { title: "家长" };
+
 export default function ParentPage() {
   const dashboard = getParentDashboard();
 

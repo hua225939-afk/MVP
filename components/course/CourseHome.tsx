@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { brand } from "@/config/brand";
 import type { lessonSummaries } from "@/lib/lesson-loader";
 import { getLesson } from "@/lib/lesson-loader";
 import { progressPercent, readProgress } from "@/lib/progress-storage";
@@ -56,8 +57,8 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
         <Link className="brand" href="/">
           <span className="brand-mark">V</span>
           <span>
-            Vibe Coding
-            <small>把想法变成作品</small>
+            {brand.platformName}
+            <small>{brand.platformSubtitle}</small>
           </span>
         </Link>
         <div className="header-status">
@@ -70,7 +71,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
         <div className="hero-copy">
           <div className="eyebrow">
             <span>✦</span>
-            造物星球 · 创造基地
+            {brand.studentSpaceName} · {brand.courseSeriesName}
           </div>
           <h1>
             不只是学代码，
@@ -107,7 +108,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
           <div className="orb orb-two" />
           <div className="journey-card">
             <div className="journey-top">
-              <span>创造基地任务进度</span>
+              <span>{brand.studentSpaceName}任务进度</span>
               <b>{total}%</b>
             </div>
             <div className="journey-progress">
@@ -138,9 +139,9 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
         <div className="section-heading">
           <div>
             <span className="section-kicker">任务舱列表</span>
-            <h2>从网页首次登陆，到启动第一个互动机关</h2>
+            <h2>从网页首次登陆，到发布完整应用</h2>
           </div>
-          <p>每节 90 分钟 · 随时停下 · 自动续学</p>
+          <p>每节 90—150 分钟 · 随时停下 · 自动续学</p>
         </div>
 
         <div className="course-grid">
@@ -200,7 +201,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
       <footer className="site-footer">
         <div className="brand brand-muted">
           <span className="brand-mark">V</span>
-          <span>Vibe Coding</span>
+          <span>{brand.platformName}</span>
         </div>
         <p>保持好奇，勇敢创造。你的每一个想法都值得被实现。</p>
       </footer>

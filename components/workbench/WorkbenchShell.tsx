@@ -7,6 +7,7 @@ import {
   ControlledProjectPreview,
 } from "@/components/workbench/ControlledProjectPreview";
 import { ToolPanel } from "@/components/workbench/tools/ToolPanel";
+import { brand } from "@/config/brand";
 import {
   createHistory,
   pushHistory,
@@ -19,6 +20,7 @@ import {
   PROJECT_EDITABLE_FIELDS,
   type ProjectDocument,
 } from "@/lib/projects/project-document";
+import { openProjectForEditing } from "@/lib/projects/project-actions";
 import {
   getBrowserProjectRepository,
   projectContentChanges,
@@ -60,6 +62,7 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
     createHistory(createDefaultProject(projectId)),
   );
   const [ready, setReady] = useState(false);
+  const [missingProject, setMissingProject] = useState(false);
   const [saveState, setSaveState] = useState<"saved" | "saving">("saved");
   const [mode, setMode] = useState<WorkbenchMode>("canvas");
   const [creationMode, setCreationMode] = useState<"guided" | "free">("guided");
@@ -78,7 +81,12 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
     const frame = window.requestAnimationFrame(() => {
       const repository = getBrowserProjectRepository();
       if (!repository) return;
-      const loaded = repository.ensure(projectId);
+      const loaded = openProjectForEditing(repository, projectId);
+      if (!loaded) {
+        setMissingProject(true);
+        setReady(true);
+        return;
+      }
       const requestedTool = new URLSearchParams(window.location.search).get("tool");
       if (requestedTool && courseToolRegistry.some((item) => item.id === requestedTool)) {
         setActiveToolId(requestedTool);
@@ -243,6 +251,18 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   if (!ready) {
     return <main className="workbench-loading">正在打开造物项目…</main>;
   }
+  if (missingProject) {
+    return (
+      <main className="workbench-loading workbench-missing">
+        <div>
+          <span>PROJECT NOT FOUND</span>
+          <h1>没有找到这个造物项目</h1>
+          <p>请从{brand.studentSpaceName}或“{brand.projectLibraryName}”选择已有项目，避免创建与课程断开的空白副本。</p>
+          <Link href="/student/projects">返回{brand.projectLibraryName}</Link>
+        </div>
+      </main>
+    );
+  }
 
   const assistantLines = assistantMessages[assistantAction];
 
@@ -250,14 +270,14 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
     <main className="workbench-shell">
       <header className="workbench-topbar">
         <Link className="workbench-brand" href="/student">
-          <span>V</span><b>造物星球</b>
+          <span>V</span><b>{brand.studentSpaceName}</b>
         </Link>
         <nav aria-label="学生导航">
-          <Link href="/student">创造基地</Link>
-          <Link aria-current="page" href={`/student/workbench/${projectId}`}>创造台</Link>
-          <Link href="/student/projects">我的作品</Link>
-          <Link href="/student/courses">学习中心</Link>
-          <Link href="/gallery">作品广场</Link>
+          <Link href="/student">{brand.studentSpaceName}</Link>
+          <Link aria-current="page" href={`/student/workbench/${projectId}`}>{brand.workbenchName}</Link>
+          <Link href="/student/projects">{brand.projectLibraryName}</Link>
+          <Link href="/student/courses">{brand.learningCenterName}</Link>
+          <Link href="/gallery">{brand.galleryName}</Link>
           <span aria-disabled="true">成就</span>
         </nav>
         <div className="workbench-save-state">
@@ -313,7 +333,7 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
 
           <div className="stage-content">
             {mode === "canvas" && (
-              <section>
+              <section className="canvas-center">
                 <div className="canvas-heading">
                   <div><small>第 {activeTool.lessonOrder} 课工具</small><h2>{activeTool.name}</h2></div>
                   <span>{creationMode === "guided" ? activeTool.basicMode.summary : activeTool.freeMode.summary}</span>

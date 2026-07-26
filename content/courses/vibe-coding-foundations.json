@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "vibe-coding-foundations",
   "slug": "vibe-coding-foundations",
-  "title": "Vibe Coding 创意编程",
+  "title": "从灵感到App",
   "subtitle": "从一句想法到一个可以独立运行的网页应用",
   "audience": {
     "grades": "小学高年级至初中",
@@ -15,7 +15,7 @@
     {
       "id": "unit-01",
       "order": 1,
-      "title": "认识 Vibe Coding",
+      "title": "认识 Vibe Coding Lab",
       "description": "从自然语言需求出发，认识网页与人机协作。",
       "lessonIds": ["lesson-01", "lesson-02"],
       "parentSummary": "孩子开始学习把想法说清楚，并观察 AI 如何把需求变成网页。"

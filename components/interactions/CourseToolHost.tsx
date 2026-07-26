@@ -2,11 +2,20 @@
 
 import { useEffect, useState } from "react";
 import { ToolPanel } from "@/components/workbench/tools/ToolPanel";
+import { brand } from "@/config/brand";
 import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
 import type { ProjectDocument } from "@/lib/projects/project-document";
 import { getBrowserProjectRepository } from "@/lib/projects/project-repository";
-import { getCourseTool } from "@/lib/tools/course-tool-registry";
+import {
+  getCourseTool,
+  isCourseToolUnlocked,
+} from "@/lib/tools/course-tool-registry";
+
+const availableLessonIds = Array.from(
+  { length: 13 },
+  (_, index) => `lesson-${String(index + 1).padStart(2, "0")}`,
+);
 
 export function CourseToolHost({
   block,
@@ -32,7 +41,24 @@ export function CourseToolHost({
   }, []);
 
   if (!definition) return <p>工具注册不存在：{block.toolId}</p>;
-  if (!project) return <p>请先在创造基地创建或选择当前项目。</p>;
+  if (!project) return <p>请先在{brand.studentSpaceName}创建或选择当前项目。</p>;
+  if (
+    !isCourseToolUnlocked(definition, {
+      availableLessonIds,
+      project,
+    })
+  ) {
+    return (
+      <section className="course-tool-locked">
+        <span>工具尚未解锁</span>
+        <h2>{definition.name}</h2>
+        <p>请先完成前序项目成果；本课路由仍可查看，但不会绕过持续项目的数据链。</p>
+        <a href={`/student/workbench/${project.projectId}`}>
+          返回当前项目检查前序成果 →
+        </a>
+      </section>
+    );
+  }
 
   const save = (next: ProjectDocument) => {
     if (readOnly) return;

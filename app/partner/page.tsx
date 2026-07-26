@@ -8,6 +8,8 @@ import {
 import { RoleShell } from "@/components/platform/RoleShell";
 import { getPartnerDashboard, mockDatabase } from "@/data/mock/platform-data";
 
+export const metadata = { title: "合作伙伴" };
+
 export default function PartnerPage() {
   const dashboard = getPartnerDashboard();
 

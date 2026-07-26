@@ -6,7 +6,7 @@
   "order": 7,
   "title": "让网页听懂我的输入",
   "subtitle": "把文字、数字或选择信号连接到自己的 App 结果",
-  "studentSubtitle": "造物星球·信号接收任务",
+  "studentSubtitle": "Vibe创作基地·信号接收任务",
   "durationMinutes": 90,
   "coreGoal": "在已有页面加入受验证的输入组件，连接实时结果并完成正常、空和异常输入测试。",
   "keyConcepts": ["输入", "处理", "输出", "校验", "错误提示"],

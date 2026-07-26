@@ -6,7 +6,7 @@
   "order": 3,
   "title": "搭好网页的内容骨架",
   "subtitle": "从网页透视和页面草图走向可修改的 HTML 结构",
-  "studentSubtitle": "造物星球·骨架搭建任务",
+  "studentSubtitle": "Vibe创作基地·骨架搭建任务",
   "durationMinutes": 90,
   "coreGoal": "读取 finalIntent、scope 与故事板，通过网页透视、页面草图和 AI 结构建议建立学生可修改的 HTML 页面骨架。",
   "keyConcepts": ["HTML", "标签", "父子层级", "页面区域", "结构同步"],

@@ -6,7 +6,7 @@
   "order": 9,
   "title": "让网页记住操作过程",
   "subtitle": "为自己的项目添加可更新、可恢复也可清空的本地记忆",
-  "studentSubtitle": "造物星球·记忆核心任务",
+  "studentSubtitle": "Vibe创作基地·记忆核心任务",
   "durationMinutes": 90,
   "coreGoal": "选择需要保留的项目状态，将试运行与正式作品分开，并验证刷新恢复、清空和项目隔离。",
   "keyConcepts": ["状态", "更新", "本地记忆", "刷新恢复", "项目隔离"],

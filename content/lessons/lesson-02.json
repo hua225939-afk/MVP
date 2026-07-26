@@ -6,7 +6,7 @@
   "order": 2,
   "title": "把灵感变成 App 任务",
   "subtitle": "用功能星系与三格故事板确定本次 App 范围",
-  "studentSubtitle": "造物星球·灵感采集任务",
+  "studentSubtitle": "Vibe创作基地·灵感采集任务",
   "durationMinutes": 90,
   "coreGoal": "读取第1课 finalIntent，通过功能星系与三格用户故事板确定可完成的 App 范围。",
   "keyConcepts": ["finalIntent", "核心功能", "项目范围", "用户流程", "输入", "输出"],

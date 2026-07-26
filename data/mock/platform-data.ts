@@ -1,3 +1,5 @@
+import { brand } from "@/config/brand";
+
 export type DemoRoleId = "hq" | "partner" | "teacher" | "student" | "parent";
 
 export type DemoRole = {
@@ -59,9 +61,9 @@ export const demoRoles: DemoRole[] = [
     href: "/student",
     symbol: "学",
     navigation: [
-      { label: "创造基地", href: "/student", symbol: "⌂" },
-      { label: "学习中心", href: "/student/courses", symbol: "课" },
-      { label: "我的作品", href: "/student/projects", symbol: "作" },
+      { label: brand.studentSpaceName, href: "/student", symbol: "⌂" },
+      { label: brand.learningCenterName, href: "/student/courses", symbol: "课" },
+      { label: brand.projectLibraryName, href: "/student/projects", symbol: "作" },
     ],
   },
   {
@@ -148,7 +150,7 @@ export type CourseUnit = {
 export const courseUnits: CourseUnit[] = [
   {
     id: "unit-01",
-    title: "认识 Vibe Coding",
+    title: `认识 ${brand.platformName}`,
     description: "从自然语言需求出发，理解应用任务。",
     lessons: [
       { id: "plan-01", order: 1, title: "一句话唤醒第一个网页", concept: "需求与迭代" },

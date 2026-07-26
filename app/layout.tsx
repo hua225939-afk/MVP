@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { brand } from "@/config/brand";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -9,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
     requestHeaders.get("x-forwarded-proto") ??
     (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "Vibe Coding｜把想法变成作品";
+  const title = `${brand.platformName}｜${brand.platformSubtitle}`;
   const description =
     "面向小学高年级与初中生的六步原子化编程课程平台，从网页结构到互动设计。";
   const socialImage = new URL("/og.png", origin).toString();
@@ -18,7 +19,7 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(origin),
     title: {
       default: title,
-      template: "%s｜Vibe Coding",
+      template: `%s｜${brand.platformName}`,
     },
     description,
     icons: {

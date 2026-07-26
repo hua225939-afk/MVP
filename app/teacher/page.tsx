@@ -9,6 +9,8 @@ import { RoleShell } from "@/components/platform/RoleShell";
 import { getTeacherDashboard } from "@/data/mock/platform-data";
 import { lessonSummaries } from "@/lib/lesson-loader";
 
+export const metadata = { title: "教师" };
+
 export default function TeacherPage() {
   const dashboard = getTeacherDashboard();
 

@@ -298,6 +298,34 @@ test("2.0版本对比展示新增修改、测试变化与同伴反馈", () => {
   assert.equal(diff.peerFeedbackAdded, 1);
 });
 
+test("第四单元版本记录形成唯一的1.0、1.1和2.0顺序", () => {
+  const project = assembledProject();
+  const snapshot = createProjectSnapshot(project);
+  project.versions = ["App 1.0", "修复版 1.1", "试玩升级版 2.0"].map(
+    (label, index) => ({
+      id: `v-${index + 1}`,
+      label,
+      description: label,
+      revision: index + 1,
+      snapshot,
+      createdAt: new Date(Date.UTC(2026, 6, 26, index)).toISOString(),
+      coverArtifactId: null,
+      screenshotArtifactId: null,
+      changes: [],
+      testSummary: "",
+      aiSuggestions: [],
+      studentDecisions: [],
+      peerFeedback: [],
+    }),
+  );
+  const parsed = projectDocumentSchema.parse(project);
+  assert.deepEqual(
+    parsed.versions.map((version) => version.label),
+    ["App 1.0", "修复版 1.1", "试玩升级版 2.0"],
+  );
+  assert.equal(new Set(parsed.versions.map((version) => version.label)).size, 3);
+});
+
 test("第10—12课工具字段权限覆盖全部第四单元写入且不含publication", () => {
   const composer = getCourseTool("app-composer")!;
   const bug = getCourseTool("bug-scanner")!;

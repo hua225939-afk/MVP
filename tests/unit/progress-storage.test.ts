@@ -124,3 +124,46 @@ test("创造基地的 13 课进度来自真实课程进度存储", () => {
   assert.equal(summary.percent, 8);
   Reflect.deleteProperty(globalThis, "window");
 });
+
+test("第1—13课刷新后分别恢复当前六步位置", () => {
+  const lessons = Array.from({ length: 13 }, (_, index) =>
+    lessonSchema.parse(
+      JSON.parse(
+        readFileSync(
+          resolve(
+            process.cwd(),
+            `content/lessons/lesson-${String(index + 1).padStart(2, "0")}.json`,
+          ),
+          "utf8",
+        ),
+      ),
+    ),
+  );
+  const values = new Map<string, string>();
+  Object.defineProperty(globalThis, "window", {
+    configurable: true,
+    value: {
+      localStorage: {
+        getItem: (key: string) => values.get(key) ?? null,
+        setItem: (key: string, value: string) => values.set(key, value),
+      },
+    },
+  });
+  const now = new Date().toISOString();
+  lessons.forEach((lesson) => {
+    writeProgress(lesson.courseId, lesson.id, {
+      ...emptyProgress(lesson),
+      status: "in_progress",
+      currentStepId: lesson.steps[3].id,
+      startedAt: now,
+      updatedAt: now,
+    });
+  });
+  lessons.forEach((lesson) => {
+    assert.equal(
+      readProgress(lesson.courseId, lesson).currentStepId,
+      lesson.steps[3].id,
+    );
+  });
+  Reflect.deleteProperty(globalThis, "window");
+});

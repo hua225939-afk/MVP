@@ -8,6 +8,8 @@ import {
 import { RoleShell } from "@/components/platform/RoleShell";
 import { getHqDashboard } from "@/data/mock/platform-data";
 
+export const metadata = { title: "总部" };
+
 export default function HeadquartersPage() {
   const dashboard = getHqDashboard();
 

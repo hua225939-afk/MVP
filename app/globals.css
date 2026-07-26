@@ -4823,3 +4823,170 @@ a {
   .version-maker h3,.version-maker>div { grid-column:auto; }
   .version-timeline>article>button { width:100%; }
 }
+
+/* 13 课贯通回归：统一层级与 1024px 平板布局 */
+:root {
+  --module-purple: #f5f1ff;
+  --module-blue: #f1f6fc;
+  --module-cyan: #f0f9f7;
+  --module-orange: #fff8ed;
+  --card-shadow: 0 12px 32px rgb(52 38 82 / 7%);
+}
+
+.lesson-shell {
+  background:
+    radial-gradient(circle at 12% 8%, rgb(124 58 237 / 5%), transparent 28%),
+    linear-gradient(180deg, #f8f7fb, #f4f6fa);
+}
+
+.lesson-main,
+.dashboard-panel,
+.project-card-grid > article,
+.project-detail-card {
+  border-color: #e2deea;
+  box-shadow: var(--card-shadow);
+}
+
+.interaction-card {
+  background: linear-gradient(145deg, #fff, #fbf9ff);
+  border-color: #dfdaea;
+  box-shadow: 0 8px 22px rgb(54 38 86 / 5%);
+}
+
+.course-tool-host {
+  border-radius: 16px;
+  background: linear-gradient(145deg, var(--module-purple), #fff 42%);
+  padding: 16px;
+}
+
+.course-tool-locked {
+  border: 1px solid #e7cda0;
+  border-radius: 16px;
+  background: var(--module-orange);
+  padding: 22px;
+}
+
+.course-tool-locked > span {
+  color: #9a5b12;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .08em;
+}
+
+.course-tool-locked h2 {
+  margin: 7px 0;
+}
+
+.course-tool-locked p {
+  color: #725d43;
+  line-height: 1.65;
+}
+
+.course-tool-locked a {
+  color: #6941c6;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.canvas-center {
+  background: linear-gradient(145deg, var(--module-purple), #fff 34%) !important;
+  border-color: #dcd3f2 !important;
+}
+
+.code-view {
+  border-color: #334765 !important;
+  box-shadow: 0 12px 30px rgb(17 24 39 / 18%);
+}
+
+.controlled-preview {
+  background: linear-gradient(145deg, var(--module-cyan), #fff 36%);
+  border-color: #cce6df;
+  box-shadow: 0 12px 30px rgb(23 105 82 / 7%);
+}
+
+.test-center {
+  background: linear-gradient(145deg, var(--module-orange), #fff 38%) !important;
+  border-color: #ead8b8 !important;
+}
+
+.version-center {
+  background: linear-gradient(145deg, var(--module-blue), #fff 38%) !important;
+  border-color: #d4dfed !important;
+}
+
+.creation-assistant {
+  background: linear-gradient(180deg, #faf8ff, #f4f1fb);
+}
+
+.workbench-missing {
+  padding: 28px;
+  text-align: center;
+}
+
+.workbench-missing > div {
+  max-width: 560px;
+  border: 1px solid #ded7eb;
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--card-shadow);
+  padding: 34px;
+}
+
+.workbench-missing span {
+  color: #8065c7;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .14em;
+}
+
+.workbench-missing p {
+  color: #667085;
+  line-height: 1.7;
+}
+
+.workbench-missing a {
+  display: inline-flex;
+  border-radius: 10px;
+  background: #6d45d5;
+  color: #fff;
+  font-weight: 800;
+  padding: 11px 15px;
+}
+
+@media (max-width: 1180px) {
+  .workbench-shell {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .workbench-body {
+    grid-template-columns: 200px minmax(0, 1fr);
+  }
+
+  .creation-assistant {
+    border-left: 0;
+    border-top: 1px solid var(--workbench-line);
+    grid-column: 1 / -1;
+  }
+
+  .creation-assistant .assistant-actions {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .workbench-topbar nav {
+    min-width: 0;
+    overflow-x: auto;
+  }
+
+  .xray-studio,
+  .structure-columns,
+  .museum-exhibit,
+  .custom-component-brief {
+    grid-template-columns: 1fr;
+  }
+
+  .structure-columns textarea {
+    min-height: 300px;
+  }
+}

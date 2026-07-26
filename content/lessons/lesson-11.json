@@ -6,7 +6,7 @@
   "order": 11,
   "title": "在 App 现场标记并修复 Bug",
   "subtitle": "截图标注、记录复现、比较调试建议并生成修复版 1.1",
-  "studentSubtitle": "造物星球·故障追踪任务",
+  "studentSubtitle": "Vibe创作基地·故障追踪任务",
   "durationMinutes": 110,
   "coreGoal": "在受控应用预览中记录真实问题证据，比较并修改多个调试建议，完成局部修复、差异查看和复测。",
   "keyConcepts": ["Bug标注", "复现步骤", "测试日志", "代码关联", "局部修复", "代码差异"],

@@ -2,7 +2,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import test from "node:test";
-import { createActiveProject } from "../../lib/projects/project-actions.ts";
+import {
+  createActiveProject,
+  openProjectForEditing,
+} from "../../lib/projects/project-actions.ts";
 import {
   ProjectRepository,
   type ProjectStorage,
@@ -64,4 +67,16 @@ test("课程页的创造台入口使用 activeProjectId，不再引用固定项�
   assert.doesNotMatch(lessonSource, /DEFAULT_PROJECT_ID/);
   assert.match(syncSource, /getActiveProject\(\)/);
   assert.doesNotMatch(syncSource, /DEFAULT_PROJECT_ID/);
+});
+
+test("打开任一历史项目创造台时切换为13课共同使用的当前项目", () => {
+  const repository = new ProjectRepository(new MemoryStorage());
+  const first = repository.createAndActivate("第1课主项目", "course-main");
+  const second = repository.create("历史项目", "course-history");
+  assert.equal(repository.getActiveProjectId(), first.projectId);
+  const opened = openProjectForEditing(repository, second.projectId);
+  assert.equal(opened?.projectId, second.projectId);
+  assert.equal(repository.getActiveProjectId(), second.projectId);
+  assert.equal(repository.getActiveProject()?.projectId, second.projectId);
+  assert.equal(openProjectForEditing(repository, "missing"), null);
 });

@@ -6,7 +6,7 @@
   "order": 8,
   "title": "不同选择，不同结果",
   "subtitle": "用两至三个条件为自己的 App 设计不同路线",
-  "studentSubtitle": "造物星球·路线分岔任务",
+  "studentSubtitle": "Vibe创作基地·路线分岔任务",
   "durationMinutes": 90,
   "coreGoal": "把第7课输入接入安全条件判断，检查重复遗漏和边界，并解释如果那么否则规则。",
   "keyConcepts": ["if", "else", "条件成立", "条件不成立", "边界值"],

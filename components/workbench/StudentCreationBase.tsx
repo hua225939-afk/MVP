@@ -10,6 +10,7 @@ import {
   ProgressBar,
   StatGrid,
 } from "@/components/platform/DashboardUI";
+import { brand } from "@/config/brand";
 import type { ProjectDocument } from "@/lib/projects/project-document";
 import { createActiveProject } from "@/lib/projects/project-actions";
 import {
@@ -96,11 +97,12 @@ export function StudentCreationBase({
       <DashboardHeader
         action={{ label: "管理全部作品", href: "/student/projects" }}
         description="从当前持续项目继续课程、创造、测试和保存版本。"
-        eyebrow="造物星球 · 创造基地"
+        eyebrow={`${brand.studentSpaceName} · ${brand.courseSeriesName}`}
         title={`${studentName}，今天准备创造什么？`}
       />
       <DemoNotice>
-        创造基地、我的作品、课程页和创造台读取同一个 ProjectRepository。
+        {brand.studentSpaceName}、{brand.projectLibraryName}、课程页和
+        {brand.workbenchName}读取同一个 ProjectRepository。
       </DemoNotice>
 
       {activeProject ? (
@@ -231,7 +233,7 @@ export function StudentCreationBase({
 
           <DashboardPanel
             description="当前已实现的正式样板课"
-            title="学习中心"
+            title={brand.learningCenterName}
           >
             <div className="student-course-grid">
               {lessons.map((lesson) => (
@@ -265,8 +267,8 @@ export function StudentCreationBase({
         <section className="no-active-project">
           <div>
             <span>还没有当前持续项目</span>
-            <h2>创建项目，或从我的作品选择一个项目</h2>
-            <p>课程和创造台会自动使用你选择的当前项目。</p>
+            <h2>创建项目，或从{brand.projectLibraryName}选择一个项目</h2>
+            <p>课程和{brand.workbenchName}会自动使用你选择的当前项目。</p>
           </div>
           <label>
             项目名称
@@ -284,7 +286,8 @@ export function StudentCreationBase({
             创建项目
           </button>
           <Link href="/student/projects">
-            从我的作品选择{projectCount > 0 ? `（${projectCount}）` : ""}
+            从{brand.projectLibraryName}选择
+            {projectCount > 0 ? `（${projectCount}）` : ""}
           </Link>
         </section>
       )}

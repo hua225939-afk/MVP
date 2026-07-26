@@ -6,7 +6,7 @@
   "order": 5,
   "title": "用组件拼出功能页面",
   "subtitle": "在组件实验馆操作反馈，用安全组件组装自己的 App 页面",
-  "studentSubtitle": "造物星球·组件组装任务",
+  "studentSubtitle": "Vibe创作基地·组件组装任务",
   "durationMinutes": 90,
   "coreGoal": "读取页面结构与 StyleTokens，操作组件案例、开放组装页面，并把自定义草图转为学生可修改的安全组件规格。",
   "keyConcepts": ["组件", "属性", "状态", "反馈", "复用", "安全组合"],

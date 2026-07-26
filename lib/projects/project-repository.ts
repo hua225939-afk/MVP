@@ -116,6 +116,7 @@ export class ProjectRepository {
         migrated.schemaVersion === 1 &&
         JSON.stringify(migrated) !== raw
       ) {
+        this.backup(projectId, raw, "migration");
         this.storage.setItem(projectKey(projectId), JSON.stringify(migrated));
       }
       return migrated;
@@ -264,7 +265,11 @@ export class ProjectRepository {
     this.storage.setItem(PROJECT_INDEX_KEY, JSON.stringify([...new Set(ids)]));
   }
 
-  private backup(projectId: string, raw: string, reason: "corrupt" | "reset") {
+  private backup(
+    projectId: string,
+    raw: string,
+    reason: "corrupt" | "migration" | "reset",
+  ) {
     this.storage.setItem(
       `${PROJECT_BACKUP_PREFIX}${projectId}:${reason}:${Date.now()}`,
       raw,

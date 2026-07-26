@@ -38,6 +38,49 @@ test("v0 项目可安全迁移，未知版本会被拒绝", () => {
   assert.throws(() => migrateProjectDocument({ schemaVersion: 99 }));
 });
 
+test("旧版 v1 项目缺少新增字段时补默认值且保留原有正文", () => {
+  const legacy = createDefaultProject(
+    "legacy-v1",
+    "2026-07-26T00:00:00.000Z",
+    "不能丢失的旧项目",
+  ) as unknown as Record<string, unknown>;
+  legacy.intent = {
+    statement: "保留旧项目任务",
+    expectedOutcome: "保留旧项目结果",
+  };
+  legacy.styleTokens = {
+    primary: "#123456",
+    background: "#FAFAFA",
+    text: "#111111",
+  };
+  legacy.publication = {
+    status: "not_ready",
+    versionId: null,
+    title: "旧发布标题",
+    description: "",
+    coverArtifactId: null,
+    visibility: "private",
+    safetyChecks: [],
+    url: null,
+    qrCodeArtifactId: null,
+    publishedAt: null,
+  };
+  delete legacy.projectStory;
+  delete legacy.finalVersion;
+  const migrated = migrateProjectDocument(
+    legacy,
+    "2026-07-26T01:00:00.000Z",
+  );
+  assert.equal(migrated.title, "不能丢失的旧项目");
+  assert.equal(migrated.intent.statement, "保留旧项目任务");
+  assert.equal(migrated.styleTokens.primary, "#123456");
+  assert.equal(migrated.styleTokens.radius, "16px");
+  assert.equal(migrated.publication.title, "旧发布标题");
+  assert.equal(migrated.publication.category, "其他");
+  assert.deepEqual(migrated.projectStory.nodes, []);
+  assert.equal(migrated.finalVersion, null);
+});
+
 test("版本快照不递归保存版本数组，并可恢复项目内容", () => {
   const project = createDefaultProject("project-version", "2026-07-26T00:00:00.000Z");
   project.title = "保存前";

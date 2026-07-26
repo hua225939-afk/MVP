@@ -105,7 +105,9 @@ export function isCourseToolUnlocked(
     case "playtest-feedback":
       return project?.versions.some((item) => item.label === "修复版 1.1") === true;
     case "work-publisher":
-      return (project?.versions.length ?? 0) > 2;
+      return ["App 1.0", "修复版 1.1", "试玩升级版 2.0"].every(
+        (label) => project?.versions.some((item) => item.label === label),
+      );
     default:
       return false;
   }

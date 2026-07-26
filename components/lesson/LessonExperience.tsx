@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { LessonRenderer } from "@/components/lesson/LessonRenderer";
+import { brand } from "@/config/brand";
 import type { Lesson } from "@/lib/lesson-schema";
 import {
   emptyProgress,
@@ -177,8 +178,8 @@ export function LessonExperience({
         <Link className="brand" href="/">
           <span className="brand-mark">V</span>
           <span>
-            Vibe Coding
-            <small>把想法变成作品</small>
+            {brand.platformName}
+            <small>{brand.platformSubtitle}</small>
           </span>
         </Link>
         <div className="lesson-title-center">
@@ -190,7 +191,8 @@ export function LessonExperience({
           {!readOnly && <small>{lesson.studentSubtitle}</small>}
         </div>
         <Link className="exit-link" href={readOnly ? "/teacher" : "/student/courses"}>
-          <span>⌂</span> {readOnly ? "教师工作台" : "创造基地"}
+          <span>⌂</span>{" "}
+          {readOnly ? "教师工作台" : `返回${brand.learningCenterName}`}
         </Link>
       </header>
 
@@ -300,10 +302,10 @@ export function LessonExperience({
         <section className="lesson-main">
           {!readOnly && (
             <div className="task-deck-label">
-              <span>任务舱 · 创造台</span>
+              <span>任务舱 · {brand.workbenchName}</span>
               {activeProjectId ? (
                 <Link href={`/student/workbench/${activeProjectId}`}>
-                  打开完整创造台 →
+                  打开完整{brand.workbenchName} →
                 </Link>
               ) : (
                 <Link href="/student/projects">先选择造物项目 →</Link>
@@ -336,8 +338,8 @@ export function LessonExperience({
                 本课成果会写入当前 ProjectDocument，不能保存为独立的单课作品。
               </p>
               <div>
-                <Link href="/student">去创造基地创建</Link>
-                <Link href="/student/projects">从我的作品选择</Link>
+                <Link href="/student">去{brand.studentSpaceName}创建</Link>
+                <Link href="/student/projects">从{brand.projectLibraryName}选择</Link>
               </div>
             </div>
           ) : (

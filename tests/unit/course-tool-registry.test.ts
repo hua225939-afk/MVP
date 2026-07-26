@@ -82,3 +82,43 @@ test("第2课项目边界只在同一项目存在 finalIntent 后解锁", () => 
     project,
   }), true);
 });
+
+test("第13课发布工具只在1.0、1.1和2.0版本齐全后解锁", () => {
+  const project = createDefaultProject();
+  const publisher = getCourseTool("work-publisher");
+  assert.ok(publisher);
+  const context = {
+    availableLessonIds: Array.from(
+      { length: 13 },
+      (_, index) => `lesson-${String(index + 1).padStart(2, "0")}`,
+    ),
+    project,
+  };
+  const timestamp = "2026-07-26T00:00:00.000Z";
+  const addVersion = (label: string) => {
+    project.versions.push({
+      id: `version-${project.versions.length + 1}`,
+      label,
+      description: "",
+      revision: 0,
+      snapshot: "{}",
+      createdAt: timestamp,
+      coverArtifactId: null,
+      screenshotArtifactId: null,
+      changes: [],
+      testSummary: "",
+      aiSuggestions: [],
+      studentDecisions: [],
+      peerFeedback: [],
+    });
+  };
+  addVersion("随手快照 A");
+  addVersion("随手快照 B");
+  addVersion("随手快照 C");
+  assert.equal(isCourseToolUnlocked(publisher, context), false);
+  addVersion("App 1.0");
+  addVersion("修复版 1.1");
+  assert.equal(isCourseToolUnlocked(publisher, context), false);
+  addVersion("试玩升级版 2.0");
+  assert.equal(isCourseToolUnlocked(publisher, context), true);
+});

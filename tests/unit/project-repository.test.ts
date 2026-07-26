@@ -8,6 +8,7 @@ import {
   ProjectRepository,
   type ProjectStorage,
 } from "../../lib/projects/project-repository.ts";
+import { createDefaultProject } from "../../lib/projects/project-document.ts";
 
 class MemoryStorage implements ProjectStorage {
   values = new Map<string, string>();
@@ -42,6 +43,35 @@ test("损坏数据先备份再隔离，重置数据也保留可恢复备份", ()
   assert.equal(reset.projectId, "reset-me");
   assert.equal(
     [...storage.values.keys()].some((key) => key.startsWith(`${PROJECT_BACKUP_PREFIX}reset-me:reset:`)),
+    true,
+  );
+});
+
+test("Schema 自动迁移前保留原始项目备份", () => {
+  const storage = new MemoryStorage();
+  const repository = new ProjectRepository(
+    storage,
+    () => "2026-07-26T00:00:00.000Z",
+  );
+  const legacy = createDefaultProject(
+    "migration-backup",
+    "2026-07-25T00:00:00.000Z",
+    "迁移前项目",
+  ) as unknown as Record<string, unknown>;
+  delete legacy.styleTokens;
+  storage.setItem(
+    `${PROJECT_STORAGE_PREFIX}migration-backup`,
+    JSON.stringify(legacy),
+  );
+  const migrated = repository.get("migration-backup");
+  assert.equal(migrated?.title, "迁移前项目");
+  assert.equal(migrated?.styleTokens.primary, "#7C3AED");
+  assert.equal(
+    [...storage.values.keys()].some((key) =>
+      key.startsWith(
+        `${PROJECT_BACKUP_PREFIX}migration-backup:migration:`,
+      ),
+    ),
     true,
   );
 });

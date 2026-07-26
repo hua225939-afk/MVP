@@ -279,6 +279,32 @@ test("公开页面使用只读安全投影，隐藏私人图片、测试答案�
   assert.doesNotMatch(read("components/publication/PublicProjectPage.tsx"), /ToolPanel|WorkbenchShell|PROJECT_EDITABLE_FIELDS/);
 });
 
+test("公开页面锁定读取第13课公开发布版快照", () => {
+  const project = publishedProject();
+  const finalSnapshot = createProjectSnapshot(project);
+  project.versions.push({
+    id: "public-v",
+    label: "公开发布版",
+    description: project.publication.oneLine,
+    revision: project.revision,
+    snapshot: finalSnapshot,
+    createdAt: timestamp,
+    coverArtifactId: project.publication.coverArtifactId,
+    screenshotArtifactId: null,
+    changes: ["发布"],
+    testSummary: "通过",
+    aiSuggestions: [],
+    studentDecisions: [],
+    peerFeedback: [],
+  });
+  project.title = "发布后继续编辑的草稿标题";
+  project.publication.title = "不应泄漏到公开页";
+  const projection = createPublicProject(project);
+  assert.ok(projection);
+  assert.equal(projection.title, "校园任务星");
+  assert.equal(projection.preview.title, "校园任务星");
+});
+
 test("作品广场只筛选publication.status为published的项目", () => {
   const published = publishedProject();
   const draft = createDefaultProject("draft", timestamp, "未发布");

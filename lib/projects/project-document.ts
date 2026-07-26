@@ -934,7 +934,8 @@ export function migrateProjectDocument(
   const source = legacy as Partial<ProjectDocument>;
   for (const field of PROJECT_EDITABLE_FIELDS) {
     if (source[field] !== undefined) {
-      (migrated as unknown as Record<string, unknown>)[field] = source[field];
+      const target = migrated as unknown as Record<string, unknown>;
+      target[field] = mergeProjectDefaults(target[field], source[field]);
     }
   }
   const legacyCode = [legacy.html, legacy.css, legacy.js]
@@ -951,6 +952,31 @@ export function migrateProjectDocument(
     });
   }
   return projectDocumentSchema.parse(migrated);
+}
+
+function mergeProjectDefaults(defaultValue: unknown, savedValue: unknown): unknown {
+  if (
+    defaultValue &&
+    savedValue &&
+    typeof defaultValue === "object" &&
+    typeof savedValue === "object" &&
+    !Array.isArray(defaultValue) &&
+    !Array.isArray(savedValue)
+  ) {
+    const defaults = defaultValue as Record<string, unknown>;
+    const saved = savedValue as Record<string, unknown>;
+    return Object.fromEntries(
+      [...new Set([...Object.keys(defaults), ...Object.keys(saved)])].map(
+        (key) => [
+          key,
+          key in saved
+            ? mergeProjectDefaults(defaults[key], saved[key])
+            : defaults[key],
+        ],
+      ),
+    );
+  }
+  return savedValue;
 }
 
 export function createProjectSnapshot(project: ProjectDocument) {

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { brand } from "@/config/brand";
 import { getBrowserProjectRepository } from "@/lib/projects/project-repository";
 import { createPublicProject } from "@/lib/unit-five/publishing";
 
@@ -57,7 +58,7 @@ export function PublicProjectPage({ projectId }: { projectId: string }) {
 
   return (
     <main className="public-project" style={{ background: project.visuals.background, color: project.visuals.textColor }}>
-      <nav><Link href="/gallery">造物星球·作品广场</Link><span>学生公开作品 · 只读</span></nav>
+      <nav><Link href="/gallery">{brand.studentSpaceName} · {brand.galleryName}</Link><span>学生公开作品 · 只读</span></nav>
       <header className="public-project-hero">
         <div>
           <span>{project.visuals.icon} {project.category}</span>
@@ -141,9 +142,9 @@ export function PublicationGallery() {
   return (
     <main className="publication-gallery">
       <header>
-        <nav><Link href="/student">← 返回创造基地</Link><span>造物星球</span></nav>
+        <nav><Link href="/student">← 返回{brand.studentSpaceName}</Link><span>{brand.platformName}</span></nav>
         <small>PUBLICATION GALLERY</small>
-        <h1>作品广场</h1>
+        <h1>{brand.galleryName}</h1>
         <p>这里只展示学生主动发布的作品。没有点赞、评论、关注或公开社交。</p>
       </header>
       <section className="gallery-filters">

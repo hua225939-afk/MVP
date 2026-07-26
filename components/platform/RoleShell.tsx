@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { DemoRoleSwitcher } from "@/components/platform/DemoRoleSwitcher";
+import { brand } from "@/config/brand";
 import { demoRoles, type DemoRoleId } from "@/data/mock/platform-data";
 
 export function RoleShell({
@@ -21,8 +22,8 @@ export function RoleShell({
         <Link className="brand" href="/">
           <span className="brand-mark">V</span>
           <span>
-            Vibe Coding
-            <small>多角色演示平台</small>
+            {brand.platformName}
+            <small>{brand.platformSubtitle}</small>
           </span>
         </Link>
         <div className="dashboard-topbar-actions">

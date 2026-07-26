@@ -1,4 +1,7 @@
-import type { ProjectDocument } from "../projects/project-document.ts";
+import {
+  migrateProjectDocument,
+  type ProjectDocument,
+} from "../projects/project-document.ts";
 
 export type ProjectStory = ProjectDocument["projectStory"];
 export type StoryNode = ProjectStory["nodes"][number];
@@ -275,13 +278,34 @@ export function getPublishedProjects(projects: ProjectDocument[]) {
 
 export function createPublicProject(project: ProjectDocument) {
   if (project.publication.status !== "published") return null;
+  const publishedVersion = project.versions.find(
+    (version) => version.id === project.publication.versionId,
+  );
+  let source = project;
+  if (publishedVersion) {
+    try {
+      const snapshot = migrateProjectDocument(
+        JSON.parse(publishedVersion.snapshot),
+        publishedVersion.createdAt,
+      );
+      if (
+        snapshot.projectId === project.projectId &&
+        snapshot.publication.status === "published" &&
+        snapshot.publication.versionId === publishedVersion.id
+      ) {
+        source = snapshot;
+      }
+    } catch {
+      source = project;
+    }
+  }
   const publicArtifacts = new Map(
-    project.artifacts
+    source.artifacts
       .filter((artifact) => artifact.visibility === "public")
       .map((artifact) => [artifact.id, artifact]),
   );
-  const story = project.projectStory.nodes
-    .filter((node) => project.publication.storyNodeIds.includes(node.id))
+  const story = source.projectStory.nodes
+    .filter((node) => source.publication.storyNodeIds.includes(node.id))
     .map((node) => ({
       id: node.id,
       title: node.title,
@@ -292,11 +316,11 @@ export function createPublicProject(project: ProjectDocument) {
         ? publicArtifacts.get(node.screenshotArtifactId)?.content ?? null
         : null,
     }));
-  const screenshots = project.launchVisuals.screenshots.flatMap((item) => {
+  const screenshots = source.launchVisuals.screenshots.flatMap((item) => {
     const artifact = publicArtifacts.get(item.artifactId);
     return artifact ? [{ ...item, content: artifact.content }] : [];
   });
-  const presentation = [...project.studentPresentation.sections]
+  const presentation = [...source.studentPresentation.sections]
     .filter((section) => section.included && (section.finalText || section.studentDraft).trim())
     .sort((a, b) => a.order - b.order)
     .map((section) => ({
@@ -305,51 +329,51 @@ export function createPublicProject(project: ProjectDocument) {
       text: section.finalText || section.studentDraft,
     }));
   return {
-    projectId: project.projectId,
-    title: project.publication.title,
-    oneLine: project.publication.oneLine,
-    audience: project.publication.audience,
-    problem: project.publication.problem,
-    category: project.publication.category,
-    featureTags: project.publication.featureTags,
-    experienceInstructions: project.publication.experienceInstructions,
-    learningReflection: project.publication.learningReflection,
-    cover: project.publication.coverArtifactId
-      ? publicArtifacts.get(project.publication.coverArtifactId)?.content ?? null
+    projectId: source.projectId,
+    title: source.publication.title,
+    oneLine: source.publication.oneLine,
+    audience: source.publication.audience,
+    problem: source.publication.problem,
+    category: source.publication.category,
+    featureTags: source.publication.featureTags,
+    experienceInstructions: source.publication.experienceInstructions,
+    learningReflection: source.publication.learningReflection,
+    cover: source.publication.coverArtifactId
+      ? publicArtifacts.get(source.publication.coverArtifactId)?.content ?? null
       : null,
     visuals: {
-      background: project.launchVisuals.background,
-      textColor: project.launchVisuals.textColor,
-      icon: project.launchVisuals.icon,
-      keywords: project.launchVisuals.keywords,
-      layoutMode: project.launchVisuals.layoutMode,
-      blocks: [...project.launchVisuals.blocks].sort((a, b) => a.order - b.order),
+      background: source.launchVisuals.background,
+      textColor: source.launchVisuals.textColor,
+      icon: source.launchVisuals.icon,
+      keywords: source.launchVisuals.keywords,
+      layoutMode: source.launchVisuals.layoutMode,
+      blocks: [...source.launchVisuals.blocks].sort((a, b) => a.order - b.order),
       screenshots,
     },
     preview: {
-      title: project.title,
-      scenario: project.scenario.context,
-      intent: project.intent.statement,
-      pages: project.pages
-        .filter((page) => project.publication.featuredPageIds.includes(page.id))
+      title: source.title,
+      scenario: source.scenario.context,
+      intent: source.intent.statement,
+      pages: source.pages
+        .filter((page) => source.publication.featuredPageIds.includes(page.id))
         .map(({ id, name, order }) => ({ id, name, order })),
-      styleTokens: project.styleTokens,
-      components: project.components.map(({ id, pageId, type, name, props }) => ({ id, pageId, type, name, props })),
-      interactions: project.interactions,
-      inputs: project.inputs,
-      conditions: project.conditions,
-      state: project.state,
+      styleTokens: source.styleTokens,
+      components: source.components.map(({ id, pageId, type, name, props }) => ({ id, pageId, type, name, props })),
+      interactions: source.interactions,
+      inputs: source.inputs,
+      conditions: source.conditions,
+      state: source.state,
     },
     story,
     versions: project.versions
       .filter((version) => ["App 1.0", "修复版 1.1", "试玩升级版 2.0"].includes(version.label))
       .map(({ label, description, changes }) => ({ label, description, changes })),
     presentation,
-    finalScript: project.studentPresentation.minuteScript.finalText ||
-      project.studentPresentation.minuteScript.studentDraft,
+    finalScript: source.studentPresentation.minuteScript.finalText ||
+      source.studentPresentation.minuteScript.studentDraft,
     publication: {
-      url: project.publication.url,
-      publishedAt: project.publication.publishedAt,
+      url: source.publication.url,
+      publishedAt: source.publication.publishedAt,
     },
   };
 }

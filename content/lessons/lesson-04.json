@@ -6,7 +6,7 @@
   "order": 4,
   "title": "给网页穿上设计外衣",
   "subtitle": "从视觉参考与色彩提取走向可检查的 CSS 设计令牌",
-  "studentSubtitle": "造物星球·外观装配任务",
+  "studentSubtitle": "Vibe创作基地·外观装配任务",
   "durationMinutes": 90,
   "coreGoal": "读取第3课页面结构与兴趣图片，建立视觉情绪板，修改并确认 AI StyleTokens 草稿，实时同步 CSS 与页面。",
   "keyConcepts": ["CSS", "StyleTokens", "色彩", "视觉层级", "可读性", "响应式"],

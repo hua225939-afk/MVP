@@ -6,7 +6,7 @@
   "order": 6,
   "title": "点击之后会发生什么",
   "subtitle": "为自己的页面安装点击事件，并完成连续点击与重置调试",
-  "studentSubtitle": "造物星球·机关启动任务",
+  "studentSubtitle": "Vibe创作基地·机关启动任务",
   "durationMinutes": 90,
   "coreGoal": "在第二单元组件页面中建立触发—动作—反馈关系，组合至少两个点击效果并完成真实测试。",
   "keyConcepts": ["点击事件", "onClick", "触发", "动作", "反馈", "调试"],
