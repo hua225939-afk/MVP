@@ -96,7 +96,7 @@ const testSchema = z.object({
 
 const artifactSchema = z.object({
   id: z.string().min(1),
-  type: z.enum(["code", "preview", "cover", "document", "lesson-binding"]),
+  type: z.enum(["code", "preview", "cover", "document", "lesson-binding", "screenshot"]),
   name: z.string().min(1),
   content: z.string(),
   createdAt: isoDate,
@@ -110,6 +110,150 @@ const versionSchema = z.object({
   revision: z.number().int().nonnegative(),
   snapshot: z.string().min(2),
   createdAt: isoDate,
+  coverArtifactId: z.string().nullable().default(null),
+  screenshotArtifactId: z.string().nullable().default(null),
+  changes: z.array(z.string()).default([]),
+  testSummary: z.string().default(""),
+  aiSuggestions: z.array(z.string()).default([]),
+  studentDecisions: z.array(z.string()).default([]),
+  peerFeedback: z.array(z.string()).default([]),
+});
+
+const appFlowSchema = z.object({
+  nodes: z.array(z.object({
+    pageId: z.string().min(1),
+    label: z.string().min(1),
+    order: z.number().int().nonnegative(),
+    enabled: z.boolean(),
+  })),
+  connections: z.array(z.object({
+    id: z.string().min(1),
+    fromPageId: z.string().min(1),
+    toPageId: z.string().min(1),
+    kind: z.enum(["next", "return", "restart"]),
+  })),
+  startPageId: z.string().nullable(),
+  coreEntryPageId: z.string().nullable(),
+  resultPageId: z.string().nullable(),
+  simulationRoles: z.array(z.string()),
+  completedVoyages: z.number().int().nonnegative(),
+  experienceChecks: z.array(z.object({
+    id: z.string().min(1),
+    question: z.string().min(1),
+    finding: z.string(),
+    suggestion: z.string(),
+    studentResponse: z.enum(["agree", "disagree", "modify", "defer"]).nullable(),
+    studentNote: z.string(),
+  })),
+}).default({
+  nodes: [],
+  connections: [],
+  startPageId: null,
+  coreEntryPageId: null,
+  resultPageId: null,
+  simulationRoles: [],
+  completedVoyages: 0,
+  experienceChecks: [],
+});
+
+const testScenarioSchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  role: z.string().min(1),
+  task: z.string(),
+  pageIds: z.array(z.string()),
+  steps: z.array(z.string()),
+  status: z.enum(["draft", "pass", "fail"]),
+  runCount: z.number().int().nonnegative(),
+  readOnly: z.boolean(),
+});
+
+const bugAnnotationSchema = z.object({
+  id: z.string().min(1),
+  screenshotArtifactId: z.string().min(1),
+  pageId: z.string().min(1),
+  shape: z.enum(["circle", "arrow", "text"]),
+  x: z.number().min(0).max(100),
+  y: z.number().min(0).max(100),
+  width: z.number().min(0).max(100),
+  height: z.number().min(0).max(100),
+  text: z.string(),
+  problemType: z.enum(["visual", "interaction", "logic", "content"]),
+});
+
+const bugReportSchema = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  type: z.enum(["visual", "interaction", "logic", "content"]),
+  severity: z.enum(["low", "medium", "high", "blocker"]),
+  beforeActions: z.array(z.string()),
+  afterActions: z.array(z.string()),
+  reproSteps: z.array(z.string()),
+  expected: z.string(),
+  actual: z.string(),
+  annotationIds: z.array(z.string()),
+  componentIds: z.array(z.string()),
+  codeExcerpt: z.string(),
+  testLog: z.array(z.string()),
+  status: z.enum(["open", "fixing", "resolved"]),
+});
+
+const aiDebugDraftSchema = z.object({
+  id: z.string().min(1),
+  bugReportId: z.string().min(1),
+  mode: z.enum(["live", "demo"]),
+  disclaimer: z.string().min(1),
+  inputSummary: z.array(z.string()),
+  suggestions: z.array(z.object({
+    id: z.string().min(1),
+    cause: z.string(),
+    checkLocation: z.string(),
+    fix: z.string(),
+    risk: z.string(),
+    retest: z.string(),
+  })).min(2),
+});
+
+const studentFixSchema = z.object({
+  id: z.string().min(1),
+  draftId: z.string().min(1),
+  suggestionId: z.string().min(1),
+  modifiedPlan: z.string().min(1),
+  patchSummary: z.string(),
+  diff: z.string(),
+  beforeTestStatus: z.enum(["pending", "pass", "fail"]),
+  afterTestStatus: z.enum(["pending", "pass", "fail"]),
+  resolved: z.boolean(),
+});
+
+const peerReviewSchema = z.object({
+  id: z.string().min(1),
+  reviewer: z.string().min(1),
+  taskId: z.string().min(1),
+  pageId: z.string().min(1),
+  readOnly: z.literal(true),
+  screenshotArtifactId: z.string().nullable(),
+  annotationIds: z.array(z.string()),
+  note: z.string(),
+  emotion: z.enum(["happy", "neutral", "confused", "frustrated"]),
+  favorite: z.string(),
+  stuckAt: z.string(),
+  suggestion: z.string(),
+  severity: z.enum(["low", "medium", "high", "blocker"]),
+  problemType: z.enum(["visual", "interaction", "logic", "content", "experience"]),
+  cluster: z.string(),
+  aiSummary: z.string(),
+  studentSummary: z.string(),
+});
+
+const experienceCurveSchema = z.object({
+  id: z.string().min(1),
+  reviewId: z.string().min(1),
+  points: z.array(z.object({
+    phase: z.enum(["start", "action", "result"]),
+    emotion: z.number().int().min(-2).max(2),
+    note: z.string(),
+  })).length(3),
 });
 
 export const projectDocumentSchema = z
@@ -310,6 +454,14 @@ export const projectDocumentSchema = z
         label: z.string().optional(),
       }),
     ),
+    appFlow: appFlowSchema,
+    testScenarios: z.array(testScenarioSchema).default([]),
+    bugAnnotations: z.array(bugAnnotationSchema).default([]),
+    bugReports: z.array(bugReportSchema).default([]),
+    aiDebugDrafts: z.array(aiDebugDraftSchema).default([]),
+    studentFixes: z.array(studentFixSchema).default([]),
+    peerReviews: z.array(peerReviewSchema).default([]),
+    experienceCurves: z.array(experienceCurveSchema).default([]),
     tests: z.array(testSchema),
     artifacts: z.array(artifactSchema),
     decisions: z.array(
@@ -392,6 +544,14 @@ export const PROJECT_EDITABLE_FIELDS = [
   "inputs",
   "conditions",
   "state",
+  "appFlow",
+  "testScenarios",
+  "bugAnnotations",
+  "bugReports",
+  "aiDebugDrafts",
+  "studentFixes",
+  "peerReviews",
+  "experienceCurves",
   "tests",
   "artifacts",
   "decisions",
@@ -481,6 +641,23 @@ export function createDefaultProject(
     inputs: [],
     conditions: [],
     state: [],
+    appFlow: {
+      nodes: [],
+      connections: [],
+      startPageId: null,
+      coreEntryPageId: null,
+      resultPageId: null,
+      simulationRoles: [],
+      completedVoyages: 0,
+      experienceChecks: [],
+    },
+    testScenarios: [],
+    bugAnnotations: [],
+    bugReports: [],
+    aiDebugDrafts: [],
+    studentFixes: [],
+    peerReviews: [],
+    experienceCurves: [],
     tests: [],
     artifacts: [],
     decisions: [],

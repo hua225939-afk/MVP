@@ -68,7 +68,7 @@ export const lessonSummaries = lessons.map((lesson) => ({
   description: lesson.coreGoal,
   duration: `${lesson.durationMinutes} 分钟`,
   level: "样板课",
-  badge: lesson.unitId === "unit-01" ? "认识 Vibe Coding" : "让网页动起来",
+  badge: course.units.find((unit) => unit.id === lesson.unitId)?.title ?? "创意编程",
   color: unitColors.get(lesson.unitId) ?? "#7C3AED",
   skills: lesson.skills,
   output: lesson.output,

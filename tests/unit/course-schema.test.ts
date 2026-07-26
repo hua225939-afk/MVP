@@ -19,8 +19,11 @@ const rawLesson06 = readJson("content/lessons/lesson-06.json");
 const rawLesson07 = readJson("content/lessons/lesson-07.json");
 const rawLesson08 = readJson("content/lessons/lesson-08.json");
 const rawLesson09 = readJson("content/lessons/lesson-09.json");
+const rawLesson10 = readJson("content/lessons/lesson-10.json");
+const rawLesson11 = readJson("content/lessons/lesson-11.json");
+const rawLesson12 = readJson("content/lessons/lesson-12.json");
 
-test("正式课程与第3—9课 JSON 通过 Schema", () => {
+test("正式课程与第3—12课 JSON 通过 Schema", () => {
   assert.equal(courseSchema.parse(rawCourse).totalLessons, 13);
   assert.equal(lessonSchema.parse(rawLesson01).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson03).steps.length, 6);
@@ -30,6 +33,9 @@ test("正式课程与第3—9课 JSON 通过 Schema", () => {
   assert.equal(lessonSchema.parse(rawLesson07).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson08).steps.length, 6);
   assert.equal(lessonSchema.parse(rawLesson09).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson10).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson11).steps.length, 6);
+  assert.equal(lessonSchema.parse(rawLesson12).steps.length, 6);
 });
 
 test("六步顺序错误会被拒绝并定位到 phase", () => {

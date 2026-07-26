@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-11",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-04",
+  "order": 11,
+  "title": "在 App 现场标记并修复 Bug",
+  "subtitle": "截图标注、记录复现、比较调试建议并生成修复版 1.1",
+  "studentSubtitle": "造物星球·故障追踪任务",
+  "durationMinutes": 110,
+  "coreGoal": "在受控应用预览中记录真实问题证据，比较并修改多个调试建议，完成局部修复、差异查看和复测。",
+  "keyConcepts": ["Bug标注", "复现步骤", "测试日志", "代码关联", "局部修复", "代码差异"],
+  "skills": ["截图圈选", "复现记录", "建议比较", "风险判断", "回归测试"],
+  "output": {"title": "修复版 1.1", "description": "含截图标注、Bug报告、Demo调试草稿、学生修复方案、代码差异和复测。", "acceptanceCriteria": ["截图上完成标注", "复现步骤可重复", "比较多个建议", "学生修改并应用局部修复", "复测通过并生成1.1"]},
+  "teacherNotes": {"objectives": ["用证据描述Bug", "理解AI诊断的不确定性", "坚持局部修复和复测"], "preparation": ["确认App 1.0已生成"], "commonIssues": ["只写问题名称没有复现", "直接采用第一条建议"], "facilitationTips": ["要求比较风险", "让学生读代码差异"]},
+  "studentContent": {"opening": "调试不是填写Bug表，而是在现场留下别人可以重复的证据。", "safetyNote": "Demo调试助手是本地规则，不会声称读懂截图；真实AI接口保留但本轮不接入。", "completionMessage": "你用证据和复测生成了修复版 1.1。"},
+  "parentSummary": {"theme": "像工程师一样修复Bug", "learned": "孩子能标记问题、复现、比较建议并验证修复。", "artifact": "修复版1.1与Bug证据链。", "conversationStarter": "请孩子解释为什么选择这个修复方案而不是另一个。"},
+  "steps": [
+    {
+      "id": "lesson-11.look", "phase": "看", "title": "观察问题现场", "durationMinutes": 15, "goal": "在App预览截图上定位问题",
+      "studentContent": {"intro": "同一句“坏了”无法帮助复现，截图和标注能保留现场。", "instructions": "截取预览，分别尝试圈、箭头和文字标注。", "completionMessage": "问题位置和类型可见。"},
+      "teacherNotes": {"purpose": "建立证据意识", "talkingPoints": ["标注位置不等于原因"], "observeFor": ["是否选择问题类型"]},
+      "assistant": {"mode": "preset", "message": "先标问题发生的位置，再写实际看到什么。", "hints": ["截图", "圈选", "箭头", "文字"]},
+      "atoms": [{"id": "lesson-11.look.bug", "type": "courseTool", "title": "BugAnnotationStudio", "instructions": "截图并标注问题现场。", "required": true, "toolId": "bug-scanner", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.look.bug"]}
+    },
+    {
+      "id": "lesson-11.explain", "phase": "讲", "title": "建立可重复的证据链", "durationMinutes": 10, "goal": "理解标注复现日志代码关系",
+      "studentContent": {"intro": "可靠调试从问题证据走向局部代码。", "instructions": "展开证据链。", "completionMessage": "你知道AI和人需要哪些输入。"},
+      "teacherNotes": {"purpose": "理解调试输入", "talkingPoints": ["预期和实际必须分开"], "observeFor": ["是否包含发生前后操作"]},
+      "assistant": {"mode": "preset", "message": "截图回答在哪里，步骤回答怎么发生。", "hints": ["预期", "实际", "日志", "代码"]},
+      "atoms": [{"id": "lesson-11.explain.chain", "type": "reveal", "title": "调试证据链", "required": true, "prompt": "完整Bug证据有哪些？", "content": "截图与标记区域、发生前后操作、自动复现步骤、预期与实际结果、关联组件与代码、浏览器测试日志。", "buttonLabel": "展开证据链"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.explain.chain"]}
+    },
+    {
+      "id": "lesson-11.think", "phase": "想", "title": "先写修复边界", "durationMinutes": 10, "goal": "避免把局部Bug变成全项目重写",
+      "studentContent": {"intro": "修复前先说明哪些地方不能被影响。", "instructions": "写下要修的局部位置、要保留的行为和复测风险。", "completionMessage": "修复边界清楚。"},
+      "teacherNotes": {"purpose": "训练变更控制", "talkingPoints": ["最小修复降低风险"], "observeFor": ["是否写出保留行为"]},
+      "assistant": {"mode": "preset", "message": "用“只修改……，保持……”开头。", "hints": ["局部", "保留", "风险"]},
+      "atoms": [{"id": "lesson-11.think.boundary", "type": "textInput", "title": "局部修复边界", "required": true, "question": "你准备只改哪里，并保持哪些行为不变？", "placeholder": "只修改……；保持……；复测……", "validation": {"mode": "minLength", "minLength": 20}, "successMessage": "局部边界明确。", "hint": "至少包含修改、保留和复测。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.think.boundary"]}
+    },
+    {
+      "id": "lesson-11.make", "phase": "做", "title": "标注、比较、修改并修复", "durationMinutes": 45, "goal": "完成调试闭环",
+      "studentContent": {"intro": "Demo助手会给多个候选，不替你做决定。", "instructions": "生成报告，比较至少两个建议，选择并修改一个，应用局部修复并查看差异。", "completionMessage": "局部修复已经有完整决策记录。"},
+      "teacherNotes": {"purpose": "实践人机协作调试", "talkingPoints": ["建议是候选不是答案"], "observeFor": ["是否修改所选建议"]},
+      "assistant": {"mode": "preset", "message": "比较原因、位置、风险和复测，再选择。", "hints": ["多个建议", "学生修改", "代码差异"]},
+      "atoms": [{"id": "lesson-11.make.bug", "type": "courseTool", "title": "BugAnnotationStudio 完整调试", "instructions": "完成标注、复现、建议选择、局部修复与1.1。", "required": true, "toolId": "bug-scanner", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.make.bug"]}
+    },
+    {
+      "id": "lesson-11.test", "phase": "测", "title": "按原步骤重新测试", "durationMinutes": 20, "goal": "判断问题是否真的解决",
+      "studentContent": {"intro": "没有复测的修改不能叫修复。", "instructions": "补全证据、差异、复测和版本标记。", "completionMessage": "修复版1.1契约通过。"},
+      "teacherNotes": {"purpose": "建立回归测试习惯", "talkingPoints": ["使用相同复现步骤"], "observeFor": ["是否判断真实解决"]},
+      "assistant": {"mode": "preset", "message": "先按原步骤，再补边界和返回测试。", "hints": ["repro", "diff", "retest", "1.1"]},
+      "atoms": [{"id": "lesson-11.test.fix", "type": "runTest", "title": "修复证据扫描", "instructions": "把 TODO 改成证据标记。", "required": true, "description": "复核调试闭环。", "language": "text", "testMode": "contains", "initialCode": "annotation: TODO\nrepro: TODO\ndiff: TODO\nretest: TODO\nversion: TODO", "tests": [{"id": "annotation", "label": "截图标注", "includes": "annotation: saved", "message": "保存标注。"}, {"id": "repro", "label": "复现步骤", "includes": "repro: repeatable", "message": "补全复现。"}, {"id": "diff", "label": "代码差异", "includes": "diff: reviewed", "message": "查看差异。"}, {"id": "retest", "label": "重新测试", "includes": "retest: pass", "message": "按原步骤复测。"}, {"id": "version", "label": "1.1快照", "includes": "version: 1.1", "message": "生成修复版。"}], "successMessage": "调试证据闭环通过。", "retryMessage": "还有调试证据缺失。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.test.fix"]}
+    },
+    {
+      "id": "lesson-11.share", "phase": "说", "title": "解释为什么这样修", "durationMinutes": 10, "goal": "说明建议比较和风险",
+      "studentContent": {"intro": "展示Bug从现场到1.1的变化。", "instructions": "解释没有选择的建议、修改后的方案和复测结果。", "completionMessage": "第11课完成，下一课让同伴只读试玩。"},
+      "teacherNotes": {"purpose": "确认调试推理", "talkingPoints": ["未选建议也有价值"], "observeFor": ["是否说明风险"]},
+      "assistant": {"mode": "preset", "message": "按证据—候选—决定—差异—复测讲。", "hints": ["原因", "风险", "结果"]},
+      "atoms": [{"id": "lesson-11.share.fix", "type": "reveal", "title": "调试讲述顺序", "required": true, "prompt": "怎样介绍一次可靠修复？", "content": "先展示截图标注和复现步骤，再比较多个原因与风险，说明学生修改后的局部方案，最后展示代码差异和相同步骤复测。", "buttonLabel": "查看讲述顺序"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-11.share.fix"]}
+    }
+  ]
+}

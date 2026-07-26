@@ -70,8 +70,8 @@ for (const lesson of lessons) {
   }
 }
 
-if (Array.from({ length: 9 }, (_, index) => `lesson-${String(index + 1).padStart(2, "0")}`).some((id) => !seenLessonIds.has(id))) {
-  throw new Error("当前阶段必须包含 lesson-01—09");
+if (Array.from({ length: 12 }, (_, index) => `lesson-${String(index + 1).padStart(2, "0")}`).some((id) => !seenLessonIds.has(id))) {
+  throw new Error("当前阶段必须包含 lesson-01—12，且不得提前创建第13课正文");
 }
 console.log(
   `内容验证通过：1 门课程、${course.units.length} 个单元、${lessons.length} 节样板课、${registeredTypes.size} 类互动原子。`,

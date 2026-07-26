@@ -56,9 +56,9 @@ export const courseToolRegistry: readonly CourseToolDefinition[] = [
   tool("input-output", "输入输出", 7, ["components", "interactions"], ["inputs", "components", "interactions", "tests", "artifacts"], "用模板连接输入、处理与结果", "自由定义输入限制与结果表达", ["正常输入通过", "空输入有提示", "异常输入可修复"], "InputOutputBuilder"),
   tool("condition-branch", "条件判断", 8, ["inputs", "interactions"], ["conditions", "interactions", "tests", "decisions", "artifacts"], "使用两至三条条件句式", "自由调整比较值和路线结果", ["条件不重复", "真假路线可达", "边界值已测试"], "ConditionBuilder"),
   tool("state-memory", "状态记忆", 9, ["inputs", "interactions", "conditions"], ["state", "interactions", "tests", "decisions", "artifacts"], "保存一个关键操作状态", "自由设计项目内的记忆旅程", ["状态会更新和清空", "刷新恢复符合设计", "项目之间互不读取"], "StateBuilder"),
-  tool("app-composer", "应用合成", 10, ["pages", "structure", "styles", "components", "interactions", "inputs", "conditions", "state"], ["artifacts", "tests", "versions", "decisions"], "按检查单合成应用 1.0", "自由选择合成范围", ["核心流程可以走通", "已生成 1.0 快照"], "AppComposerTool"),
-  tool("bug-scanner", "故障扫描", 11, ["artifacts", "tests", "versions"], ["tests", "decisions", "artifacts", "versions"], "按提示定位并修复故障", "自由建立测试清单", ["失败测试有原因", "修改后重新测试"], "BugScannerTool"),
-  tool("playtest-feedback", "试玩反馈", 12, ["artifacts", "tests", "versions", "decisions"], ["feedback", "decisions", "tests", "artifacts", "versions"], "按反馈模板完成互评", "自由记录与采纳反馈", ["反馈具体可行动", "已形成 2.0 快照"], "PlaytestFeedbackTool"),
+  tool("app-composer", "应用流程编排器", 10, ["finalIntent", "scope", "pages", "structure", "styles", "components", "interactions", "inputs", "conditions", "state", "tests"], ["appFlow", "testScenarios", "artifacts", "tests", "versions", "decisions"], "可视化组织页面、角色试航并逐项决定 AI 体验检查", "自由排序、连接、删减并查看完整代码结构", ["核心流程可以走通", "至少一次角色试航", "至少修复一个中断点", "已生成 App 1.0"], "AppFlowComposer"),
+  tool("bug-scanner", "Bug 标注工作室", 11, ["appFlow", "testScenarios", "artifacts", "tests", "versions", "components"], ["bugAnnotations", "bugReports", "aiDebugDrafts", "studentFixes", "tests", "decisions", "artifacts", "versions"], "在应用截图上标注、复现并比较本地调试草稿", "自由关联代码日志、修改局部方案并复测", ["截图标注和复现完整", "比较并修改多个建议", "查看局部代码差异", "已生成修复版 1.1"], "BugAnnotationStudio"),
+  tool("playtest-feedback", "同伴试玩工作室", 12, ["appFlow", "testScenarios", "bugAnnotations", "artifacts", "tests", "versions", "decisions"], ["testScenarios", "bugAnnotations", "peerReviews", "experienceCurves", "decisions", "tests", "artifacts", "versions"], "在同一浏览器进入只读试玩并绘制体验曲线", "自由整理反馈、选择升级问题并对比版本", ["App 正文只读", "反馈与情绪曲线完整", "同一任务重新测试", "已形成试玩升级版 2.0"], "PeerReviewStudio"),
   tool("work-publisher", "作品发布", 13, ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "components", "interactions", "inputs", "conditions", "state", "tests", "artifacts", "decisions", "feedback", "versions"], ["publication", "artifacts", "tests", "decisions", "versions"], "完成发布检查单", "自由编写发布介绍", ["关键测试通过", "发布信息完整"], "WorkPublisherTool"),
 ] as const;
 
@@ -101,9 +101,9 @@ export function isCourseToolUnlocked(
     case "app-composer":
       return (project?.interactions.length ?? 0) > 0;
     case "bug-scanner":
-      return (project?.versions.length ?? 0) > 0;
+      return project?.versions.some((item) => item.label === "App 1.0") === true;
     case "playtest-feedback":
-      return (project?.versions.length ?? 0) > 1;
+      return project?.versions.some((item) => item.label === "修复版 1.1") === true;
     case "work-publisher":
       return (project?.versions.length ?? 0) > 2;
     default:

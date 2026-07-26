@@ -432,6 +432,9 @@ const courseToolAtomSchema = atomBaseSchema
       "input-output",
       "condition-branch",
       "state-memory",
+      "app-composer",
+      "bug-scanner",
+      "playtest-feedback",
     ]),
     mode: z.enum(["basic", "free"]),
   })

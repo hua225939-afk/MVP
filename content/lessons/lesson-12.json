@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-12",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-04",
+  "order": 12,
+  "title": "邀请同伴试玩并升级 App",
+  "subtitle": "只读试玩、截图反馈、体验情绪曲线与试玩升级版 2.0",
+  "studentSubtitle": "造物星球·同伴体验任务",
+  "durationMinutes": 110,
+  "coreGoal": "在同一浏览器只读试玩模式收集页面标注和体验曲线，由制作者整理、修改总结、选择两类问题并复测生成2.0。",
+  "keyConcepts": ["只读试玩", "截图反馈", "情绪曲线", "反馈聚类", "版本对比", "升级说明"],
+  "skills": ["任务试玩", "页面圈选", "情绪记录", "反馈整理", "迭代验证"],
+  "output": {"title": "试玩升级版 2.0", "description": "含只读试玩记录、截图便签、情绪曲线、反馈聚类、学生总结、双问题升级和版本对比。", "acceptanceCriteria": ["同伴只读完成任务", "提交截图标注和情绪曲线", "制作者修改AI整理草稿", "选择功能与体验问题", "相同任务复测并生成2.0"]},
+  "teacherNotes": {"objectives": ["区分作品只读与反馈写入", "从情绪曲线识别断点", "根据证据迭代"], "preparation": ["确认修复版1.1已生成"], "commonIssues": ["把喜欢不喜欢当完整反馈", "整理后不回到App修改"], "facilitationTips": ["同伴不看代码", "要求相同任务前后对比"]},
+  "studentContent": {"opening": "真正的试玩不是一句好不好，而是让同伴完成任务并留下可定位的体验证据。", "safetyNote": "本轮没有数据库，试玩只在同一浏览器切换身份；预留跨账号数据接口但不伪装已联网。", "completionMessage": "你根据同伴证据升级为2.0，第四单元完成。"},
+  "parentSummary": {"theme": "根据真实体验升级作品", "learned": "孩子能收集、整理、判断反馈并验证迭代效果。", "artifact": "试玩升级版2.0与版本轨迹。", "conversationStarter": "请孩子展示1.1和2.0的差别，以及哪条反馈没有采纳。"},
+  "steps": [
+    {
+      "id": "lesson-12.look", "phase": "看", "title": "进入同伴只读试玩", "durationMinutes": 15, "goal": "体验作品冻结反馈分离",
+      "studentContent": {"intro": "试玩者能操作App，但不能改制作者的项目正文。", "instructions": "切换只读身份，完成制作者任务并观察反馈入口。", "completionMessage": "你理解了本地只读试玩边界。"},
+      "teacherNotes": {"purpose": "建立只读契约", "talkingPoints": ["反馈字段可写不等于作品可写"], "observeFor": ["是否理解同浏览器限制"]},
+      "assistant": {"mode": "preset", "message": "先确认只读标记，再开始任务。", "hints": ["readOnly", "peerReviews"]},
+      "atoms": [{"id": "lesson-12.look.peer", "type": "courseTool", "title": "PeerReviewStudio", "instructions": "进入同一浏览器只读试玩。", "required": true, "toolId": "playtest-feedback", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.look.peer"]}
+    },
+    {
+      "id": "lesson-12.explain", "phase": "讲", "title": "理解体验证据", "durationMinutes": 10, "goal": "区分位置情绪严重程度与建议",
+      "studentContent": {"intro": "好的反馈能回答在哪、何时、感受怎样、影响多大。", "instructions": "展开体验反馈结构。", "completionMessage": "你知道一条可行动反馈的组成。"},
+      "teacherNotes": {"purpose": "建立反馈质量标准", "talkingPoints": ["情绪曲线展示变化而非平均感受"], "observeFor": ["是否写具体建议"]},
+      "assistant": {"mode": "preset", "message": "截图定位，曲线说明过程，建议指向行动。", "hints": ["页面", "情绪", "严重程度"]},
+      "atoms": [{"id": "lesson-12.explain.evidence", "type": "reveal", "title": "试玩证据结构", "required": true, "prompt": "怎样让反馈可行动？", "content": "完成同一任务；在当前页面截图圈选并贴便签；记录开始—操作—结果的情绪；标出喜欢和卡住；选择问题类型与严重程度；提出具体建议。", "buttonLabel": "展开证据结构"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.explain.evidence"]}
+    },
+    {
+      "id": "lesson-12.think", "phase": "想", "title": "设计一次公平试玩", "durationMinutes": 10, "goal": "使用相同任务前后测试",
+      "studentContent": {"intro": "不同任务无法公平比较1.1和2.0。", "instructions": "写出明确的起点、操作和完成标准。", "completionMessage": "试玩任务可以重复。"},
+      "teacherNotes": {"purpose": "建立对照测试", "talkingPoints": ["任务不暗示具体按钮"], "observeFor": ["是否有完成标准"]},
+      "assistant": {"mode": "preset", "message": "写用户目标，不要告诉他答案。", "hints": ["起点", "任务", "完成标准"]},
+      "atoms": [{"id": "lesson-12.think.task", "type": "textInput", "title": "可重复试玩任务", "required": true, "question": "同伴要从哪里开始、完成什么、怎样算成功？", "placeholder": "从……开始；完成……；看到……算成功", "validation": {"mode": "minLength", "minLength": 22}, "successMessage": "试玩任务清楚可重复。", "hint": "包含起点、任务和结果。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.think.task"]}
+    },
+    {
+      "id": "lesson-12.make", "phase": "做", "title": "试玩、标注、整理并升级", "durationMinutes": 45, "goal": "完成反馈到修改的闭环",
+      "studentContent": {"intro": "同伴提交证据后，制作者重新接管项目。", "instructions": "提交截图便签和曲线，按页面类型严重程度整理，修改AI总结，选择一项功能和一项体验问题，回到创造台修改。", "completionMessage": "升级决定来自可定位的同伴证据。"},
+      "teacherNotes": {"purpose": "完成体验迭代", "talkingPoints": ["本地聚类只是草稿"], "observeFor": ["是否修改AI总结"]},
+      "assistant": {"mode": "preset", "message": "先收证据，再聚类，最后只选两项重点。", "hints": ["截图", "曲线", "聚类", "决定"]},
+      "atoms": [{"id": "lesson-12.make.peer", "type": "courseTool", "title": "PeerReviewStudio 完整试玩", "instructions": "完成只读试玩、情绪曲线、反馈整理与2.0。", "required": true, "toolId": "playtest-feedback", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.make.peer"]}
+    },
+    {
+      "id": "lesson-12.test", "phase": "测", "title": "用相同任务对比1.1和2.0", "durationMinutes": 20, "goal": "验证升级真的改善体验",
+      "studentContent": {"intro": "再次测试使用完全相同的任务和完成标准。", "instructions": "补全只读、曲线、整理、复测和2.0标记。", "completionMessage": "2.0升级契约通过。"},
+      "teacherNotes": {"purpose": "复核迭代证据", "talkingPoints": ["比较版本而不是只看最新"], "observeFor": ["是否使用相同任务"]},
+      "assistant": {"mode": "preset", "message": "对比卡住位置和情绪曲线变化。", "hints": ["readonly", "curve", "cluster", "retest", "2.0"]},
+      "atoms": [{"id": "lesson-12.test.upgrade", "type": "runTest", "title": "试玩升级扫描", "instructions": "修复 TODO 后重测。", "required": true, "description": "复核2.0升级证据。", "language": "text", "testMode": "contains", "initialCode": "readonly: TODO\ncurve: TODO\ncluster: TODO\nretest: TODO\nversion: TODO", "tests": [{"id": "readonly", "label": "只读试玩", "includes": "readonly: pass", "message": "确认作品正文未被试玩修改。"}, {"id": "curve", "label": "情绪曲线", "includes": "curve: saved", "message": "保存三段曲线。"}, {"id": "cluster", "label": "反馈整理", "includes": "cluster: revised", "message": "修改AI整理草稿。"}, {"id": "retest", "label": "相同任务复测", "includes": "retest: same-task", "message": "用相同任务复测。"}, {"id": "version", "label": "2.0快照", "includes": "version: 2.0", "message": "生成升级版。"}], "successMessage": "试玩升级证据完整。", "retryMessage": "还有升级证据未补齐。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.test.upgrade"]}
+    },
+    {
+      "id": "lesson-12.share", "phase": "说", "title": "展示版本轨迹与升级说明", "durationMinutes": 10, "goal": "说明从意图到2.0的关键决定",
+      "studentContent": {"intro": "版本时间线会保留意图、骨架、互动、1.0、1.1和2.0。", "instructions": "对比截图、测试、AI建议、学生决定和同伴反馈。", "completionMessage": "第四单元完成；本轮停止，不进入第13课。"},
+      "teacherNotes": {"purpose": "总结迭代能力", "talkingPoints": ["版本轨迹记录过程证据"], "observeFor": ["是否能说明未采纳反馈"]},
+      "assistant": {"mode": "preset", "message": "按意图—骨架—互动—1.0—1.1—2.0讲。", "hints": ["截图", "测试", "决定", "反馈"]},
+      "atoms": [{"id": "lesson-12.share.timeline", "type": "reveal", "title": "版本轨迹讲述法", "required": true, "prompt": "怎样介绍从想法到2.0？", "content": "依次展示意图草稿、页面骨架、互动模块、App 1.0、修复版1.1、试玩升级版2.0；每次说明截图、修改、测试、AI建议、学生决定和同伴反馈。", "buttonLabel": "查看版本轨迹"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-12.share.timeline"]}
+    }
+  ]
+}

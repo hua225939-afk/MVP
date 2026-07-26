@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ControlledProjectPreview,
@@ -116,14 +117,14 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
   }, [activeTool.id, activeTool.lessonId, project, projectId, ready]);
 
   const unlockedContext = useMemo(
-    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06", "lesson-07", "lesson-08", "lesson-09"], project }),
+    () => ({ availableLessonIds: ["lesson-01", "lesson-02", "lesson-03", "lesson-04", "lesson-05", "lesson-06", "lesson-07", "lesson-08", "lesson-09", "lesson-10", "lesson-11", "lesson-12"], project }),
     [project],
   );
   const changeProject = (next: ProjectDocument) => {
     const now = new Date().toISOString();
     const upstreamChanged = activeTool.outputFields.some(
       (field) =>
-        ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "styleTokens", "moodboard", "components", "customComponentBriefs", "interactions", "inputs", "conditions", "state"].includes(field) &&
+        ["title", "audience", "scenario", "intent", "scope", "pages", "structure", "styles", "styleTokens", "moodboard", "components", "customComponentBriefs", "interactions", "inputs", "conditions", "state", "appFlow", "bugReports", "studentFixes", "peerReviews"].includes(field) &&
         JSON.stringify(project[field]) !== JSON.stringify(next[field]),
     );
     const invalidated = next.tests.map((item) => {
@@ -339,7 +340,74 @@ export function WorkbenchShell({ projectId }: { projectId: string }) {
             {mode === "versions" && (
               <section className="version-center">
                 <div className="canvas-heading"><div><small>VERSION RECORD</small><h2>版本记录</h2></div><button onClick={createVersion} type="button">保存版本快照</button></div>
-                {project.versions.length === 0 ? <p>还没有版本快照。重要修改前后各保存一次，方便对比。</p> : project.versions.map((version) => <article key={version.id}><b>{version.label}</b><span>项目修订 {version.revision}</span><small>{new Date(version.createdAt).toLocaleString("zh-CN")}</small><button onClick={() => restoreVersion(version.id)} type="button">恢复</button></article>)}
+                <div className="version-timeline">
+                  {[
+                    {
+                      id: "intent",
+                      label: "意图草稿",
+                      description: project.finalIntent?.appIntent || project.intent.statement || "等待确认项目意图",
+                      screenshot: project.sketch.compressedImage,
+                      changes: project.keywords,
+                      tests: project.finalIntent ? "意图已由学生确认" : "待确认",
+                      ai: project.aiDraft ? ["AI 意图原稿已保存"] : [],
+                      decisions: project.studentRevision ? ["学生已修改 AI 原稿"] : [],
+                      peers: [],
+                    },
+                    {
+                      id: "structure",
+                      label: "页面骨架",
+                      description: `${project.pages.length} 个页面 · ${project.structure.length} 个结构节点`,
+                      screenshot: project.artifacts.find((item) => item.id.includes("structure"))?.content,
+                      changes: project.pages.map((page) => page.name),
+                      tests: project.tests.filter((item) => item.toolId === "page-structure").map((item) => item.status).join("、") || "等待结构测试",
+                      ai: project.aiDrafts.filter((item) => item.kind === "structure").map((item) => item.disclaimer),
+                      decisions: project.studentRevisions.filter((item) => item.kind === "structure").map((item) => item.reason),
+                      peers: [],
+                    },
+                    {
+                      id: "interaction",
+                      label: "互动模块",
+                      description: `${project.interactions.length} 个互动 · ${project.inputs.length} 个输入 · ${project.conditions.length} 个条件 · ${project.state.length} 个状态`,
+                      screenshot: project.artifacts.find((item) => item.type === "preview")?.content,
+                      changes: project.artifacts.filter((item) => ["code", "document"].includes(item.type)).slice(-4).map((item) => item.name),
+                      tests: project.tests.filter((item) => ["click-event", "input-output", "condition-branch", "state-memory"].includes(item.toolId ?? "")).map((item) => `${item.name}:${item.status}`).join("；") || "等待互动测试",
+                      ai: [],
+                      decisions: project.decisions.filter((item) => ["lesson-06", "lesson-07", "lesson-08", "lesson-09"].includes(item.lessonId ?? "")).map((item) => item.title),
+                      peers: [],
+                    },
+                    ...project.versions
+                      .filter((item) => ["App 1.0", "修复版 1.1", "试玩升级版 2.0"].includes(item.label))
+                      .map((item) => ({
+                        id: item.id,
+                        label: item.label,
+                        description: item.description,
+                        screenshot: project.artifacts.find((artifact) => artifact.id === item.screenshotArtifactId)?.content,
+                        changes: item.changes,
+                        tests: item.testSummary,
+                        ai: item.aiSuggestions,
+                        decisions: item.studentDecisions,
+                        peers: item.peerFeedback,
+                        versionId: item.id,
+                      })),
+                  ].map((milestone) => (
+                    <article key={milestone.id}>
+                      <i />
+                      <div className="timeline-shot">
+                        {milestone.screenshot?.startsWith("data:image") ? <Image alt={`${milestone.label} 截图`} height={90} src={milestone.screenshot} unoptimized width={140} /> : <span>版本截图</span>}
+                      </div>
+                      <div>
+                        <b>{milestone.label}</b>
+                        <p>{milestone.description}</p>
+                        <details><summary>修改内容</summary>{milestone.changes.length ? <ul>{milestone.changes.map((item) => <li key={item}>{item}</li>)}</ul> : <span>暂无</span>}</details>
+                        <small>测试结果：{milestone.tests}</small>
+                        <small>AI 建议：{milestone.ai.join("；") || "无"}</small>
+                        <small>学生决定：{milestone.decisions.join("；") || "无"}</small>
+                        <small>同伴反馈：{milestone.peers.join("；") || "无"}</small>
+                      </div>
+                      {"versionId" in milestone && milestone.versionId && <button onClick={() => restoreVersion(milestone.versionId)} type="button">恢复</button>}
+                    </article>
+                  ))}
+                </div>
               </section>
             )}
           </div>

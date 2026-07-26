@@ -13,6 +13,11 @@ import {
   InputOutputBuilder,
   StateBuilder,
 } from "./UnitThreeTools";
+import {
+  AppFlowComposer,
+  BugAnnotationStudio,
+  PeerReviewStudio,
+} from "./UnitFourTools";
 
 export function ToolPanel({
   definition,
@@ -57,6 +62,18 @@ export function ToolPanel({
 
   if (definition.id === "state-memory") {
     return <StateBuilder definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "app-composer") {
+    return <AppFlowComposer definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "bug-scanner") {
+    return <BugAnnotationStudio definition={definition} onChange={onChange} project={project} />;
+  }
+
+  if (definition.id === "playtest-feedback") {
+    return <PeerReviewStudio definition={definition} onChange={onChange} project={project} />;
   }
 
   return (

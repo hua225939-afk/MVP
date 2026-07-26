@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-10",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-04",
+  "order": 10,
+  "title": "把功能组装成完整 App",
+  "subtitle": "组织页面流程、模拟真实用户并用学生决定生成 App 1.0",
+  "studentSubtitle": "造物星球·App 试航任务",
+  "durationMinutes": 110,
+  "coreGoal": "把第2—9课页面和功能编排为可达流程，完成角色试航、体验断点检查与 App 1.0 快照。",
+  "keyConcepts": ["应用流程", "入口", "结果页", "角色模拟", "体验断点", "版本快照"],
+  "skills": ["点击连接与排序", "全流程试航", "AI建议判断", "功能删减", "版本说明"],
+  "output": {"title": "App 1.0", "description": "含流程图、完整代码结构、体验检查决定、封面与版本说明。", "acceptanceCriteria": ["页面流程可达", "完成一次角色试航", "修复一个中断点", "逐项处理体验检查", "保存 App 1.0"]},
+  "teacherNotes": {"objectives": ["把分散页面组织为完整任务", "区分 AI 草稿与学生决定", "理解版本快照"], "preparation": ["确认第2—9课成果位于同一项目"], "commonIssues": ["只排序不连接", "把 AI 建议当自动修改"], "facilitationTips": ["平板使用点击连接和上下移动", "要求学生解释保留与删除"]},
+  "studentContent": {"opening": "你的页面和功能已经齐了，现在要让真实用户从入口顺利走到结果。", "safetyNote": "本地体验检查只生成草稿，不能自动修改整个项目。", "completionMessage": "你的完整 App 已完成试航并保存为 1.0。"},
+  "parentSummary": {"theme": "把功能组装成 App", "learned": "孩子能组织用户流程、模拟使用并判断改进建议。", "artifact": "App 1.0 与流程试航记录。", "conversationStarter": "请孩子演示从入口到结果，并解释删除了什么。"},
+  "steps": [
+    {
+      "id": "lesson-10.look", "phase": "看", "title": "总览第2—9课成果", "durationMinutes": 15, "goal": "看清全部页面、组件、互动与状态",
+      "studentContent": {"intro": "流程编排器会读取当前持续项目，不复制页面。", "instructions": "打开页面卡片，比较页面、组件和功能数量。", "completionMessage": "你已看到 App 的全部零件。"},
+      "teacherNotes": {"purpose": "建立完整应用视角", "talkingPoints": ["页面和功能来自同一 ProjectDocument"], "observeFor": ["是否能指出核心页面"]},
+      "assistant": {"mode": "preset", "message": "先找起点、核心入口和结果页。", "hints": ["页面", "组件", "互动"]},
+      "atoms": [{"id": "lesson-10.look.flow", "type": "courseTool", "title": "AppFlowComposer 总览", "instructions": "查看并启用需要的页面。", "required": true, "toolId": "app-composer", "mode": "basic"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.look.flow"]}
+    },
+    {
+      "id": "lesson-10.explain", "phase": "讲", "title": "理解入口与可达流程", "durationMinutes": 10, "goal": "理解起点核心入口结果返回",
+      "studentContent": {"intro": "完整流程不只是页面列表，还要有方向和返回路线。", "instructions": "展开流程契约。", "completionMessage": "你知道完整流程的必要连接。"},
+      "teacherNotes": {"purpose": "建立可达性概念", "talkingPoints": ["结果页需要返回或重新开始"], "observeFor": ["是否区分起点与核心入口"]},
+      "assistant": {"mode": "preset", "message": "从第一次打开 App 的人的视角检查。", "hints": ["起点", "入口", "结果", "返回"]},
+      "atoms": [{"id": "lesson-10.explain.contract", "type": "reveal", "title": "流程契约", "required": true, "prompt": "完整 App 至少需要什么？", "content": "设置起点和核心入口；让每个必要页面可达；结果页给出反馈；用户能返回或重新开始；无用功能从流程中关闭。", "buttonLabel": "查看流程契约"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.explain.contract"]}
+    },
+    {
+      "id": "lesson-10.think", "phase": "想", "title": "决定保留与删除", "durationMinutes": 10, "goal": "用项目意图判断功能必要性",
+      "studentContent": {"intro": "更多功能不等于更完整。", "instructions": "写下一个必须保留和一个可以删除的功能及理由。", "completionMessage": "你的删减标准来自最初意图。"},
+      "teacherNotes": {"purpose": "训练范围判断", "talkingPoints": ["每个步骤都应服务目标用户"], "observeFor": ["是否给出具体理由"]},
+      "assistant": {"mode": "preset", "message": "问：删掉它，用户还能完成核心任务吗？", "hints": ["服务对象", "核心任务"]},
+      "atoms": [{"id": "lesson-10.think.scope", "type": "textInput", "title": "保留与删除决定", "required": true, "question": "你要保留什么、删除什么，为什么？", "placeholder": "保留……因为……；删除……因为……", "validation": {"mode": "minLength", "minLength": 20}, "successMessage": "删减理由清楚。", "hint": "同时写出保留和删除。"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.think.scope"]}
+    },
+    {
+      "id": "lesson-10.make", "phase": "做", "title": "编排并试航完整 App", "durationMinutes": 45, "goal": "连接页面角色试航处理体验检查",
+      "studentContent": {"intro": "用点击连接和上下移动完成流程，平板无需复杂拖拽。", "instructions": "设置三类关键页面，连接、试航、修复中断点并逐项决定 AI 建议。", "completionMessage": "流程已由你的决定完成。"},
+      "teacherNotes": {"purpose": "完成高密度应用组装", "talkingPoints": ["AI只给草稿"], "observeFor": ["是否完成六项学生决定"]},
+      "assistant": {"mode": "preset", "message": "先连主路线，再加返回，最后用不同角色试航。", "hints": ["连接", "角色", "修复", "决定"]},
+      "atoms": [{"id": "lesson-10.make.flow", "type": "courseTool", "title": "AppFlowComposer", "instructions": "完成流程、试航、AI体验检查与1.0。", "required": true, "toolId": "app-composer", "mode": "free"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.make.flow"]}
+    },
+    {
+      "id": "lesson-10.test", "phase": "测", "title": "复核 App 1.0 契约", "durationMinutes": 20, "goal": "确认试航修复与版本材料完整",
+      "studentContent": {"intro": "版本不是改个名字，而是一组可恢复的项目证据。", "instructions": "补全试航、修复、决定和快照标记。", "completionMessage": "App 1.0 契约通过。"},
+      "teacherNotes": {"purpose": "复核版本门槛", "talkingPoints": ["快照保存当时项目内容"], "observeFor": ["是否真正试航"]},
+      "assistant": {"mode": "preset", "message": "从测试记录和版本时间线找证据。", "hints": ["voyage", "repair", "decision", "snapshot"]},
+      "atoms": [{"id": "lesson-10.test.version", "type": "runTest", "title": "App 1.0 扫描", "instructions": "修复 TODO 后重测。", "required": true, "description": "复核版本生成门槛。", "language": "text", "testMode": "contains", "initialCode": "voyage: TODO\nrepair: TODO\ndecision: TODO\nsnapshot: TODO", "tests": [{"id": "voyage", "label": "全流程试航", "includes": "voyage: complete", "message": "补上完整试航。"}, {"id": "repair", "label": "中断点修复", "includes": "repair: local", "message": "记录局部修复。"}, {"id": "decision", "label": "学生决定", "includes": "decision: student", "message": "AI建议必须由学生决定。"}, {"id": "snapshot", "label": "1.0快照", "includes": "snapshot: 1.0", "message": "保存1.0快照。"}], "successMessage": "App 1.0 契约完整。", "retryMessage": "还有版本证据未补齐。", "editable": true}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.test.version"]}
+    },
+    {
+      "id": "lesson-10.share", "phase": "说", "title": "演示一条完整用户路线", "durationMinutes": 10, "goal": "说明流程删减与学生决定",
+      "studentContent": {"intro": "用目标用户角色展示从入口到结果。", "instructions": "说明一个保留、一个删除、一个修复和一项没有采纳的建议。", "completionMessage": "第10课完成，下一课在 App 中直接标注 Bug。"},
+      "teacherNotes": {"purpose": "确认设计推理", "talkingPoints": ["展示学生的不同意或暂不处理"], "observeFor": ["是否说明理由"]},
+      "assistant": {"mode": "preset", "message": "按入口—操作—结果—返回讲。", "hints": ["保留", "删除", "修复"]},
+      "atoms": [{"id": "lesson-10.share.route", "type": "reveal", "title": "试航讲述顺序", "required": true, "prompt": "怎样介绍 App 1.0？", "content": "先说目标用户和入口，再演示核心操作与反馈，最后展示返回，并解释保留、删除、修复和没有采纳的 AI 建议。", "buttonLabel": "查看讲述顺序"}],
+      "completion": {"mode": "allRequired", "requiredAtomIds": ["lesson-10.share.route"]}
+    }
+  ]
+}
