@@ -1,0 +1,613 @@
+{
+  "schemaVersion": 1,
+  "id": "lesson-06",
+  "courseId": "vibe-coding-foundations",
+  "unitId": "unit-03",
+  "order": 6,
+  "title": "点击之后会发生什么",
+  "subtitle": "理解事件关系，安装多个互动效果，并修复连续点击与重置故障",
+  "studentSubtitle": "造物星球·启动机关任务",
+  "durationMinutes": 90,
+  "coreGoal": "通过失灵按钮和三个可操作案例理解触发、动作与反馈，完成包含至少两个效果的互动网页并修复轻量 Bug。",
+  "keyConcepts": ["事件", "触发", "onClick", "函数", "反馈", "状态", "重置", "Bug"],
+  "skills": ["故障观察", "事件拆解", "互动配置", "代码修改", "连续测试", "修复记录"],
+  "output": {
+    "title": "启动机关造物成果",
+    "description": "一张互动网页卡片、一张事件关系图和一份 Bug 修复记录。",
+    "acceptanceCriteria": [
+      "发现并说明失灵按钮的问题",
+      "操作文字变化、颜色变化和数字增加三个案例",
+      "选择一个任务并安装至少两个互动效果",
+      "在代码预览中看到 onClick 和对应函数",
+      "至少修改一次反馈文字、颜色或起始数值",
+      "测试第一次点击、连续点击和重置",
+      "修复 Bug 后重新运行故障扫描",
+      "保存事件关系图和 Bug 修复记录"
+    ]
+  },
+  "teacherNotes": {
+    "objectives": [
+      "让学生从按钮失灵的现象进入事件概念",
+      "通过三种可操作反馈理解同一触发可以连接不同网页动作",
+      "让学生配置至少两个效果，并经历失败、修复和重测"
+    ],
+    "preparation": [
+      "说明互动卡片由本地模板生成，不调用真实 AI",
+      "强调 onClick 是触发连接，函数负责具体网页动作",
+      "提示学生轻量 Bug 位于连续计数和重置数值"
+    ],
+    "commonIssues": [
+      "学生把按钮文字当作用户反馈",
+      "学生选择两个效果但没有修改反馈、颜色或数值",
+      "只修连续点击，没有再次测试重置"
+    ],
+    "facilitationTips": [
+      "持续追问第一次点击后用户看见什么",
+      "让学生连续点击两次并口头比较状态变化",
+      "要求修复后保存 Bug 现象、原因和修改记录"
+    ]
+  },
+  "studentContent": {
+    "opening": "启动机关任务开始。你会先遇到一个失灵按钮，再安装文字、颜色和数字效果，最后亲手修复隐藏 Bug。",
+    "safetyNote": "创造台和故障扫描使用本地模板与字符串规则，不连接真实 AI，也不执行任意 JavaScript。",
+    "completionMessage": "启动机关任务完成：互动卡片、事件关系图和 Bug 修复记录已经保存。"
+  },
+  "parentSummary": {
+    "theme": "点击事件、状态变化与故障修复",
+    "learned": "孩子能够用触发—动作—反馈解释点击事件，组合多个互动效果，并通过连续点击与重置测试修复 Bug。",
+    "artifact": "一张互动网页卡片、一张事件关系图和一份 Bug 修复记录。",
+    "conversationStarter": "请孩子演示连续点击与重置，并说明 Bug 原来在哪里、最后怎样修复。"
+  },
+  "steps": [
+    {
+      "id": "lesson-06.look",
+      "phase": "看",
+      "title": "发现失灵按钮",
+      "durationMinutes": 10,
+      "goal": "亲自点击无反应按钮，并识别缺少事件连接与用户反馈",
+      "studentContent": {
+        "intro": "这个网页看起来有按钮，但它可能只是一个外壳。请先点击，再判断问题。",
+        "instructions": "点击“启动机关”，观察页面是否变化；然后完成故障判断。",
+        "completionMessage": "你发现了第一个故障：按钮出现了，但点击后没有事件反馈。"
+      },
+      "teacherNotes": {
+        "purpose": "从可感知故障建立学习动机",
+        "talkingPoints": ["有按钮不等于有事件", "没有可见反馈时用户无法确认操作"],
+        "observeFor": ["学生是否先点击再作判断，而不是只看说明"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先像普通用户一样点击。如果标题、文字、颜色和数字都没变，就说明机关还没连接。",
+        "hints": ["按钮本身已经显示", "检查点击前后的页面是否完全相同", "下一步要找到触发和反馈"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.look.broken",
+          "type": "codePreview",
+          "title": "失灵的启动按钮",
+          "instructions": "点击按钮，确认页面没有预期变化。",
+          "required": true,
+          "description": "按钮已经出现，但还没有连接 onClick 事件。",
+          "language": "jsx",
+          "code": "<button>启动机关</button>\n<p>等待启动</p>",
+          "preview": {
+            "eyebrow": "故障案例",
+            "heading": "机关待机中",
+            "text": "点击按钮看看会不会启动。",
+            "accent": "#7C3AED",
+            "interaction": {
+              "type": "none",
+              "buttonLabel": "启动机关",
+              "observationMessage": "没有变化：按钮尚未连接事件。"
+            }
+          },
+          "confirmationLabel": "我确认按钮没有反应"
+        },
+        {
+          "id": "lesson-06.look.diagnosis",
+          "type": "choice",
+          "title": "第一次故障判断",
+          "instructions": "选择最准确的问题描述。",
+          "required": true,
+          "question": "这个按钮最需要补上的是什么？",
+          "options": [
+            { "id": "more-size", "label": "把按钮做得更大" },
+            { "id": "event-feedback", "label": "连接点击事件并给出用户反馈" },
+            { "id": "more-text", "label": "在页面加入更多说明文字" }
+          ],
+          "correctOptionId": "event-feedback",
+          "explanation": "正确。按钮需要通过 onClick 连接函数，函数再改变页面并提供反馈。",
+          "incorrectMessage": "按钮已经看得见，问题发生在点击之后没有任何变化。"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": [
+          "lesson-06.look.broken",
+          "lesson-06.look.diagnosis"
+        ]
+      }
+    },
+    {
+      "id": "lesson-06.explain",
+      "phase": "讲",
+      "title": "操作三种事件反馈",
+      "durationMinutes": 10,
+      "goal": "体验文字、颜色和数字三种变化，并理解触发—动作—反馈",
+      "studentContent": {
+        "intro": "同一个点击触发，可以让网页执行不同动作。依次操作三个机关，再选择正确的事件关系。",
+        "instructions": "三个案例都要点击；数字案例请连续点击并尝试重置。",
+        "completionMessage": "你已经体验三种反馈，并理解事件关系的顺序。"
+      },
+      "teacherNotes": {
+        "purpose": "让事件概念对应到不同可见效果",
+        "talkingPoints": ["onClick 负责触发", "函数负责动作", "文字、颜色和数字是反馈与状态"],
+        "observeFor": ["学生是否连续操作计数器并使用重置"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "注意三种案例都由点击开始，但函数执行的动作不同，用户看到的反馈也不同。",
+        "hints": ["文字案例改变 message", "颜色案例改变 accent", "计数案例改变 count 状态"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.explain.message-demo",
+          "type": "codePreview",
+          "title": "机关一：文字变化",
+          "instructions": "点击后观察反馈文字。",
+          "required": true,
+          "description": "函数把等待状态改成一条明确反馈。",
+          "language": "jsx",
+          "code": "function handleClick() {\n  setMessage('今天也要保持好心情');\n}\n<button onClick={handleClick}>转换心情</button>",
+          "preview": {
+            "eyebrow": "文字变化",
+            "heading": "心情转换器",
+            "text": "当前状态：等待转换",
+            "accent": "#7C3AED",
+            "interaction": {
+              "type": "message",
+              "buttonLabel": "转换心情",
+              "clickedHeading": "转换完成",
+              "clickedText": "今天也要保持好心情。"
+            }
+          },
+          "confirmationLabel": "我体验了文字变化"
+        },
+        {
+          "id": "lesson-06.explain.color-demo",
+          "type": "codePreview",
+          "title": "机关二：颜色变化",
+          "instructions": "点击后观察卡片主题色。",
+          "required": true,
+          "description": "函数把主题色状态从紫色切换为绿色。",
+          "language": "jsx",
+          "code": "function handleColor() {\n  setAccent('#0F766E');\n}\n<button onClick={handleColor}>切换状态</button>",
+          "preview": {
+            "eyebrow": "颜色变化",
+            "heading": "专注模式",
+            "text": "点击后进入绿色专注状态。",
+            "accent": "#7C3AED",
+            "interaction": {
+              "type": "color",
+              "buttonLabel": "切换状态",
+              "clickedText": "主题色已经更新为专注绿。",
+              "clickedAccent": "#0F766E"
+            }
+          },
+          "confirmationLabel": "我体验了颜色变化"
+        },
+        {
+          "id": "lesson-06.explain.counter-demo",
+          "type": "codePreview",
+          "title": "机关三：数字增加",
+          "instructions": "至少连续点击两次，再使用重置。",
+          "required": true,
+          "description": "数字状态会记录每一次喝水操作。",
+          "language": "jsx",
+          "code": "function addWater() {\n  setCount(count + 1);\n}\nfunction reset() {\n  setCount(0);\n}",
+          "preview": {
+            "eyebrow": "数字增加",
+            "heading": "喝水记录器",
+            "text": "每点击一次，记录增加 1。",
+            "accent": "#2563EB",
+            "interaction": {
+              "type": "counter",
+              "buttonLabel": "喝了一杯水",
+              "resetLabel": "重置",
+              "counterLabel": "今日杯数",
+              "start": 0,
+              "step": 1
+            }
+          },
+          "confirmationLabel": "我体验了连续点击和重置"
+        },
+        {
+          "id": "lesson-06.explain.relationship",
+          "type": "choice",
+          "title": "事件关系排序",
+          "instructions": "选择正确的事件顺序。",
+          "required": true,
+          "question": "哪一条最准确地描述网页事件？",
+          "options": [
+            { "id": "correct", "label": "触发方式 → 网页动作 → 用户反馈" },
+            { "id": "feedback-first", "label": "用户反馈 → 网页动作 → 触发方式" },
+            { "id": "action-only", "label": "网页动作 → 网页动作 → 网页动作" }
+          ],
+          "correctOptionId": "correct",
+          "explanation": "正确。用户触发事件，函数执行网页动作，页面最后给出可见反馈。",
+          "incorrectMessage": "从用户第一次点击开始，再看函数做了什么和用户最后看见什么。"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": [
+          "lesson-06.explain.message-demo",
+          "lesson-06.explain.color-demo",
+          "lesson-06.explain.counter-demo",
+          "lesson-06.explain.relationship"
+        ]
+      }
+    },
+    {
+      "id": "lesson-06.think",
+      "phase": "想",
+      "title": "设计事件关系与修复计划",
+      "durationMinutes": 15,
+      "goal": "用自然语言写出触发、动作、反馈，并预测连续点击故障",
+      "studentContent": {
+        "intro": "进入创造台之前，先把事件说明白，并想想连续点击或重置可能出现什么问题。",
+        "instructions": "完成两次内容输入；第一条写事件关系，第二条写故障预测。",
+        "completionMessage": "事件任务和故障观察计划已经准备好。"
+      },
+      "teacherNotes": {
+        "purpose": "让学生在生成代码前建立事件模型和测试意识",
+        "talkingPoints": ["触发必须具体", "反馈必须可见", "连续操作会暴露状态 Bug"],
+        "observeFor": ["学生是否把连续点击和重置纳入测试计划"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先写用户点击什么，再写函数改变什么状态，最后写用户会看到什么。",
+        "hints": ["例如点击记录按钮", "动作可以改变文字、颜色或数字", "Bug 可能是数字不增加或重置不回到 0"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.think.event-map",
+          "type": "textInput",
+          "title": "事件关系草图",
+          "instructions": "使用“当……时，网页会……，用户看到……”句式。",
+          "required": true,
+          "question": "描述你准备制作的触发—动作—反馈关系。",
+          "placeholder": "当用户点击……时，网页会……，用户看到……",
+          "validation": { "mode": "minLength", "minLength": 24 },
+          "successMessage": "事件关系已经包含触发、动作和反馈。",
+          "hint": "补上具体按钮、状态变化和用户看见的结果。"
+        },
+        {
+          "id": "lesson-06.think.bug-plan",
+          "type": "textInput",
+          "title": "连续操作故障预测",
+          "instructions": "写出连续点击或重置时可能出现的问题。",
+          "required": true,
+          "question": "你准备怎样检查连续点击和重置？",
+          "placeholder": "我会连续点击……次，再点击重置，检查……",
+          "validation": { "mode": "minLength", "minLength": 18 },
+          "successMessage": "你已经形成了清楚的故障检查计划。",
+          "hint": "写出点击次数，以及重置后应该回到哪个状态。"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": [
+          "lesson-06.think.event-map",
+          "lesson-06.think.bug-plan"
+        ]
+      }
+    },
+    {
+      "id": "lesson-06.make",
+      "phase": "做",
+      "title": "安装两个以上互动效果",
+      "durationMinutes": 35,
+      "goal": "选择任务、安装至少两个效果，并修改反馈、颜色和起始数值",
+      "studentContent": {
+        "intro": "在创造台选择一个任务，安装互动效果。右侧卡片可以立即点击和重置。",
+        "instructions": "从四个任务中选择一个；至少选择两个效果；必须修改反馈文字、主题颜色和起始数值，再保存。",
+        "completionMessage": "互动网页卡片已保存，并且至少安装了两个互动效果。"
+      },
+      "teacherNotes": {
+        "purpose": "让学生组合多个效果并即时验证状态变化",
+        "talkingPoints": ["同一 onClick 可以调用多个状态更新", "反馈、颜色和数值都是可观察结果"],
+        "observeFor": ["学生是否连续点击预览并尝试重置"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "创造台会使用本地模板生成 onClick 和函数。你选中的效果决定函数里包含哪些状态更新。",
+        "hints": ["先选择真正想做的任务", "至少安装两个效果", "修改默认反馈、紫色和起始数字"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.make.builder",
+          "type": "taskBuilder",
+          "title": "启动机关创造台",
+          "instructions": "完成选择和指定修改后保存互动卡片。",
+          "required": true,
+          "description": "每一项选择都会更新互动预览和本地生成代码。",
+          "fields": [
+            {
+              "id": "event-task",
+              "label": "选择互动任务",
+              "control": "select",
+              "options": [
+                { "id": "mood", "label": "心情转换器", "value": "心情转换器" },
+                { "id": "water", "label": "喝水记录器", "value": "喝水记录器" },
+                { "id": "lunch", "label": "午餐选择器", "value": "午餐选择器" },
+                { "id": "encourage", "label": "学习鼓励按钮", "value": "学习鼓励按钮" }
+              ],
+              "defaultValue": "",
+              "required": true
+            },
+            {
+              "id": "effects",
+              "label": "安装互动效果",
+              "control": "multiSelect",
+              "options": [
+                { "id": "message", "label": "文字变化", "value": "message" },
+                { "id": "color", "label": "颜色变化", "value": "color" },
+                { "id": "counter", "label": "数字增加", "value": "counter" }
+              ],
+              "defaultValue": [],
+              "minSelections": 2,
+              "required": true
+            },
+            {
+              "id": "feedback-text",
+              "label": "修改反馈文字",
+              "control": "text",
+              "placeholder": "例如：启动成功，继续保持",
+              "defaultValue": "任务已启动",
+              "minLength": 6,
+              "required": true
+            },
+            {
+              "id": "event-color",
+              "label": "修改反馈颜色",
+              "control": "color",
+              "options": [
+                { "id": "purple", "label": "默认紫", "value": "#7C3AED" },
+                { "id": "blue", "label": "清醒蓝", "value": "#2563EB" },
+                { "id": "green", "label": "完成绿", "value": "#0F766E" },
+                { "id": "orange", "label": "能量橙", "value": "#C2410C" }
+              ],
+              "defaultValue": "#7C3AED",
+              "required": true
+            },
+            {
+              "id": "start-value",
+              "label": "修改起始数值",
+              "control": "select",
+              "options": [
+                { "id": "zero", "label": "从 0 开始", "value": "0" },
+                { "id": "one", "label": "从 1 开始", "value": "1" },
+                { "id": "five", "label": "从 5 开始", "value": "5" }
+              ],
+              "defaultValue": "0",
+              "required": true
+            }
+          ],
+          "preview": {
+            "type": "interactiveCard",
+            "taskFieldId": "event-task",
+            "effectsFieldId": "effects",
+            "feedbackFieldId": "feedback-text",
+            "accentFieldId": "event-color",
+            "startValueFieldId": "start-value",
+            "activateLabel": "启动机关",
+            "resetLabel": "重置",
+            "deliberateBug": "counter-and-reset"
+          },
+          "minimumChanges": 5,
+          "requiredChangeFieldIds": [
+            "event-task",
+            "effects",
+            "feedback-text",
+            "event-color",
+            "start-value"
+          ],
+          "saveLabel": "保存互动网页卡片",
+          "successMessage": "互动卡片已保存"
+        },
+        {
+          "id": "lesson-06.make.code",
+          "type": "codePreview",
+          "title": "查看 onClick 与对应函数",
+          "instructions": "在左侧找到 onClick、handleActivate 和 handleReset。",
+          "required": true,
+          "description": "代码读取创造台最新结果。函数中藏有两个稍后需要修复的轻量 Bug。",
+          "language": "jsx",
+          "sourceAtomId": "lesson-06.make.builder",
+          "sourceValuePath": "generatedCode",
+          "preview": {
+            "eyebrow": "事件连接",
+            "heading": "onClick 已连接",
+            "text": "点击按钮查看函数带来的反馈。",
+            "accent": "#7C3AED",
+            "interaction": {
+              "type": "message",
+              "buttonLabel": "启动机关",
+              "clickedHeading": "函数已执行",
+              "clickedText": "下一步将检查连续点击与重置。"
+            }
+          },
+          "confirmationLabel": "我找到了 onClick 和两个函数"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": [
+          "lesson-06.make.builder",
+          "lesson-06.make.code"
+        ]
+      }
+    },
+    {
+      "id": "lesson-06.test",
+      "phase": "测",
+      "title": "修复连续点击与重置 Bug",
+      "durationMinutes": 15,
+      "goal": "扫描第一次点击、连续点击和重置，修复后重新运行",
+      "studentContent": {
+        "intro": "本地模板故意留下两个轻量 Bug：连续点击没有增加，重置也没有回到 0。",
+        "instructions": "先运行扫描保留失败结果；根据逐级提示，把 count + 0 改为 count + 1，把 setCount(1) 改为 setCount(0)，然后重新运行。",
+        "completionMessage": "第一次点击、连续点击和重置三种情况全部通过。"
+      },
+      "teacherNotes": {
+        "purpose": "让学生完成可重复的事件与状态调试闭环",
+        "talkingPoints": ["第一次点击检查事件连接", "连续点击检查状态累加", "重置检查状态回到初始值"],
+        "observeFor": ["学生是否先运行失败版本并在修复后重新扫描"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "逐级排查：先确认 onClick，再修连续计数，最后修重置。每修一处都可以重新扫描。",
+        "hints": ["提示 1：第一次点击需要 onClick={handleActivate}", "提示 2：连续点击应该使用 count + 1", "提示 3：重置函数应该 setCount(0)"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.test.bug-scan",
+          "type": "runTest",
+          "title": "启动机关故障扫描",
+          "instructions": "先扫描失败版本，修改两处 Bug 后重新扫描。",
+          "required": true,
+          "description": "检查第一次点击、连续点击和重置三种情况。",
+          "language": "jsx",
+          "testMode": "contains",
+          "sourceAtomId": "lesson-06.make.builder",
+          "sourceValuePath": "generatedCode",
+          "tests": [
+            {
+              "id": "first-click",
+              "label": "第一次点击：onClick 连接启动函数",
+              "includes": "onClick={handleActivate}",
+              "message": "检查按钮是否使用 onClick={handleActivate}。"
+            },
+            {
+              "id": "continuous-click",
+              "label": "连续点击：数值每次增加 1",
+              "includes": "setCount(count + 1)",
+              "message": "把 setCount(count + 0) 改为 setCount(count + 1)。"
+            },
+            {
+              "id": "reset",
+              "label": "重置：数值回到 0",
+              "includes": "setCount(0)",
+              "message": "把 handleReset 中的 setCount(1) 改为 setCount(0)。"
+            }
+          ],
+          "successMessage": "故障修复完成：第一次点击、连续点击和重置全部通过。",
+          "retryMessage": "扫描发现 Bug。按右侧提示修改代码，并再次运行故障扫描。",
+          "editable": true
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-06.test.bug-scan"]
+      }
+    },
+    {
+      "id": "lesson-06.share",
+      "phase": "说",
+      "title": "保存事件关系图与修复记录",
+      "durationMinutes": 5,
+      "goal": "记录触发、动作、反馈和 Bug 修复过程",
+      "studentContent": {
+        "intro": "把事件关系和修复证据保存进造物档案，说明你不只是让按钮能用，还理解了它为什么能用。",
+        "instructions": "填写触发方式、网页动作、用户反馈、Bug 现象和修复方法，然后保存。",
+        "completionMessage": "事件关系图和 Bug 修复记录已经保存。"
+      },
+      "teacherNotes": {
+        "purpose": "把操作经验转化为可表达的事件模型与调试记录",
+        "talkingPoints": ["关系图描述正常机制", "修复记录描述故障证据与改动"],
+        "observeFor": ["学生是否准确写出 count + 1 与 setCount(0) 的作用"]
+      },
+      "assistant": {
+        "mode": "preset",
+        "message": "先记录正常事件关系，再记录 Bug 原来怎样表现、你改了哪两处。",
+        "hints": ["触发是点击启动按钮", "动作是函数更新文字、颜色或数字", "修复包括连续增加和重置为 0"]
+      },
+      "atoms": [
+        {
+          "id": "lesson-06.share.archive",
+          "type": "taskBuilder",
+          "title": "启动机关造物档案",
+          "instructions": "填写并保存事件关系图和 Bug 修复记录。",
+          "required": true,
+          "description": "用五项记录说明正常事件和本次故障修复。",
+          "fields": [
+            {
+              "id": "archive-trigger",
+              "label": "触发方式",
+              "control": "text",
+              "placeholder": "用户点击哪个按钮",
+              "defaultValue": "",
+              "minLength": 6,
+              "required": true
+            },
+            {
+              "id": "archive-action",
+              "label": "网页动作",
+              "control": "text",
+              "placeholder": "函数改变了哪些状态",
+              "defaultValue": "",
+              "minLength": 8,
+              "required": true
+            },
+            {
+              "id": "archive-feedback",
+              "label": "用户反馈",
+              "control": "text",
+              "placeholder": "用户最后看到什么",
+              "defaultValue": "",
+              "minLength": 8,
+              "required": true
+            },
+            {
+              "id": "archive-bug",
+              "label": "Bug 现象",
+              "control": "text",
+              "placeholder": "连续点击和重置原来有什么问题",
+              "defaultValue": "",
+              "minLength": 10,
+              "required": true
+            },
+            {
+              "id": "archive-fix",
+              "label": "修复记录",
+              "control": "text",
+              "placeholder": "你修改了哪两处代码",
+              "defaultValue": "",
+              "minLength": 12,
+              "required": true
+            }
+          ],
+          "preview": {
+            "type": "record",
+            "heading": "事件关系图 · Bug 修复记录"
+          },
+          "minimumChanges": 5,
+          "requiredChangeFieldIds": [
+            "archive-trigger",
+            "archive-action",
+            "archive-feedback",
+            "archive-bug",
+            "archive-fix"
+          ],
+          "saveLabel": "保存事件与修复档案",
+          "successMessage": "事件与修复档案已保存"
+        }
+      ],
+      "completion": {
+        "mode": "allRequired",
+        "requiredAtomIds": ["lesson-06.share.archive"]
+      }
+    }
+  ]
+}

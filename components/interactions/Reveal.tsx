@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { InteractionBlock } from "@/lib/lesson-schema";
+import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
 
-type RevealBlock = Extract<InteractionBlock, { type: "reveal" }>;
+type RevealBlock = Extract<InteractionAtom, { type: "reveal" }>;
 
 export function Reveal({
   block,
@@ -19,7 +19,13 @@ export function Reveal({
 
   const showAnswer = () => {
     setRevealed(true);
-    onChange({ value: true, completed: true, correct: true });
+    onChange({
+      value: true,
+      completed: true,
+      correct: true,
+      attempts: (progress?.attempts ?? 0) + 1,
+      updatedAt: new Date().toISOString(),
+    });
   };
 
   return (

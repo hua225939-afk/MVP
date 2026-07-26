@@ -1,39 +1,67 @@
 "use client";
 
 import { useState } from "react";
-import type { InteractionBlock } from "@/lib/lesson-schema";
+import { evaluateContainsTests } from "@/lib/interaction-logic";
+import { getGeneratedCode } from "@/lib/task-builder-logic";
+import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
 
-type RunTestBlock = Extract<InteractionBlock, { type: "runTest" }>;
+type RunTestBlock = Extract<InteractionAtom, { type: "runTest" }>;
 
 export function RunTest({
   block,
   progress,
+  allProgress,
   onChange,
+  readOnly = false,
 }: {
   block: RunTestBlock;
   progress?: InteractionProgress;
+  allProgress: Record<string, InteractionProgress>;
   onChange: (next: InteractionProgress) => void;
+  readOnly?: boolean;
 }) {
+  const sourceProgress = block.sourceAtomId
+    ? allProgress[block.sourceAtomId]
+    : undefined;
+  const sourceCode =
+    getGeneratedCode(sourceProgress?.value) ?? block.initialCode ?? "";
+  const progressIsNewer =
+    progress &&
+    (!sourceProgress ||
+      new Date(progress.updatedAt).getTime() >=
+        new Date(sourceProgress.updatedAt).getTime());
   const [code, setCode] = useState(
-    typeof progress?.value === "string" ? progress.value : block.initialCode,
+    progressIsNewer && typeof progress?.value === "string"
+      ? progress.value
+      : sourceCode,
   );
-  const [hasRun, setHasRun] = useState(progress?.completed ?? false);
+  const [hasRun, setHasRun] = useState(
+    Boolean(progressIsNewer && progress?.attempts),
+  );
 
-  const results = block.tests.map((test) => ({
-    ...test,
-    passed: code.toLowerCase().includes(test.includes.toLowerCase()),
-  }));
+  const results = evaluateContainsTests(code, block.tests);
   const allPassed = results.every((result) => result.passed);
 
   const run = () => {
     setHasRun(true);
-    onChange({ value: code, completed: allPassed, correct: allPassed });
+    onChange({
+      value: code,
+      completed: allPassed,
+      correct: allPassed,
+      attempts: (progress?.attempts ?? 0) + 1,
+      updatedAt: new Date().toISOString(),
+    });
   };
 
   return (
-    <section className="interaction-card interaction-card-wide" data-testid={`block-${block.id}`}>
-      <div className="interaction-label">安全测试</div>
+    <section
+      className="interaction-card interaction-card-wide"
+      data-testid={`block-${block.id}`}
+    >
+      <div className="interaction-label">
+        {readOnly ? "安全规则检查" : "故障扫描"}
+      </div>
       <h3>{block.title}</h3>
       <p className="interaction-question">{block.description}</p>
       <div className="test-grid">
@@ -50,14 +78,21 @@ export function RunTest({
               setCode(event.target.value);
               setHasRun(false);
             }}
+            readOnly={!block.editable}
             spellCheck={false}
             value={code}
           />
         </div>
         <div className="test-panel">
           <div className="test-panel-title">
-            <span>测试清单</span>
-            <span>{hasRun ? `${results.filter((item) => item.passed).length}/${results.length}` : "待运行"}</span>
+            <span>{readOnly ? "测试清单" : "试航检查清单"}</span>
+            <span>
+              {hasRun
+                ? `${results.filter((item) => item.passed).length}/${results.length}`
+                : readOnly
+                  ? "待运行"
+                  : "待扫描"}
+            </span>
           </div>
           {results.map((result) => (
             <div className="test-result" key={result.id}>
@@ -74,7 +109,7 @@ export function RunTest({
       </div>
       <button className="button button-primary" onClick={run} type="button">
         <span>▶</span>
-        运行测试
+        {readOnly ? "运行测试" : "运行故障扫描"}
       </button>
       {hasRun && (
         <div
@@ -82,11 +117,7 @@ export function RunTest({
           role="status"
         >
           <span className="feedback-icon">{allPassed ? "✓" : "↻"}</span>
-          <p>
-            {allPassed
-              ? "全部通过！代码已经满足本关要求。"
-              : "还有测试没有通过。根据右侧提示修改后再运行一次。"}
-          </p>
+          <p>{allPassed ? block.successMessage : block.retryMessage}</p>
         </div>
       )}
     </section>

@@ -18,37 +18,37 @@ export default function StudentPage() {
   return (
     <RoleShell roleId="student">
       <DashboardHeader
-        action={{ label: "打开原课程首页", href: "/student/courses" }}
-        description="继续现有三节示例课，学习进度仍保存在本设备。"
-        eyebrow="学生学习中心"
-        title={`${dashboard.student.name}，把今天的想法做出来吧`}
+        action={{ label: "进入任务舱", href: "/student/courses" }}
+        description="选择任务舱，进入创造台，把想法做成可以试航的网页作品。"
+        eyebrow="造物星球 · 创造基地"
+        title={`${dashboard.student.name}，今天准备创造什么？`}
       />
       <DemoNotice>
-        当前使用演示学生身份。新学习路由与原有课程页共用同一份 JSON、LessonRenderer 和本地进度。
+        当前使用演示学生身份。两节样板共用正式课程 JSON、互动注册表、LessonRenderer 和本地进度。
       </DemoNotice>
       <StatGrid
         items={[
-          { label: "示例课程", value: lessonSummaries.length, detail: "原有 MVP 内容", symbol: "课" },
+          { label: "样板课程", value: lessonSummaries.length, detail: "第 01 / 06 课", symbol: "课" },
           { label: "已完成", value: dashboard.progress.completedLessons, detail: "模拟学习摘要", symbol: "✓" },
           { label: "总体进度", value: `${dashboard.progress.percent}%`, detail: "演示学生数据", symbol: "进" },
-          { label: "我的作品", value: dashboard.works.length, detail: "共享模拟作品", symbol: "作" },
+          { label: "造物档案", value: dashboard.works.length, detail: "共享模拟作品", symbol: "作" },
         ]}
       />
-      <DashboardPanel description="原有 3 节示例课均可继续体验" title="继续学习">
+      <DashboardPanel description="两节完整样板任务均可体验" title="任务舱">
         <div className="student-course-grid">
           {lessonSummaries.map((lesson) => (
             <article key={lesson.id} style={{ "--course-color": lesson.color } as React.CSSProperties}>
               <div className="student-course-top">
-                <span>0{lesson.order}</span>
+                <span>{String(lesson.order).padStart(2, "0")}</span>
                 <small>{lesson.badge}</small>
               </div>
               <h3>{lesson.title}</h3>
-              <p>{lesson.subtitle}</p>
+              <p>{lesson.studentSubtitle}</p>
               <div className="skill-list">
                 {lesson.skills.map((skill) => <span key={skill}>{skill}</span>)}
               </div>
               <Link className="course-link" href={`/learn/${courseId}/${lesson.id}`}>
-                进入学习页 <span>→</span>
+                进入任务舱 <span>→</span>
               </Link>
             </article>
           ))}
@@ -62,7 +62,7 @@ export default function StudentPage() {
             <p><span>本地保存</span><b>已开启</b></p>
           </div>
         </DashboardPanel>
-        <DashboardPanel description="作品联动规则仍待产品确认" id="works" title="我的作品">
+        <DashboardPanel description="作品联动规则仍待产品确认" id="works" title="造物档案">
           <div className="data-list">
             {dashboard.works.map((work) => (
               <article className="data-row" key={work.id}>

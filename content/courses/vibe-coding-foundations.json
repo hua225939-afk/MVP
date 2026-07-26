@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "vibe-coding-foundations",
+  "slug": "vibe-coding-foundations",
+  "title": "Vibe Coding 创意编程",
+  "subtitle": "从一句想法到一个可以独立运行的网页应用",
+  "audience": {
+    "grades": "小学高年级至初中",
+    "ages": "10–15 岁",
+    "prerequisites": "无需编程基础，能够阅读简短中文操作说明"
+  },
+  "totalLessons": 13,
+  "learningRhythm": ["看", "讲", "想", "做", "测", "说"],
+  "units": [
+    {
+      "id": "unit-01",
+      "order": 1,
+      "title": "认识 Vibe Coding",
+      "description": "从自然语言需求出发，认识网页与人机协作。",
+      "lessonIds": ["lesson-01", "lesson-02"],
+      "parentSummary": "孩子开始学习把想法说清楚，并观察 AI 如何把需求变成网页。"
+    },
+    {
+      "id": "unit-02",
+      "order": 2,
+      "title": "搭建网页界面",
+      "description": "学习网页结构、视觉样式和组件组合。",
+      "lessonIds": ["lesson-03", "lesson-04", "lesson-05"],
+      "parentSummary": "孩子将理解页面内容、视觉与操作入口如何共同组成清楚的界面。"
+    },
+    {
+      "id": "unit-03",
+      "order": 3,
+      "title": "让网页真正动起来",
+      "description": "用事件、输入、条件和状态构建互动。",
+      "lessonIds": ["lesson-06", "lesson-07", "lesson-08", "lesson-09"],
+      "parentSummary": "孩子将学习让网页回应用户，并能测试互动是否符合预期。"
+    },
+    {
+      "id": "unit-04",
+      "order": 4,
+      "title": "完成自己的网页应用",
+      "description": "组合功能、调试问题并根据反馈迭代。",
+      "lessonIds": ["lesson-10", "lesson-11", "lesson-12"],
+      "parentSummary": "孩子会把多个功能组合成作品，并通过测试与反馈持续改进。"
+    },
+    {
+      "id": "unit-05",
+      "order": 5,
+      "title": "应用发布与成果展示",
+      "description": "完成发布检查并清楚介绍创作过程。",
+      "lessonIds": ["lesson-13"],
+      "parentSummary": "孩子将整理作品并向他人清楚介绍自己的设计与学习收获。"
+    }
+  ],
+  "status": "draft",
+  "version": "1.0.0"
+}

@@ -8,6 +8,7 @@ import {
 } from "@/components/platform/DashboardUI";
 import { RoleShell } from "@/components/platform/RoleShell";
 import { getParentDashboard } from "@/data/mock/platform-data";
+import { lessonSummaries } from "@/lib/lesson-loader";
 
 export default function ParentPage() {
   const dashboard = getParentDashboard();
@@ -24,7 +25,7 @@ export default function ParentPage() {
       </DemoNotice>
       <StatGrid
         items={[
-          { label: "已完成课次", value: dashboard.progress.completedLessons, detail: "现有 3 节示例课", symbol: "✓" },
+          { label: "已完成课次", value: dashboard.progress.completedLessons, detail: "两节样板课", symbol: "✓" },
           { label: "学习进度", value: `${dashboard.progress.percent}%`, detail: "模拟学习摘要", symbol: "进" },
           { label: "课程成果", value: dashboard.works.length, detail: "允许家长查看", symbol: "作" },
           { label: "教师反馈", value: dashboard.feedback.length, detail: "家长可见内容", symbol: "评" },
@@ -32,10 +33,10 @@ export default function ParentPage() {
       />
       <div className="dashboard-columns">
         <DashboardPanel description="来自统一学生学习摘要" id="progress" title="学习进度">
-          <ProgressBar label="示例课程总体进度" value={dashboard.progress.percent} />
+          <ProgressBar label="样板课程总体进度" value={dashboard.progress.percent} />
           <div className="metric-notes">
             <p><span>当前学习</span><b>{dashboard.progress.currentLessonId}</b></p>
-            <p><span>已完成</span><b>{dashboard.progress.completedLessons} / 3</b></p>
+            <p><span>已完成</span><b>{dashboard.progress.completedLessons} / 2</b></p>
           </div>
         </DashboardPanel>
         <DashboardPanel description="不展示作品代码与调试记录" id="works" title="课程成果">
@@ -53,6 +54,26 @@ export default function ParentPage() {
           </div>
         </DashboardPanel>
       </div>
+      <DashboardPanel
+        description="摘要直接读取课次 JSON，不展示代码与调试细节"
+        title="两节课学了什么"
+      >
+        <div className="compact-card-grid">
+          {lessonSummaries.map((lesson) => (
+            <article className="compact-card" key={lesson.id}>
+              <span className="compact-card-index">
+                {String(lesson.order).padStart(2, "0")}
+              </span>
+              <div>
+                <small>{lesson.parentSummary.theme}</small>
+                <h3>{lesson.title}</h3>
+                <p>{lesson.parentSummary.learned}</p>
+                <p><b>学习成果：</b>{lesson.parentSummary.artifact}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </DashboardPanel>
       <DashboardPanel description="仅显示 student_and_parent 可见范围" id="feedback" title="教师反馈">
         {dashboard.feedback.length ? (
           <div className="feedback-list">

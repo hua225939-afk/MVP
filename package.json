@@ -9,8 +9,11 @@
     "dev": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
-    "test": "npm run lint && npm run build",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next"
+    "test": "npm run validate:content && npm run test:unit && npm run lint && npm run typecheck && npm run build",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test:unit": "node --experimental-strip-types --test tests/unit/*.test.ts",
+    "validate:content": "node --experimental-strip-types scripts/validate-content.ts"
   },
   "dependencies": {
     "next": "16.2.6",

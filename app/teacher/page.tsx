@@ -7,6 +7,7 @@ import {
 } from "@/components/platform/DashboardUI";
 import { RoleShell } from "@/components/platform/RoleShell";
 import { getTeacherDashboard } from "@/data/mock/platform-data";
+import { lessonSummaries } from "@/lib/lesson-loader";
 
 export default function TeacherPage() {
   const dashboard = getTeacherDashboard();
@@ -19,7 +20,7 @@ export default function TeacherPage() {
         title={`${dashboard.teacher.name}，今天一起看看学习进展`}
       />
       <DemoNotice>
-        当前数据为只读演示。课程预览能力将在样板课阶段接入只读进度边界。
+        当前数据为只读演示。课程预览可以操作互动，但不会读取或写入学生学习进度。
       </DemoNotice>
       <StatGrid
         items={[
@@ -63,12 +64,38 @@ export default function TeacherPage() {
                 <tr key={student.studentId}>
                   <td><b>{student.studentName}</b></td>
                   <td>{student.currentLessonId}</td>
-                  <td>{student.completedLessons} / 3</td>
+                  <td>{student.completedLessons} / 2</td>
                   <td><ProgressBar value={student.percent} /></td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </DashboardPanel>
+      <DashboardPanel
+        description="课程目标、产出与教学信息均直接读取同一份课次 JSON"
+        title="第 01 / 06 课课程信息"
+      >
+        <div className="compact-card-grid">
+          {lessonSummaries.map((lesson) => (
+            <article className="compact-card" key={lesson.id}>
+              <span className="compact-card-index">
+                {String(lesson.order).padStart(2, "0")}
+              </span>
+              <div>
+                <small>{lesson.badge} · {lesson.duration}</small>
+                <h3>{lesson.title}</h3>
+                <p>{lesson.description}</p>
+                <p><b>学习产出：</b>{lesson.output.description}</p>
+                <a
+                  className="course-link"
+                  href={`/learn/vibe-coding-foundations/${lesson.id}?mode=preview`}
+                >
+                  只读预览 <span>→</span>
+                </a>
+              </div>
+            </article>
+          ))}
         </div>
       </DashboardPanel>
       <DashboardPanel description="本阶段不写入正式教师评价" id="works" title="学生作品">

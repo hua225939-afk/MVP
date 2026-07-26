@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import type { InteractionBlock } from "@/lib/lesson-schema";
+import { validateTextInput } from "@/lib/interaction-logic";
+import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
 
-type TextInputBlock = Extract<InteractionBlock, { type: "textInput" }>;
-
-const normalize = (value: string) =>
-  value.toLowerCase().replace(/\s+/g, "").replace(/[。！!，,]/g, "");
+type TextInputBlock = Extract<InteractionAtom, { type: "textInput" }>;
 
 export function TextInput({
   block,
@@ -26,11 +24,15 @@ export function TextInput({
   );
 
   const submit = () => {
-    const correct = block.acceptedAnswers.some(
-      (answer) => normalize(answer) === normalize(value),
-    );
+    const correct = validateTextInput(value, block.validation);
     setResult(correct ? "correct" : "wrong");
-    onChange({ value, completed: correct, correct });
+    onChange({
+      value,
+      completed: correct,
+      correct,
+      attempts: (progress?.attempts ?? 0) + 1,
+      updatedAt: new Date().toISOString(),
+    });
   };
 
   return (

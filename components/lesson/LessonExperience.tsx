@@ -14,58 +14,133 @@ import {
 } from "@/lib/progress-storage";
 
 const stepIcons = ["◉", "▤", "◇", "✦", "✓", "◌"];
-const stepCaptions = ["先观察", "听明白", "动脑筋", "亲手做", "跑测试", "讲出来"];
+const studentStepCaptions = [
+  "发现案例",
+  "解码原理",
+  "设计任务",
+  "进入创造台",
+  "进行试航",
+  "记录造物档案",
+];
+const previewStepCaptions = [
+  "看案例",
+  "懂原理",
+  "拆任务",
+  "动手做",
+  "运行测试",
+  "讲出理解",
+];
 
-export function LessonExperience({ lesson }: { lesson: Lesson }) {
-  const [progress, setProgress] = useState<LessonProgress>(emptyProgress);
+export function LessonExperience({
+  lesson,
+  readOnly = false,
+}: {
+  lesson: Lesson;
+  readOnly?: boolean;
+}) {
+  const [progress, setProgress] = useState<LessonProgress>(() => emptyProgress(lesson));
   const [ready, setReady] = useState(false);
   const [hintIndex, setHintIndex] = useState(0);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      setProgress(readProgress(lesson.id));
+      setProgress(readOnly ? emptyProgress(lesson) : readProgress(lesson.courseId, lesson));
       setReady(true);
     });
     return () => window.cancelAnimationFrame(frame);
-  }, [lesson.id]);
+  }, [lesson, readOnly]);
 
-  const step = lesson.steps[progress.currentStep] ?? lesson.steps[0];
-  const percent = progressPercent(progress);
-  const stepComplete = progress.completedSteps.includes(step.id);
+  const currentStepIndex = Math.max(
+    0,
+    lesson.steps.findIndex((item) => item.id === progress.currentStepId),
+  );
+  const step = lesson.steps[currentStepIndex];
+  const percent = progressPercent(progress, lesson.steps.length);
+  const stepComplete = progress.completedStepIds.includes(step.id);
   const interactionsComplete = useMemo(
-    () => step.blocks.every((block) => progress.interactions[block.id]?.completed),
-    [progress.interactions, step.blocks],
+    () =>
+      step.completion.requiredAtomIds.every(
+        (atomId) => progress.interactions[atomId]?.completed,
+      ),
+    [progress.interactions, step.completion.requiredAtomIds],
   );
 
   const save = (updater: (current: LessonProgress) => LessonProgress) => {
     setProgress((current) => {
       const next = updater(current);
-      writeProgress(lesson.id, next);
+      if (!readOnly) writeProgress(lesson.courseId, lesson.id, next);
       return next;
     });
   };
 
   const goToStep = (index: number) => {
     setHintIndex(0);
-    save((current) => ({ ...current, currentStep: index }));
-  };
-
-  const updateInteraction = (blockId: string, next: InteractionProgress) => {
     save((current) => ({
       ...current,
-      interactions: { ...current.interactions, [blockId]: next },
+      currentStepId: lesson.steps[index].id,
+      status: current.status === "not_started" ? "in_progress" : current.status,
+      startedAt: current.startedAt ?? new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
     }));
   };
 
-  const finishStep = () => {
+  const updateInteraction = (atomId: string, next: InteractionProgress) => {
+    const currentAtomStepId = lesson.steps.find((lessonStep) =>
+      lessonStep.atoms.some((atom) => atom.id === atomId),
+    )?.id;
+    const dependentAtoms = lesson.steps.flatMap((lessonStep) =>
+      lessonStep.atoms
+        .filter(
+          (atom) => "sourceAtomId" in atom && atom.sourceAtomId === atomId,
+        )
+        .map((atom) => ({ atomId: atom.id, stepId: lessonStep.id })),
+    );
     save((current) => {
-      const completedSteps = current.completedSteps.includes(step.id)
-        ? current.completedSteps
-        : [...current.completedSteps, step.id];
+      const interactions = { ...current.interactions, [atomId]: next };
+      dependentAtoms.forEach((dependent) => {
+        delete interactions[dependent.atomId];
+      });
+      const dependentStepIds = new Set(
+        dependentAtoms.map((dependent) => dependent.stepId),
+      );
+      if (!next.completed && currentAtomStepId) {
+        dependentStepIds.add(currentAtomStepId);
+      }
       return {
         ...current,
-        completedSteps,
-        currentStep: Math.min(current.currentStep + 1, lesson.steps.length - 1),
+        status:
+          dependentAtoms.length > 0 && current.status === "completed"
+            ? "in_progress"
+            : current.status === "not_started"
+              ? "in_progress"
+              : current.status,
+        startedAt: current.startedAt ?? new Date().toISOString(),
+        completedStepIds: current.completedStepIds.filter(
+          (stepId) => !dependentStepIds.has(stepId),
+        ),
+        interactions,
+        completedAt: dependentAtoms.length > 0 ? null : current.completedAt,
+        updatedAt: next.updatedAt,
+      };
+    });
+  };
+
+  const finishStep = () => {
+    const now = new Date().toISOString();
+    save((current) => {
+      const completedStepIds = current.completedStepIds.includes(step.id)
+        ? current.completedStepIds
+        : [...current.completedStepIds, step.id];
+      const lessonComplete = completedStepIds.length === lesson.steps.length;
+      return {
+        ...current,
+        status: lessonComplete ? "completed" : "in_progress",
+        completedStepIds,
+        currentStepId:
+          lesson.steps[Math.min(currentStepIndex + 1, lesson.steps.length - 1)].id,
+        startedAt: current.startedAt ?? now,
+        updatedAt: now,
+        completedAt: lessonComplete ? now : null,
       };
     });
     setHintIndex(0);
@@ -83,19 +158,21 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
         </Link>
         <div className="lesson-title-center">
           <span>
-            第 {lesson.order} 课 · {lesson.badge}
+            第 {String(lesson.order).padStart(2, "0")} 课
+            {readOnly ? " · 教师只读预览" : " · 任务舱"}
           </span>
           <b>{lesson.title}</b>
+          {!readOnly && <small>{lesson.studentSubtitle}</small>}
         </div>
-        <Link className="exit-link" href="/student/courses">
-          <span>⌂</span> 课程首页
+        <Link className="exit-link" href={readOnly ? "/teacher" : "/student/courses"}>
+          <span>⌂</span> {readOnly ? "教师工作台" : "创造基地"}
         </Link>
       </header>
 
       <nav className="step-nav" aria-label="学习步骤">
         {lesson.steps.map((item, index) => {
-          const completed = progress.completedSteps.includes(item.id);
-          const active = index === progress.currentStep;
+          const completed = progress.completedStepIds.includes(item.id);
+          const active = index === currentStepIndex;
           return (
             <button
               aria-current={active ? "step" : undefined}
@@ -106,8 +183,10 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
             >
               <span className="step-icon">{completed ? "✓" : stepIcons[index]}</span>
               <span>
-                <b>{item.type}</b>
-                <small>{stepCaptions[index]}</small>
+                <b>{item.phase}</b>
+                <small>
+                  {(readOnly ? previewStepCaptions : studentStepCaptions)[index]}
+                </small>
               </span>
               {index < lesson.steps.length - 1 && <i />}
             </button>
@@ -125,9 +204,9 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
             <div className="coach-card-heading">
               <span className="teacher-avatar">AI</span>
               <div>
-                <b>AI 老师 · 小紫</b>
+                <b>{readOnly ? "AI 老师 · 小紫" : "造物领航员 · 小紫"}</b>
                 <small>
-                  <span className="online-dot" /> 正在陪你学习
+                  <span className="online-dot" /> 预设教学讲解
                 </small>
               </div>
             </div>
@@ -138,14 +217,16 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
               <span className="scene-code">&lt;/&gt;</span>
             </div>
             <div className="coach-content">
-              <span className="coach-kicker">现在要做什么</span>
-              <h3>{step.teacher.title}</h3>
-              <p>{step.teacher.message}</p>
+              <span className="coach-kicker">
+                {readOnly ? "AI 老师讲解" : "领航员解码"}
+              </span>
+              <h3>{step.title}</h3>
+              <p>{step.assistant.message}</p>
               <div className="key-point">
                 <span>💡</span>
                 <p>
-                  <b>记住这一点</b>
-                  {step.teacher.keyPoint}
+                  <b>本步目标</b>
+                  {step.goal}
                 </p>
               </div>
             </div>
@@ -155,19 +236,34 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
             <div className="assistant-heading">
               <span>✦</span>
               <div>
-                <b>AI 学习助手</b>
-                <small>卡住时点我一下</small>
+                <b>{readOnly ? "教师教学提示" : "创造助手"}</b>
+                <small>{readOnly ? "只读查看，不写入学生进度" : "卡住时点我一下"}</small>
               </div>
             </div>
-            <p>{step.assistant.message}</p>
+            <p>
+              {readOnly
+                ? step.teacherNotes.purpose
+                : step.studentContent.instructions}
+            </p>
             <div className="hint-box">
               <span>提示 {hintIndex + 1}</span>
-              <p>{step.assistant.hints[hintIndex]}</p>
+              <p>
+                {readOnly
+                  ? step.teacherNotes.observeFor[
+                      hintIndex % step.teacherNotes.observeFor.length
+                    ]
+                  : step.assistant.hints[hintIndex]}
+              </p>
             </div>
             <button
               className="button button-ghost"
               onClick={() =>
-                setHintIndex((current) => (current + 1) % step.assistant.hints.length)
+                setHintIndex((current) =>
+                  (current + 1) %
+                  (readOnly
+                    ? step.teacherNotes.observeFor.length
+                    : step.assistant.hints.length),
+                )
               }
               type="button"
             >
@@ -177,13 +273,14 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
         </aside>
 
         <section className="lesson-main">
+          {!readOnly && <div className="task-deck-label">任务舱 · 创造台</div>}
           <div className="lesson-main-heading">
             <div>
               <span className="step-pill">
-                第 {progress.currentStep + 1} 步 · {step.type}
+                第 {currentStepIndex + 1} 步 · {step.phase}
               </span>
               <h1>{step.title}</h1>
-              <p>{step.intro}</p>
+              <p>{step.studentContent.intro}</p>
             </div>
             <div className="goal-card">
               <span>本步目标</span>
@@ -192,50 +289,55 @@ export function LessonExperience({ lesson }: { lesson: Lesson }) {
           </div>
 
           {!ready ? (
-            <div className="loading-card">正在接上你的学习进度…</div>
+            <div className="loading-card">
+              {readOnly ? "正在打开教师预览…" : "正在接上你的学习进度…"}
+            </div>
           ) : (
             <LessonRenderer
-              blocks={step.blocks}
+              atoms={step.atoms}
               onChange={updateInteraction}
               progress={progress.interactions}
+              readOnly={readOnly}
             />
           )}
 
           <div className="lesson-actions">
             <button
               className="button button-secondary"
-              disabled={progress.currentStep === 0}
-              onClick={() => goToStep(progress.currentStep - 1)}
+              disabled={currentStepIndex === 0}
+              onClick={() => goToStep(currentStepIndex - 1)}
               type="button"
             >
               ← 上一步
             </button>
             <div className="completion-note">
-              {stepComplete ? (
+              {readOnly ? (
+                <span>只读预览：操作结果不会保存</span>
+              ) : stepComplete ? (
                 <span className="complete-text">✓ 本步骤已完成，进度已保存</span>
               ) : interactionsComplete ? (
-                <span>互动完成，可以继续啦！</span>
+                <span>{step.studentContent.completionMessage}</span>
               ) : (
-                <span>完成上方互动后即可进入下一步</span>
+                <span>完成上方必做互动后即可进入下一步</span>
               )}
             </div>
-            {progress.currentStep < lesson.steps.length - 1 ? (
+            {currentStepIndex < lesson.steps.length - 1 ? (
               <button
                 className="button button-primary"
                 disabled={!interactionsComplete}
                 onClick={finishStep}
                 type="button"
               >
-                完成本步，继续 →
+                保存本环节，继续 →
               </button>
             ) : (
               <button
                 className="button button-primary"
-                disabled={!interactionsComplete}
+                disabled={!interactionsComplete || stepComplete}
                 onClick={finishStep}
                 type="button"
               >
-                {percent === 100 ? "课程已完成 ✓" : "完成课程 ✓"}
+                {stepComplete ? "造物档案已保存 ✓" : "保存造物档案 ✓"}
               </button>
             )}
           </div>

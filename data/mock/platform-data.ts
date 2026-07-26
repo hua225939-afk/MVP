@@ -196,13 +196,13 @@ export const courseUnits: CourseUnit[] = [
   },
 ];
 
-export const interactionCatalog = [
-  { id: "reveal", name: "点击揭晓", purpose: "逐步展示案例与知识点", usedBy: "现有 3 节示例课" },
-  { id: "choice", name: "单项选择", purpose: "检查概念理解并提供反馈", usedBy: "现有 3 节示例课" },
-  { id: "textInput", name: "文本输入", purpose: "收集答案与学习表达", usedBy: "现有 3 节示例课" },
-  { id: "codePreview", name: "代码预览", purpose: "对照代码与可视结果", usedBy: "现有 3 节示例课" },
-  { id: "runTest", name: "安全规则检查", purpose: "按预设字符串规则验证代码", usedBy: "现有 3 节示例课" },
-];
+export const interactionCatalog = Object.entries(interactionMetadata).map(
+  ([id, metadata]) => ({
+    id,
+    ...metadata,
+    usedBy: "第 01 / 06 课样板",
+  }),
+);
 
 const campuses: Campus[] = [
   { id: "campus-xuhui", partnerId: "partner-star", name: "徐汇创意校区", city: "上海", status: "active" },
@@ -235,22 +235,22 @@ const students: Student[] = [
 ];
 
 const progress: ProgressRecord[] = [
-  { studentId: "student-an", completedLessons: 2, currentLessonId: "lesson-03", percent: 72 },
-  { studentId: "student-yu", completedLessons: 1, currentLessonId: "lesson-02", percent: 48 },
-  { studentId: "student-ke", completedLessons: 3, currentLessonId: "lesson-03", percent: 100 },
-  { studentId: "student-mu", completedLessons: 1, currentLessonId: "lesson-02", percent: 39 },
-  { studentId: "student-le", completedLessons: 2, currentLessonId: "lesson-03", percent: 81 },
-  { studentId: "student-yi", completedLessons: 1, currentLessonId: "lesson-02", percent: 44 },
+  { studentId: "student-an", completedLessons: 1, currentLessonId: "lesson-06", percent: 72 },
+  { studentId: "student-yu", completedLessons: 0, currentLessonId: "lesson-01", percent: 48 },
+  { studentId: "student-ke", completedLessons: 2, currentLessonId: "lesson-06", percent: 100 },
+  { studentId: "student-mu", completedLessons: 0, currentLessonId: "lesson-01", percent: 39 },
+  { studentId: "student-le", completedLessons: 1, currentLessonId: "lesson-06", percent: 81 },
+  { studentId: "student-yi", completedLessons: 0, currentLessonId: "lesson-01", percent: 44 },
   { studentId: "student-nuo", completedLessons: 0, currentLessonId: "lesson-01", percent: 16 },
-  { studentId: "student-xin", completedLessons: 2, currentLessonId: "lesson-03", percent: 67 },
+  { studentId: "student-xin", completedLessons: 1, currentLessonId: "lesson-06", percent: 67 },
 ];
 
 const works: Work[] = [
-  { id: "work-1", studentId: "student-an", title: "星球欢迎卡", lessonId: "lesson-03", status: "已完成", updatedAt: "2026-07-24" },
-  { id: "work-2", studentId: "student-yu", title: "我的动物名片", lessonId: "lesson-02", status: "草稿", updatedAt: "2026-07-23" },
-  { id: "work-3", studentId: "student-ke", title: "太空挑战按钮", lessonId: "lesson-03", status: "演示发布", updatedAt: "2026-07-24" },
-  { id: "work-4", studentId: "student-le", title: "彩虹心情卡", lessonId: "lesson-03", status: "已完成", updatedAt: "2026-07-22" },
-  { id: "work-5", studentId: "student-yi", title: "校园社团名片", lessonId: "lesson-02", status: "草稿", updatedAt: "2026-07-21" },
+  { id: "work-1", studentId: "student-an", title: "星球欢迎卡", lessonId: "lesson-01", status: "已完成", updatedAt: "2026-07-24" },
+  { id: "work-2", studentId: "student-yu", title: "我的欢迎页", lessonId: "lesson-01", status: "草稿", updatedAt: "2026-07-23" },
+  { id: "work-3", studentId: "student-ke", title: "太空挑战按钮", lessonId: "lesson-06", status: "演示发布", updatedAt: "2026-07-24" },
+  { id: "work-4", studentId: "student-le", title: "彩虹挑战按钮", lessonId: "lesson-06", status: "已完成", updatedAt: "2026-07-22" },
+  { id: "work-5", studentId: "student-yi", title: "校园欢迎卡", lessonId: "lesson-01", status: "草稿", updatedAt: "2026-07-21" },
 ];
 
 const feedback: Feedback[] = [
@@ -374,3 +374,4 @@ export function getParentDashboard() {
     }));
   return { student, progress: studentProgress, works: studentWorks, feedback: visibleFeedback };
 }
+import { interactionMetadata } from "@/lib/interaction-types";

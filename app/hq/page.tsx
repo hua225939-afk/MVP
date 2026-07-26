@@ -51,7 +51,7 @@ export default function HeadquartersPage() {
             ))}
           </div>
         </DashboardPanel>
-        <DashboardPanel description="现有示例学习记录汇总" title="整体学习进度">
+        <DashboardPanel description="两节样板课模拟学习记录汇总" title="整体学习进度">
           <ProgressBar label="学生平均完成度" value={dashboard.stats.completion} />
           <div className="metric-notes">
             <p>
@@ -64,7 +64,7 @@ export default function HeadquartersPage() {
             </p>
             <p>
               <span>可体验示例课</span>
-              <b>3 节</b>
+              <b>2 节样板</b>
             </p>
           </div>
         </DashboardPanel>

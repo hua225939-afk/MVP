@@ -3,10 +3,20 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import type { lessonSummaries } from "@/lib/lesson-loader";
+import { getLesson } from "@/lib/lesson-loader";
 import { progressPercent, readProgress } from "@/lib/progress-storage";
 
 type LessonSummary = (typeof lessonSummaries)[number];
 const courseIcons = ["</>", "✦", "{ }"];
+const courseId = "vibe-coding-foundations";
+const studentStepCaptions = [
+  "发现案例",
+  "解码原理",
+  "设计任务",
+  "进入创造台",
+  "进行试航",
+  "记录档案",
+];
 
 export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
   const [progress, setProgress] = useState<Record<string, number>>({});
@@ -15,7 +25,18 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
     const frame = window.requestAnimationFrame(() => {
       setProgress(
         Object.fromEntries(
-          lessons.map((lesson) => [lesson.id, progressPercent(readProgress(lesson.id))]),
+          lessons.map((lesson) => {
+            const content = getLesson(lesson.id);
+            return [
+              lesson.id,
+              content
+                ? progressPercent(
+                    readProgress(courseId, content),
+                    content.steps.length,
+                  )
+                : 0,
+            ];
+          }),
         ),
       );
     });
@@ -49,7 +70,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
         <div className="hero-copy">
           <div className="eyebrow">
             <span>✦</span>
-            适合小学高年级与初中生
+            造物星球 · 创造基地
           </div>
           <h1>
             不只是学代码，
@@ -57,12 +78,15 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
             更是把<span>奇思妙想</span>做出来
           </h1>
           <p>
-            跟着 AI 老师，用“看、讲、想、做、测、说”六个步骤，
-            一小步一小步完成你的第一个互动网页。
+            跟着造物领航员，用“发现、解码、设计、创造、试航、记录”六个环节，
+            在任务舱中完成真正可以操作和调整的网页作品。
           </p>
           <div className="hero-actions">
-            <Link className="button button-primary button-large" href="/lessons/lesson-01">
-              开始第一课 <span>→</span>
+            <Link
+              className="button button-primary button-large"
+              href={`/learn/${courseId}/lesson-01`}
+            >
+              进入首次登陆任务 <span>→</span>
             </Link>
             <div className="hero-proof">
               <div className="avatar-stack">
@@ -71,8 +95,8 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
                 <span>🧑🏻‍🎨</span>
               </div>
               <p>
-                <b>六步学习法</b>
-                <small>每一步都有清晰反馈</small>
+                <b>创造台已就绪</b>
+                <small>选择、填写、调整、试航</small>
               </p>
             </div>
           </div>
@@ -83,7 +107,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
           <div className="orb orb-two" />
           <div className="journey-card">
             <div className="journey-top">
-              <span>我的学习旅程</span>
+              <span>创造基地任务进度</span>
               <b>{total}%</b>
             </div>
             <div className="journey-progress">
@@ -94,15 +118,15 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
                 <div className={index === 0 ? "journey-step-active" : ""} key={step}>
                   <span>{["◉", "◫", "◇", "✦", "✓", "◌"][index]}</span>
                   <b>{step}</b>
-                  <small>{["先观察", "听明白", "动脑筋", "亲手做", "跑测试", "讲出来"][index]}</small>
+                  <small>{studentStepCaptions[index]}</small>
                 </div>
               ))}
             </div>
             <div className="coach-bubble">
               <span className="coach-avatar">AI</span>
               <p>
-                <b>嗨，我是你的 AI 老师</b>
-                <small>遇到问题别着急，我们一起把它拆小。</small>
+                <b>嗨，我是造物领航员</b>
+                <small>遇到故障别着急，创造助手会给你线索。</small>
               </p>
               <span className="spark">✦</span>
             </div>
@@ -113,10 +137,10 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
       <section className="course-section">
         <div className="section-heading">
           <div>
-            <span className="section-kicker">学习路线</span>
-            <h2>三节课，做出第一个互动网页</h2>
+            <span className="section-kicker">任务舱列表</span>
+            <h2>从网页首次登陆，到启动第一个互动机关</h2>
           </div>
-          <p>每节约 30 分钟 · 随时停下 · 自动续学</p>
+          <p>每节 90 分钟 · 随时停下 · 自动续学</p>
         </div>
 
         <div className="course-grid">
@@ -128,8 +152,12 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
                   className="course-card-cover"
                   style={{ "--course-color": lesson.color } as React.CSSProperties}
                 >
-                  <span className="course-number">0{lesson.order}</span>
-                  <span className="course-icon">{courseIcons[index]}</span>
+                  <span className="course-number">
+                    {String(lesson.order).padStart(2, "0")}
+                  </span>
+                  <span className="course-icon">
+                    {courseIcons[index % courseIcons.length]}
+                  </span>
                   <span className="course-badge">{lesson.badge}</span>
                 </div>
                 <div className="course-card-body">
@@ -139,7 +167,7 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
                     <span>{lesson.duration}</span>
                   </div>
                   <h3>{lesson.title}</h3>
-                  <p className="course-subtitle">{lesson.subtitle}</p>
+                  <p className="course-subtitle">{lesson.studentSubtitle}</p>
                   <p>{lesson.description}</p>
                   <div className="skill-list">
                     {lesson.skills.map((skill) => (
@@ -155,8 +183,11 @@ export function CourseHome({ lessons }: { lessons: LessonSummary[] }) {
                       <span style={{ width: `${percent}%` }} />
                     </div>
                   </div>
-                  <Link className="course-link" href={`/lessons/${lesson.id}`}>
-                    {percent > 0 ? "继续学习" : "进入课程"}
+                  <Link
+                    className="course-link"
+                    href={`/learn/${courseId}/${lesson.id}`}
+                  >
+                    {percent > 0 ? "继续任务" : "进入任务舱"}
                     <span>→</span>
                   </Link>
                 </div>

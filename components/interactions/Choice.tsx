@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { InteractionBlock } from "@/lib/lesson-schema";
+import type { InteractionAtom } from "@/lib/lesson-schema";
 import type { InteractionProgress } from "@/lib/progress-storage";
 
-type ChoiceBlock = Extract<InteractionBlock, { type: "choice" }>;
+type ChoiceBlock = Extract<InteractionAtom, { type: "choice" }>;
 
 export function Choice({
   block,
@@ -24,7 +24,13 @@ export function Choice({
     if (!selected) return;
     const correct = selected === block.correctOptionId;
     setSubmitted(true);
-    onChange({ value: selected, completed: correct, correct });
+    onChange({
+      value: selected,
+      completed: correct,
+      correct,
+      attempts: (progress?.attempts ?? 0) + 1,
+      updatedAt: new Date().toISOString(),
+    });
   };
 
   return (
@@ -75,7 +81,7 @@ export function Choice({
           <p>
             {selected === block.correctOptionId
               ? block.explanation
-              : "再想一想：先判断每一段内容在网页中扮演什么角色。"}
+              : block.incorrectMessage}
           </p>
         </div>
       )}
